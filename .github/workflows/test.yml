@@ -1,0 +1,15 @@
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  update_file:
+    steps:
+      - uses: actions/checkout@v2
+      - run: date > file.txt
+      - uses: EndBug/add-and-commit@v7 
+        with:
+          message: Updating file.txt
+          add: file.txt
+          author_name: Trevor Sullivan
+          author_email: trevor@trevorsullivan.net

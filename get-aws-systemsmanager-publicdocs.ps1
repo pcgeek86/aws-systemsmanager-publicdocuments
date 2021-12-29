@@ -6,6 +6,10 @@ $Filter.Key = 'Owner'
 $Filter.Values = 'Public'
 
 $ScriptDate = Get-Date -Format yyyy-MM-dd
+
+# Create directory for files, if it doesn't exist.
+New-Item -ItemType Directory -Path $ScriptDate -ErrorAction Ignore
+
 $DocList = Get-SSMDocumentList -Filter $Filter
 
 foreach ($Document in $DocList) {

@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Document to collect logs from IAM\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"environmentName\" : {\n      \"default\" : \"\",\n      \"description\" : \"Envrironment Name\",\n      \"type\" : \"String\"\n    },\n    \"TenantName\" : {\n      \"default\" : \"\",\n      \"description\" : \"Tenant for which data need to be fetched\",\n      \"type\" : \"String\"\n    },\n    \"BucketName\" : {\n      \"default\" : \"\",\n      \"description\" : \"Bucket for uploading and downloading data\",\n      \"type\" : \"String\"\n    },\n    \"WorkDir\" : {\n      \"default\" : \"/apps/dmpsec/AccessManager/OpenAM/openam/log\",\n      \"description\" : \"Directory where operation will be getting perform\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su -\", \"cd {{ WorkDir }}\", \"aws s3 cp s3://{{ BucketName }}/collect_iam_session_logs.sh ./\", \"chmod u+x collect_iam_session_logs.sh\", \"./collect_iam_session_logs.sh {{ TenantName }} {{ BucketName }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-24T12:49:45.499Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:350063297140:document/IAM_Logs_Generation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0bf2dbef-8d15-44f1-a057-914b8d3c3196",
+    "Metadata": {}
+  },
+  "ContentLength": 1378,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2021-12-29T02:41:19.4723919+00:00"
+}

@@ -1,4 +1,5 @@
 Import-Module -Name AWS.Tools.SimpleSystemsManagement
+Set-DefaultAWSRegion -Region us-west-2
 
 $Filter = [Amazon.SimpleSystemsManagement.Model.DocumentKeyValuesFilter]::new()
 $Filter.Key = 'Owner'

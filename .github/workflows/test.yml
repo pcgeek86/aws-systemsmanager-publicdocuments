@@ -1,6 +1,8 @@
 on:
   push:
   workflow_dispatch:
+permissions:
+  id-token: write
 
 jobs:
   update_file:
@@ -8,6 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: pwsh -Command 'Install-Module -Name AWS.Tools.SimpleSystemsManagement -Force'
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::987868780346:role/github-actions-systemsmanager
       - run: pwsh -File get-aws-systemsmanager-publicdocs.ps1
       - uses: EndBug/add-and-commit@v7 
         with:

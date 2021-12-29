@@ -8,10 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: pwsh -Command 'Install-Module -Name AWS.Tools.SimpleSystemsManagement -Force'
-#       - run: pwsh -Command 
-#       - uses: EndBug/add-and-commit@v7 
-#         with:
-#           message: Updating file.txt
-#           add: file.txt
-#           author_name: Trevor Sullivan
-#           author_email: trevor@trevorsullivan.net
+      - run: pwsh -File get-aws-systemsmanager-publicdocs.ps1
+      - uses: EndBug/add-and-commit@v7 
+        with:
+          message: Updating Systems Manager documents
+          author_name: Trevor Sullivan
+          author_email: trevor@trevorsullivan.net

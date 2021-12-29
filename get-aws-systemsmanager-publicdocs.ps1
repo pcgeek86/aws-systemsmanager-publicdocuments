@@ -28,4 +28,4 @@ foreach ($Document in $DocList) {
 }
 
 # Update the README.md with the latest information
-(Get-Content -Path README.template.md -Raw) -replace '\{\{DOCUMENT_LIST\}\}' | Set-Content -Path README.md
+(Get-Content -Path README.template.md -Raw) -replace '\{\{DOCUMENT_LIST\}\}', $READMEBuilder.ToString() | Set-Content -Path README.md

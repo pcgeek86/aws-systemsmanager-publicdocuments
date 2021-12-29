@@ -7,7 +7,7 @@ Each Systems Manager document will be archived as a JSON object, which can easil
 # Documents
 
 | Owner | Name | Type | Format | Version | CreateDate | Attachments |
-|-------|------|------|--------|---------|------------|
+|-------|------|------|--------|---------|------------|-------------|
 {{DOCUMENT_LIST}}
 
 # License

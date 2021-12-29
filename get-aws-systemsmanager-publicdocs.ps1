@@ -23,7 +23,7 @@ foreach ($Document in $DocList) {
   $FileName = '{0}/{1}-{2}-{3}.json' -f $TargetFolder, $Document.Owner, $CurrentDocument.Name.Split('/')[-1], $Document.DocumentVersion
   $CurrentDocument | ConvertTo-Json -Depth 10 | Set-Content -Path $FileName
   
-  $ReadmeLine = '|{0}|{1}|{2}|{3}|{4}|{5}|{6}|' -f $Document.Owner, $Document.Name, $CurrentDocument.DocumentType.Value, $CurrentDocument.DocumentFormat.Value, $Document.DocumentVersion, $CurrentDocument.CreatedDate.ToString('u'), ($CurrentDocument.AttachmentsContent ? $CurrentDocument.AttachmentsContent.Count : 0)
+  $ReadmeLine = '|{0}|{1}|{2}|{3}|{4}|{5}|{6}|' -f $Document.Owner, $Document.Name.Split('/')[-1], $CurrentDocument.DocumentType.Value, $CurrentDocument.DocumentFormat.Value, $Document.DocumentVersion, $CurrentDocument.CreatedDate.ToString('u'), ($CurrentDocument.AttachmentsContent ? $CurrentDocument.AttachmentsContent.Count : 0)
   $null = $READMEBuilder.AppendLine($ReadmeLine)
 }
 

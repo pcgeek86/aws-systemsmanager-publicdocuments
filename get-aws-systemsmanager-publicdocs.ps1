@@ -14,6 +14,6 @@ $DocList = Get-SSMDocumentList -Filter $Filter
 
 foreach ($Document in $DocList) {
   $CurrentDocument = Get-SSMDocument -Name $Document.Name -DocumentVersion $Document.DocumentVersion
-  $FileName = '{0}/{1}-{2}-{3}.json' -f $ScriptDate, $Document.Owner, $CurrentDocument.Name, $Document.DocumentVersion
+  $FileName = '{0}/{1}-{2}-{3}.json' -f $ScriptDate, $Document.Owner, $CurrentDocument.Name.Split('/')[-1], $Document.DocumentVersion
   $CurrentDocument | ConvertTo-Json -Depth 10 | Set-Content -Path $FileName
 }

@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.2\",\n  \"description\": \"Backup logs to S3\",\n  \"parameters\": {\n    \"ASGNAME\": {\n      \"type\": \"String\",\n      \"description\": \"Auto Scaling group name\"\n    },\n    \"LIFECYCLEHOOKNAME\": {\n      \"type\": \"String\",\n      \"description\": \"LIFECYCLEHOOK name\"\n    },\n    \"BACKUPDIRECTORY\": {\n      \"type\": \"String\",\n      \"description\": \"BACKUPDIRECTORY localtion in server\"\n    },\n    \"S3BUCKET\": {\n      \"type\": \"String\",\n      \"description\": \"S3BUCKET backup logs\"\n    },\n    \"SNSTARGET\": {\n      \"type\": \"String\",\n      \"description\": \"SNSTARGET\"\n    }\n  },\n  \"runtimeConfig\": {\n    \"aws:runShellScript\": {\n      \"properties\": [\n        {\n          \"id\": \"0.aws:runShellScript\",\n          \"runCommand\": [\n            \"sudo /etc/init.d/ssp-server stop;/opt/log_utility/log_utility /opt/log_utility/log_util_config_org.yaml shutdown\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+  "CreatedDate": "2020-07-14T07:01:20.448Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:296135169644:document/asg-hook-ssm-log-utility-oregon",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9e02da40-d051-4f4e-bfc2-f742cd5238a3",
+    "Metadata": {}
+  },
+  "ContentLength": 1219,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2021-12-30T07:12:55.7747357+00:00"
+}

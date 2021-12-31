@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"0.3\",\n  \"description\": \"Install UpdatesAndTagInstance\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"String\",\n      \"description\": \"Instance ID to be patched\"\n      },\n      \"AutomationAssumeRole\": {\n        \"type\": \"String\",\n        \"description\": \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n        \"default\": \"arn:aws:iam::{{global:ACCOUNT_ID}}:role/SSMAutomationRole\"\n        }\n  },\n  \"mainSteps\": [\n  {\n    \"name\": \"RunPatchBaseline\",\n    \"action\": \"aws:runCommand\",\n    \"maxAttempts\": 3,\n    \"onFailure\": \"Abort\",\n    \"timeoutSeconds\": 7200,\n    \"inputs\": {\n      \"DocumentName\": \"AWS-RunPatchBaseline\",\n      \"InstanceIds\": [\n        \"{{InstanceId}}\"\n        ],\n      \"Parameters\": {\n        \"Operation\": \"Install\"\n        },\n      \"OutputS3BucketName\": \"w-torq-usw2-prod-ssm-patching\",\n      \"OutputS3KeyPrefix\": \"logs\"\n      }\n    },\n  {\n    \"name\": \"RemoveKernel\",\n    \"action\": \"aws:runCommand\",\n    \"maxAttempts\": 3,\n    \"onFailure\": \"Continue\",\n    \"timeoutSeconds\": 7200,\n    \"inputs\": {\n      \"DocumentName\": \"wabtec-kernel-cleanup-doc\",\n      \"InstanceIds\": [\n        \"{{InstanceId}}\"\n        ]\n      }\n    },\n  {\n    \"name\": \"createTags\",\n    \"action\": \"aws:createTags\",\n    \"maxAttempts\": 3,\n    \"onFailure\": \"Abort\",\n    \"inputs\": {\n      \"ResourceType\": \"EC2\",\n      \"ResourceIds\": [\n        \"{{InstanceId}}\"\n        ],\n      \"Tags\": [\n      {\n    \"Key\": \"patch-run-date\",\n    \"Value\": \"{{global:DATE}}\"\n      }\n      ]\n    }\n  }\n]\n}\n",
+  "CreatedDate": "2021-07-15T23:56:38.373Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:074452064311:document/wabtec-patch-automation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "2324d0d6-fb56-4e69-b2c1-19a0dd5974c5",
+    "Metadata": {}
+  },
+  "ContentLength": 2003,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2021-12-31T07:12:38.9917962+00:00"
+}

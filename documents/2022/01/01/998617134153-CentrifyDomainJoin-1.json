@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"centrify-linux-domain-join\",\n  \"parameters\": {\n    \"resourceDomainName\": {\n      \"description\": \"The FQDN of the Directory Service.\",\n      \"type\": \"String\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"CentrifyLinuxDomainJoin\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"sudo su - root\",\n          \"cd /tmp\",\n          \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/centrify-linux-join.py .\",\n          \"python3 ./centrify-linux-join.py {{ resourceDomainName }}\",\n          \"rm ./centrify-linux-join.py\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2021-12-23T17:24:34.657Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:998617134153:document/CentrifyDomainJoin",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "34699024-9d2e-4571-a3be-276ffd5797f8",
+    "Metadata": {}
+  },
+  "ContentLength": 1084,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-01T07:12:14.8053352+00:00"
+}

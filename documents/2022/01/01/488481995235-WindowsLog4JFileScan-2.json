@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r  \"schemaVersion\": \"2.2\",\r  \"description\": \"Scans Filesystem for Log4J Prints to stdout\",\r  \"mainSteps\": [\r    {\r      \"inputs\": {\r        \"runCommand\": [\r          \"$Drives = Get-PSDrive -PSProvider 'FileSystem'\\n foreach($Drive in $drives) { \\n $log4jfiles = Get-Childitem –Path $Drive.Root -Include *log4j-core-*.jar -File -Recurse -ErrorAction SilentlyContinue\\n $RunDate = (get-date).ToUniversalTime().ToString(\\\"yyyy-MM-ddTHH:mm+00:00\\\")\\n $header = @{\\\"X-aws-ec2-metadata-token-ttl-seconds\\\" = \\\"21600\\\"}\\n $token = Invoke-RestMethod -Method Put -Uri \\\"http://169.254.169.254/latest/api/token\\\" -Headers $header\\n $header = @{\\\"X-aws-ec2-metadata-token\\\" = $token}\\n $ec2info = Invoke-RestMethod -Headers $header -Method Get -Uri \\\"http://169.254.169.254/latest/meta-data/identity-credentials/ec2/info/\\\"\\n $instanceid = Invoke-RestMethod -Headers $header -Method Get -Uri \\\"http://169.254.169.254/latest/meta-data/instance-id\\\"\\n $region = Invoke-RestMethod -Headers $header -Method Get -Uri \\\"http://169.254.169.254/latest/meta-data/placement/availability-zone\\\"\\n $hostname_ip = $env:computername + \\\"_\\\"+(Get-NetIPAddress -AddressFamily IPv4).IPAddress[0]\\n Foreach ($file in $log4jfiles)\\n { \\n Write-Host \\\"$($RunDate)`t$($ec2info.AccountId)`t$($region)`t$($instanceid)`t$($hostname_ip)`t$($file.FullName)\\\"} }\"\r        ]\r      },\r      \"name\": \"log4jFileSystemQuery\",\r      \"action\": \"aws:runPowerShellScript\",\r      \"precondition\": {\r        \"StringEquals\": [\r          \"platformType\",\r          \"Windows\"\r        ]\r      }\r    }\r  ]\r}",
+  "CreatedDate": "2021-12-23T16:39:21.038Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:488481995235:document/WindowsLog4JFileScan",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "438af20c-fb3c-4b11-9dc7-19cd7a2210b5",
+    "Metadata": {}
+  },
+  "ContentLength": 1867,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-01T07:12:26.2605071+00:00"
+}

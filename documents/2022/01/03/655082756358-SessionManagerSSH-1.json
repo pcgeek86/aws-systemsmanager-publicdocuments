@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n   \"schemaVersion\": \"1.0\",\n   \"description\": \"Document to open SSH Connection over Session Manager\",\n   \"sessionType\": \"Port\",\n   \"parameters\": {\n      \"portNumber\": {\n         \"description\": \"(Optional) Port number that SSH daemon on managed instance is running on\",\n         \"type\": \"String\",\n         \"default\": \"22\"\n      }\n   },\n   \"properties\": {\n      \"portNumber\": \"{{portNumber}}\"\n   }\n}\n\n",
+  "CreatedDate": "2019-06-07T00:23:20.779Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:655082756358:document/SessionManagerSSH",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "dc3dc927-ae82-477e-b002-a9b80da4f542",
+    "Metadata": {}
+  },
+  "ContentLength": 655,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-03T07:12:58.6098578+00:00"
+}

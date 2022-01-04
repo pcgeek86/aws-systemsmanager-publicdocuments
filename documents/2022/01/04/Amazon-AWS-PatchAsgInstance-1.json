@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Systems Manager Automation - Patch instances in an Auto Scaling Group\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{AutomationAssumeRole}}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) ID of the Instance to patch. Only specify when not running from Maintenance Windows.\"\n    },\n    \"WaitForReboot\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) How long Automation should sleep for, to allow a patched instance to reboot\",\n      \"default\": \"PT5M\"\n    },\n    \"WaitForInstance\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) How long Automation should sleep for, to allow the instance come back into service\",\n      \"default\": \"PT2M\"\n    },\n    \"LambdaRoleArn\": {\n      \"default\": \"\",\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Lambda created by Automation to perform the actions on your behalf. If not specified a transient role will be created to execute the Lambda function.\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"createPatchGroupTags\",\n      \"action\": \"aws:createTags\",\n      \"maxAttempts\": 1,\n      \"onFailure\": \"Continue\",\n      \"inputs\": {\n        \"ResourceType\": \"EC2\",\n        \"ResourceIds\": [\n          \"{{InstanceId}}\"\n        ],\n        \"Tags\": [\n          {\n            \"Key\": \"AutoPatchInstanceInASG\",\n            \"Value\": \"InProgress\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"EnterStandby\",\n      \"action\": \"aws:executeAutomation\",\n      \"maxAttempts\": 1,\n      \"timeoutSeconds\": 300,\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n        \"DocumentName\": \"AWS-ASGEnterStandby\",\n        \"RuntimeParameters\": {\n          \"InstanceId\": [\"{{InstanceId}}\"],\n          \"LambdaRoleArn\": [\"{{LambdaRoleArn}}\"],\n          \"AutomationAssumeRole\":[\"{{AutomationAssumeRole}}\"]\n        }\n      }\n    },\n    {\n      \"name\": \"installMissingOSUpdates\",\n      \"action\": \"aws:runCommand\",\n      \"maxAttempts\": 1,\n      \"onFailure\": \"Continue\",\n      \"inputs\": {\n        \"DocumentName\": \"AWS-RunPatchBaseline\",\n        \"InstanceIds\": [\n          \"{{InstanceId}}\"\n        ],\n        \"Parameters\": {\n          \"Operation\": \"Install\"\n        }\n      }\n    },\n    {\n      \"name\": \"SleepToCompleteInstall\",\n      \"action\": \"aws:sleep\",\n      \"inputs\": {\n        \"Duration\": \"{{WaitForReboot}}\"\n      }\n    },\n    {\n      \"name\": \"ExitStandby\",\n      \"action\": \"aws:executeAutomation\",\n      \"maxAttempts\": 1,\n      \"timeoutSeconds\": 300,\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n        \"DocumentName\": \"AWS-ASGExitStandby\",\n        \"RuntimeParameters\": {\n          \"InstanceId\": [\"{{InstanceId}}\"],\n          \"LambdaRoleArn\": [\"{{LambdaRoleArn}}\"],\n          \"AutomationAssumeRole\":[\"{{AutomationAssumeRole}}\"]\n        }\n      }\n    },\n    {\n      \"name\": \"CompletePatchGroupTags\",\n      \"action\": \"aws:createTags\",\n      \"maxAttempts\": 1,\n      \"onFailure\": \"Continue\",\n      \"inputs\":{\n        \"ResourceType\": \"EC2\",\n        \"ResourceIds\": [\n          \"{{InstanceId}}\"\n        ],\n        \"Tags\": [\n          {\n            \"Key\": \"AutoPatchInstanceInASG\",\n            \"Value\": \"Completed\"\n          }\n        ]\n      }\n    },\n    {\n      \"name\": \"SleepBeforeNextInstance\",\n      \"action\": \"aws:sleep\",\n      \"inputs\": {\n        \"Duration\": \"{{WaitForInstance}}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2018-07-10T17:05:08.037Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-PatchAsgInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "30aaa584-cb96-4e62-a836-89bdfee03444",
+    "Metadata": {}
+  },
+  "ContentLength": 4121,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-04T07:12:04.3573574+00:00"
+}

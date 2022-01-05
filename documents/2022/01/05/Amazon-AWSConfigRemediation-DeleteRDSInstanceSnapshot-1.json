@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-DeleteRDSInstanceSnapshot\\n\\n## What does this document do?\\nThis document deletes an Amazon Relational Database Service (Amazon RDS) instance snapshot using the [DeleteDBSnapshot](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_DeleteDBSnapshot.html) API. This automation document only deletes Amazon RDS instance snapshots in the `available` state. This automation document does not work on Amazon Aurora snapshots.\\n\\n## Input Parameters\\n* DbSnapshotId: (Required) The DB snapshot identifier.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* DeleteDbSnapshot.DeleteDbSnapshotResponse: The standard HTTP response from the DeleteDBSnapshot API.\\n* VerifyDbInstanceSnapshotDeletion.Output: The message to verify the deletion of Amazon RDS instance snapshot. \",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"DeleteDbSnapshot.DeleteDbSnapshotResponse\", \"VerifyDbInstanceSnapshotDeletion.Output\" ],\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"DbSnapshotId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The DB snapshot identifier.\",\n      \"allowedPattern\" : \"^[\\\\w+=,.@_-]{1,128}$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"GetRDSSnapshotState\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetRDSSnapshotState\\nMakes DescribeDBSnapshots API call using the Amazon RDS instance snapshot identifier to get the snapshot status.\\n## outputs\\n* IsSnapshotAvailable: The string value indicating the state of Amazon RDS instance snapshot.\",\n    \"timeoutSeconds\" : 60,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBSnapshots\",\n      \"DBSnapshotIdentifier\" : \"{{ DbSnapshotId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"IsSnapshotAvailable\",\n      \"Selector\" : \"$.DBSnapshots[0].Status\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"CheckDbInstance\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## CheckDbInstance\\nChecks if the Amazon RDS instance snapshot is in \\\"available\\\" state.\",\n    \"timeoutSeconds\" : 60,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBSnapshots\",\n      \"DBSnapshotIdentifier\" : \"{{ DbSnapshotId }}\",\n      \"PropertySelector\" : \"$.DBSnapshots[0].Status\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"DeleteDbSnapshot\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DeleteDbSnapshot\\nAccepts the Amazon RDS instance snapshot identifier as an input and deletes it.\\n## outputs\\n* DeleteDbSnapshotResponse: The standard HTTP response from the DeleteDBSnapshot API.\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DeleteDBSnapshot\",\n      \"DBSnapshotIdentifier\" : \"{{ DbSnapshotId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DeleteDbSnapshotResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDbInstanceSnapshotDeletion\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"## VerifyDbInstanceSnapshotDeletion\\nVerifies the given Amazon RDS instance snapshot is deleted.\\n## outputs\\n* Output: The message to verify the deletion of Amazon RDS instance snapshot.\",\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"DbSnapshotIdentifier\" : \"{{ DbSnapshotId }}\"\n      },\n      \"Script\" : \"import boto3\\nimport botocore\\n\\ndef handler(event, context):\\n  rds_client = boto3.client(\\\"rds\\\")\\n  snapshot_name = event[\\\"DbSnapshotIdentifier\\\"]\\n  try:\\n    rds_client.describe_db_snapshots(DBSnapshotIdentifier=snapshot_name)\\n    error_message = f\\\"VERIFICATION FAILED. AMAZON RDS INSTANCE SNAPSHOT {snapshot_name} NOT DELETED.\\\"\\n    raise Exception(error_message)\\n  except rds_client.exceptions.DBSnapshotNotFoundFault:\\n    return {\\n        \\\"output\\\":{\\n            \\\"Message\\\": \\\"Verification of 'DeleteRdsInstanceSnapshot' is successful.\\\"\\n        }\\n    }\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"StringMap\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:08:08.162Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DeleteRDSInstanceSnapshot",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "32a2c8ab-87b7-4f01-8aa2-fae9dec39df4",
+    "Metadata": {}
+  },
+  "ContentLength": 5020,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-05T07:11:35.9777098+00:00"
+}

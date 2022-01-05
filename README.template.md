@@ -4,6 +4,16 @@ The purpose of this GitHub repository is to archive AWS Systems Manager public d
 A new folder will be created for each date that this workflow is executed.
 Each Systems Manager document will be archived as a JSON object, which can easily be interpreted by any language.
 
+Folder structure of persisted AWS Systems Manager documents:
+
+```
+documents\
+  year\
+    month\
+      day\
+        xyz.json
+```
+
 # Documents
 
 | Owner | Name | Type | Format | Version | CreateDate | Attachments |

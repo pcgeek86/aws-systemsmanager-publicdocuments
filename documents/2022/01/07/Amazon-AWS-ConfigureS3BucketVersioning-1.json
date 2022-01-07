@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Configures the S3 Bucket's versioning\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the S3 Bucket whose encryption configuration will be managed.\"\n    },\n    \"VersioningState\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Applied to the VersioningConfiguration.Status. When set to 'Enabled', this process enables versioning for the objects in the bucket, all objects added to the bucket receive a unique version ID. When set to 'Suspended', this process dsables versioning for the objects in the bucket, all objects added to the bucket receive the version ID null.\\n\",\n      \"default\" : \"Enabled\",\n      \"allowedValues\" : [ \"Enabled\", \"Suspended\" ]\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"ConfigureVersioning\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"maxAttempts\" : 1,\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutBucketVersioning\",\n      \"Bucket\" : \"{{BucketName}}\",\n      \"VersioningConfiguration\" : {\n        \"MFADelete\" : \"Disabled\",\n        \"Status\" : \"{{VersioningState}}\"\n      }\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2018-08-27T17:39:09.115Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureS3BucketVersioning",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c3f2fc0f-ffcb-45bd-890d-fb7968ef3e14",
+    "Metadata": {}
+  },
+  "ContentLength": 1732,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-07T07:11:13.7137566+00:00"
+}

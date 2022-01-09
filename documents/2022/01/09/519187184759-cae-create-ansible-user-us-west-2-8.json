@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"cae-create-ansible-user\",\n  \"parameters\": {\n    \"ssmuser\": {\n      \"description\": \"User to create.\",\n      \"type\": \"String\"\n    },\n    \"ssmpassword\": {\n      \"description\": \"Encrypted Password to use.\",\n      \"type\": \"String\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"CreateWindowsAnsibleUser\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"net user /delete {{ ssmuser }}\",\n          \"$password=$(ConvertTo-SecureString '{{ ssmpassword }}' -AsPlainText -Force)\",\n          \"New-LocalUser -Name '{{ ssmuser }}' -Description 'CAE Ansible Account.' -Password $password\",\n          \"Add-LocalGroupMember -Group 'Administrators' -Member '{{ ssmuser }}'\"\n        ]\n      }\n    },\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"CreateLinuxAnsibleUser\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"sudo su - root\",\n          \"pkill -U {{ ssmuser }}\",\n          \"userdel -rf {{ ssmuser }}\",\n          \"useradd -g users -p $(echo '{{ ssmpassword }}' | openssl passwd -1 -stdin) {{ ssmuser }}\",\n          \"if [[ $(/usr/sbin/visudo -cf /etc/sudoers > /dev/null;echo $?) -eq 0 ]]; then echo 'sudoers was found to be in a healthy state'; else echo 'sudoers was found in a broken state, fix it...' && /usr/local/bin/sudoers_auto_heal.sh; fi\",\n          \"grep -qxF '{{ ssmuser }} ALL=(ALL) NOPASSWD:ALL' /etc/sudoers || echo 'writing to sudoers file...' && echo '{{ ssmuser }} ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers\",\n          \"if [[ $(/usr/sbin/visudo -cf /etc/sudoers > /dev/null;echo $?) -eq 0 ]]; then echo 'sudoers was found to be in a healthy state'; else echo 'our change broke sudoers so we must restore it...' && /usr/local/bin/sudoers_auto_heal.sh; fi;exit\"]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-01-11T20:31:35.945Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "8",
+  "Name": "arn:aws:ssm:us-west-2:519187184759:document/cae-create-ansible-user-us-west-2",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e577e865-126a-4f64-979b-b63a2f2cc314",
+    "Metadata": {}
+  },
+  "ContentLength": 2408,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-09T07:12:34.2823147+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n   \"schemaVersion\":\"2.0\",\n   \"description\":\"Blackhole a port on an instance\",\n   \"parameters\":{\n      \"port\":{\n         \"type\":\"String\",\n         \"description\":\"(Required) Specify a port to blackhole.\"\n      },\n      \"duration\":{\n         \"type\":\"String\",\n         \"description\":\"(Required) Duration (in seconds) to blackhole the port.\"\n      }\n   },\n   \"mainSteps\":[\n      {\n         \"action\":\"aws:runShellScript\",\n         \"name\":\"runShellScript\",\n         \"inputs\":{\n            \"runCommand\":\n            [\n                \"iptables -A INPUT -p tcp --destination-port {{ port }} -j DROP\",\n                \"sleep {{ duration }}\",\n                \"iptables -D INPUT -p tcp --destination-port {{ port }} -j DROP\"\n            ]\n         }\n      }\n   ]\n}\n",
+  "CreatedDate": "2017-11-06T12:26:33.827Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:024611248101:document/Port-Blackhole",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "13686338-4d31-41bb-9830-cccaada7b9f7",
+    "Metadata": {}
+  },
+  "ContentLength": 1035,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-10T07:13:22.4796296+00:00"
+}

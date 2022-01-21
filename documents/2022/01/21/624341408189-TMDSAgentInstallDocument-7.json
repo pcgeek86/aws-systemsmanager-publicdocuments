@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n\t\"schemaVersion\": \"2.2\",\r\n\t\"description\": \"Execute TMDS install scripts stored in a remote location.\",\r\n\t\"parameters\": {\r\n\t\t\"SaaSTenant\": {\r\n\t\t\t\"type\": \"String\",\r\n\t\t\t\"default\": \"{{ssm:/CORP/TMDS/SaaSTenant}}\"\r\n\t\t},\r\n\t\t\"TenantID\": {\r\n\t\t\t\"type\": \"String\",\r\n\t\t\t\"default\": \"{{ssm:/CORP/TMDS/TenantID}}\"\r\n\t\t},\r\n\t\t\"Token\": {\r\n\t\t\t\"type\": \"String\",\r\n\t\t\t\"default\": \"{{ssm:/CORP/TMDS/Token}}\"\r\n\t\t},\r\n\t\t\"WindowsPolicyID\": {\r\n\t\t\t\"type\": \"String\",\r\n\t\t\t\"default\": \"{{ssm:/CORP/TMDS/WindowsPolicyID}}\"\r\n\t\t},\r\n\t\t\"LinuxPolicyID\": {\r\n\t\t\t\"type\": \"String\",\r\n\t\t\t\"default\": \"{{ssm:/CORP/TMDS/LinuxPolicyID}}\"\r\n\t\t},\r\n\t\t\"AgentVersion\": {\r\n\t\t\t\"type\": \"String\",\r\n\t\t\t\"default\": \"Default\"\r\n\t\t}\r\n\t},\r\n\t\"mainSteps\": [\r\n\t\t{\r\n\t\t\t\"precondition\": {\r\n\t\t\t\t\"StringEquals\": [\r\n\t\t\t\t\t\"platformType\",\r\n\t\t\t\t\t\"Windows\"\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t\"action\": \"aws:runPowerShellScript\",\r\n\t\t\t\"name\": \"runPowerShellScript\",\r\n\t\t\t\"inputs\": {\r\n\t\t\t\t\"runCommand\": [\r\n\t\t\t\t\t\"\",\r\n\t\t\t\t\t\"$directory = Convert-Path .\",\r\n\t\t\t\t\t\"$env:PATH += \\\";$directory\\\"\",\r\n\t\t\t\t\t\"powershell\",\r\n\t\t\t\t\t\"mkdir C:\\\\ssmtemp\\\\\",\r\n\t\t\t\t\t\"iwr -uri \\\"https://agent-scripts.ipc.corp.amway.net/tmds-scripts/Install-TMDSWindowsWProxyOption-Unsigned.ps1\\\" -OutFile C:\\\\ssmtemp\\\\Install-TMDSWindowsWProxyOption-Unsigned.ps1\",\r\n\t\t\t\t\t\"C:\\\\ssmtemp\\\\Install-TMDSWindowsWProxyOption-Unsigned.ps1 -TenantID '{{TenantID}}' -Token '{{Token}}' -PolicyID '{{WindowsPolicyID}}'\",\r\n\t\t\t\t\t\"if ($?) {echo \\\"Installation Successful\\\"} else {exit 1}\",\r\n\t\t\t\t\t\"Remove-Item -LiteralPath \\\"C:\\\\ssmtemp\\\\\\\" -Force -Recurse\",\r\n\t\t\t\t\t\"\"\r\n\t\t\t\t],\r\n\t\t\t\t\"timeoutSeconds\": \"3600\"\r\n\t\t\t}\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"precondition\": {\r\n\t\t\t\t\"StringEquals\": [\r\n\t\t\t\t\t\"platformType\",\r\n\t\t\t\t\t\"Linux\"\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t\"action\": \"aws:runShellScript\",\r\n\t\t\t\"name\": \"runShellScript\",\r\n\t\t\t\"inputs\": {\r\n\t\t\t\t\"runCommand\": [\r\n\t\t\t\t\t\"\",\r\n\t\t\t\t\t\"directory=$(pwd)\",\r\n\t\t\t\t\t\"curl -s https://agent-scripts.ipc.corp.amway.net/tmds-scripts/Install-TMDSLinux.sh -o /tmp/Install-TMDSLinux.sh\",\r\n\t\t\t\t\t\"chmod u+x /tmp/Install-TMDSLinux.sh\",\r\n\t\t\t\t\t\"/tmp/Install-TMDSLinux.sh --Install --SaaSTenant {{SaaSTenant}} --TenantID {{TenantID}} --Token {{Token}} --PolicyID {{LinuxPolicyID}} --AgentVersion {{AgentVersion}}\",\r\n\t\t\t\t\t\"if [ $? != 0 ]; then echo \\\"Installation Failed\\\"; exit 1; fi\",\r\n\t\t\t\t\t\"rm /tmp/Install-TMDSLinux.sh\",\r\n\t\t\t\t\t\"\"\r\n\t\t\t\t],\r\n\t\t\t\t\"timeoutSeconds\": \"3600\"\r\n\t\t\t}\r\n\t\t}\r\n\t]\r\n}",
+  "CreatedDate": "2020-10-26T18:17:51.273Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "7",
+  "Name": "arn:aws:ssm:us-west-2:624341408189:document/TMDSAgentInstallDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "2a44b733-3f7a-482f-b0f9-7b74d69f7e7a",
+    "Metadata": {}
+  },
+  "ContentLength": 3140,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-21T07:12:15.1045162+00:00"
+}

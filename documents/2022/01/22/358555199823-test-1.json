@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\":\"1.2\",\n  \"description\":\"Export metrics \\\"><u>and log files from your instances to Amazon CloudWatch.\",\n  \"parameters\":{\n    \"status\":{\n      \"type\":\"String\",\n      \"default\":\"Enabled\",\n      \"description\":\"(Optional)\\\"><u> Enable or disable CloudWatch. Valid values: Enabled | Disabled\",\n      \"allowedValues\":[\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    },\n    \"properties\":{\n      \"type\":\"String\",\n      \"default\":\"\",\n      \"description\":\"(Opti\\\"><u>onal) The configuration for CloudWatch in JSON format. Learn more at https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-plugins.html#aws-cloudWatch\",\n      \"displayType\":\"textarea\"\n    }\n  },\n  \"runtimeConfig\":{\n    \"aws:cloudWatch\":{\n      \"settings\":{\n        \"startType\":\"{{ status }}\"\n      },\n      \"properties\":\"{{ properties }}\"\n    }\n  }\n}",
+  "CreatedDate": "2018-12-13T22:23:50.932Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:358555199823:document/test",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "260341f3-1453-44cf-87c1-33fee66b477b",
+    "Metadata": {}
+  },
+  "ContentLength": 1128,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-22T07:12:06.2815489+00:00"
+}

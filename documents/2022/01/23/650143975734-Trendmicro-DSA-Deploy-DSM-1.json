@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n\t\"schemaVersion\": \"2.2\",\r\n\t\"description\": \"This document is created by Trendmicro India. Execute scripts stored in a remote location for Deep security manager deployed with customer managed instance. Currently supported scripts are: #! support on Linux and file associations on Windows. Owner: Tejas Sheth (SAL-IN)\",\r\n\t\"parameters\":{\r\n\t\t\"DSMURL\":{\r\n\t\t\t\"type\":\"String\",\r\n\t\t\t\"default\":\"<ip/dns>\",\r\n\t\t\t\"description\":\"(Required) Deep security manager ip address or domain name\"\r\n\t\t},\r\n\t\t\"WindowsPolicyID\":{\r\n\t\t\t\"type\":\"String\",\r\n\t\t\t\"default\":\"1\",\r\n\t\t\t\"description\":\"(Optional) Deep security Windows policy id need to applied here for activation\"\r\n\t\t},\r\n\t\t\"LinuxPolicyID\":{\r\n\t\t\t\"type\":\"String\",\r\n\t\t\t\"default\":\"1\",\r\n\t\t\t\"description\":\"(Optional) Deep security Linux policy id need to applied here for activation\"\r\n\t\t}\r\n\t},\r\n\r\n\t\"mainSteps\": [{\r\n\t\t\"action\": \"aws:downloadContent\",\r\n\t\t\"name\": \"downloadContent\",\r\n\t\t\"inputs\": {\r\n\t\t\t\"sourceType\": \"S3\",\r\n\t\t\t\"sourceInfo\": \"{\\\"path\\\":\\\"https://s3.amazonaws.com/awstrendssm-script/\\\"}\"\r\n      }\r\n\r\n\t},\r\n\r\n\t{\r\n\t\t\"precondition\": {\r\n\t\t\t\"StringEquals\": [\"platformType\",\r\n\t\t\t\"Windows\"]\r\n\t\t},\r\n\t\t\"action\": \"aws:runPowerShellScript\",\r\n\t\t\"name\": \"runPowerShellScript\",\r\n\t\t\"inputs\": {\r\n\t\t\t\"runCommand\": [\"\",\r\n\t\t\t\"$directory = Convert-Path .\",\r\n\t\t\t\"$env:PATH += \\\";$directory\\\"\",\r\n\t\t\t\"Install-TMDSWindows_DSM.ps1 -DSMURL '{{DSMURL}}' -PolicyID '{{WindowsPolicyID}}'\",\r\n\t\t\t\"if ($?) {\",\r\n\t\t\t\"    exit $LASTEXITCODE\",\r\n\t\t\t\"} else {\",\r\n\t\t\t\"    exit 255\",\r\n\t\t\t\"}\",\r\n\t\t\t\"\"],\r\n\t\t\t\"timeoutSeconds\": \"3600\"\r\n\t\t}\r\n\t},\r\n\t{\r\n\t\t\"precondition\": {\r\n\t\t\t\"StringEquals\": [\"platformType\",\r\n\t\t\t\"Linux\"]\r\n\t\t},\r\n\t\t\"action\": \"aws:runShellScript\",\r\n\t\t\"name\": \"runShellScript\",\r\n\t\t\"inputs\": {\r\n\t\t\t\"runCommand\": [\"\",\r\n\t\t\t\"directory=$(pwd)\",\r\n\t\t\t\"export PATH=$PATH:$directory\",\r\n\t\t\t\"TMDSLinux_DSM_install.sh {{DSMURL}} {{LinuxPolicyID}}\",\r\n\t\t\t\"\"],\r\n\t\t\t\"timeoutSeconds\": \"3600\"\r\n\t\t}\r\n\t}]\r\n}",
+  "CreatedDate": "2018-06-04T09:28:17.349Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:650143975734:document/Trendmicro-DSA-Deploy-DSM",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "cc936c01-f3e6-4938-af00-8fb0f05f7e15",
+    "Metadata": {}
+  },
+  "ContentLength": 2549,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-23T07:11:23.3429101+00:00"
+}

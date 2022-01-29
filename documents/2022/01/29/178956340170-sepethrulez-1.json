@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.0\",\n  \"description\": \"Example instance configuration tasks\",\n  \"runtimeConfig\": {\n    \"aws:applications\": {\n      \"properties\": [\n        {\n          \"action\": \"Install\",\n          \"source\": \"http://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.6.22.0.msi\"\n        },\n        {\n          \"action\": \"Install\",\n          \"source\": \"https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi\"\n        },\n        {\n          \"action\": \"Install\",\n          \"source\": \"http://download.winzip.com/winzip190-64.msi\",\n          \"parameters\": \"INSTALLDIR=\\\"C:\\\\Program Files\\\\WinZipXX\\\"\" \n        }\n      ]\n    }\n  }\n}",
+  "CreatedDate": "2016-05-24T12:00:27.987Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:178956340170:document/sepethrulez",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "8331feb9-2946-4cf9-abf1-c3a22348bcb2",
+    "Metadata": {}
+  },
+  "ContentLength": 926,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-01-29T07:12:17.9434132+00:00"
+}

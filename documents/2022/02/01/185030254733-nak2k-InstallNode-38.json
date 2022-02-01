@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.0\",\n  \"description\" : \"Install Node.js (https://github.com/nak2k/aws-ssm-document)\",\n  \"parameters\" : {\n    \"version\" : {\n      \"description\" : \"Version of Node.js\",\n      \"type\" : \"String\",\n      \"default\" : \"14.6.0\"\n    },\n    \"owner\" : {\n      \"description\" : \"Owner of installed node.js\",\n      \"type\" : \"String\",\n      \"default\" : \"ec2-user\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"cd /opt && curl -sSL https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-linux-x64.tar.gz | tar -xvzf - && chown -R {{ owner }} node-v{{ version }}-linux-x64 && ln -sfn node-v{{ version }}-linux-x64 node\", \"echo 'export PATH=$PATH:/opt/node/bin' > /etc/profile.d/node.sh\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-07-27T13:15:19.837Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "38",
+  "Name": "arn:aws:ssm:us-west-2:185030254733:document/nak2k-InstallNode",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d14e55e2-fd1c-4d9c-a348-21d7abfbfbba",
+    "Metadata": {}
+  },
+  "ContentLength": 1090,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-01T07:11:53.0965671+00:00"
+}

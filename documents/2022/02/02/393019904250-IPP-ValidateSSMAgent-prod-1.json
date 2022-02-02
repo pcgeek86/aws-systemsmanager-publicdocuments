@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"validate SSM agent permissions.\",\n  \"parameters\" : {\n    \"linuxInstallDirectory\" : {\n      \"type\" : \"String\",\n      \"default\" : \"/tmp\"\n    },\n    \"windowsInstallDirectory\" : {\n      \"type\" : \"String\",\n      \"default\" : \"C:\\\\tmp\"\n    },\n    \"s3UrlBase\" : {\n      \"type\" : \"String\",\n      \"default\" : \"https://s3-us-west-2.amazonaws.com\"\n    },\n    \"s3Bucket\" : {\n      \"type\" : \"String\"\n    },\n    \"s3UrlVersion\" : {\n      \"type\" : \"String\",\n      \"default\" : \"latest\"\n    },\n    \"VPCEndpoint\" : {\n      \"type\" : \"String\",\n      \"default\" : \"MOCK_VPC_ENDPOINT\"\n    },\n    \"HSAPIToken\" : {\n      \"type\" : \"String\",\n      \"default\" : \"MOCK_HSAPI_TOKEN\"\n    },\n    \"Region\" : {\n      \"type\" : \"String\",\n      \"default\" : \"us-west-2\"\n    },\n    \"ChaosCommand\" : {\n      \"type\" : \"String\",\n      \"default\" : \"help\"\n    },\n    \"ChaosDuration\" : {\n      \"type\" : \"String\",\n      \"default\" : \"30\"\n    },\n    \"ChaosJobId\" : {\n      \"type\" : \"String\",\n      \"default\" : \"1000000\"\n    },\n    \"executionTimeout\" : {\n      \"type\" : \"String\",\n      \"default\" : \"30\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"1_prepareEnv_linux\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"runCommand\" : [ \"mkdir -p {{ linuxInstallDirectory }}\" ]\n    }\n  }, {\n    \"action\" : \"aws:downloadContent\",\n    \"name\" : \"2_downloadChaosclient_linux\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"sourceType\" : \"S3\",\n      \"sourceInfo\" : \"{\\\"path\\\": \\\"{{ s3UrlBase }}/{{ s3Bucket }}/{{ s3UrlVersion }}/exec/amd64/linux/chaosclient\\\"}\",\n      \"destinationPath\" : \"{{ linuxInstallDirectory }}\"\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"3_executeChaosclient_linux\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"runCommand\" : [ \"chmod +x {{ linuxInstallDirectory }}/chaosclient\", \"export HOLOSENSE_VPC_ENDPOINT={{ VPCEndpoint }}\", \"export HOLOSENSE_HSAPI_TOKEN={{ HSAPIToken }}\", \"export HOLOSENSE_REGION={{ Region }}\", \"{{ linuxInstallDirectory }}/chaosclient -d {{ ChaosDuration }} -j {{ ChaosJobId }} {{ ChaosCommand }}\" ]\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"4_cleanUp_linux\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"runCommand\" : [ \"rm {{ linuxInstallDirectory }}/chaosclient\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"1_prepareEnv_windows\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"runCommand\" : [ \"New-Item -Path {{ windowsInstallDirectory }} -Type Directory\" ]\n    }\n  }, {\n    \"action\" : \"aws:downloadContent\",\n    \"name\" : \"2_downloadChaosclient_windows\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"sourceType\" : \"S3\",\n      \"sourceInfo\" : \"{\\\"path\\\": \\\"{{ s3UrlBase }}/{{ s3Bucket }}/{{ s3UrlVersion }}/exec/amd64/windows/chaosclient.exe\\\"}\",\n      \"destinationPath\" : \"{{ windowsInstallDirectory }}\"\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"3_executeChaosclient_windows\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"runCommand\" : [ \"$env:HOLOSENSE_VPC_ENDPOINT=\\\"{{ VPCEndpoint }}\\\"\", \"$env:HOLOSENSE_HSAPI_TOKEN=\\\"{{ HSAPIToken }}\\\"\", \"$env:HOLOSENSE_REGION=\\\"{{ Region }}\\\"\", \"{{ windowsInstallDirectory }}\\\\chaosclient.exe -d {{ ChaosDuration }} -j {{ ChaosJobId }} {{ ChaosCommand }}\", \"if (!$?) { exit 1 }\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"4_cleanUp_windows\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"{{ executionTimeout }}\",\n      \"runCommand\" : [ \"Remove-Item -Force -Path {{ windowsInstallDirectory }}\\\\chaosclient.exe\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-07-24T11:48:13.495Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:393019904250:document/IPP-ValidateSSMAgent-prod",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d9ca50be-9035-4e5f-9ec1-2d5d29580e1b",
+    "Metadata": {}
+  },
+  "ContentLength": 5174,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-02T07:11:45.2923455+00:00"
+}

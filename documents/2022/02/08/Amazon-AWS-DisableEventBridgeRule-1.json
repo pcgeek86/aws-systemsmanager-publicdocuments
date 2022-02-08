@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Document name -  AWS-DisableEventBridgeRule\\n\\n## What does this document do?\\nThe  AWS-DisableEventBridgeRule Automation document disables the rule in EventBridge\\n\\n## Input Parameters\\n* RuleName: (Required) Name of the EventBridge rule.\\n* EventBusName: (Optional) Name of the event bus. If not specified, uses `default` event bus.\\n* AutomationAssumeRole: (Optional) The Amazon Resource Name (ARN) of the role that allows SSM Automation to perform the actions on your behalf.\\n\\n## Output parameters\\nNone\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"RuleName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Name of the EventBridge rule\"\n    },\n    \"EventBusName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Name of the event bus. If not specified, uses `default` event bus. \",\n      \"default\" : \"default\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The Amazon Resource Name (ARN) of the role that allows SSM Automation to perform the actions on your behalf.\",\n      \"default\" : \"\",\n      \"allowedPattern\" : \"^arn:aws(-cn|-us-gov)?:iam::\\\\d{12}:role\\\\/[\\\\w+=,.@_\\\\/-]+|^$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DisableEventBridgeRule\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"events\",\n      \"Api\" : \"disable_rule\",\n      \"Name\" : \"{{RuleName}}\",\n      \"EventBusName\" : \"{{EventBusName}}\"\n    },\n    \"description\" : \"Disables a rule in EventBridge\"\n  } ]\n}",
+  "CreatedDate": "2021-05-05T17:43:23.523Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-DisableEventBridgeRule",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ac0d12ee-5b63-4963-8cf3-f2e5def50de5",
+    "Metadata": {}
+  },
+  "ContentLength": 1873,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-08T07:10:39.5862252+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"Configures CloudTrail Logging\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"CloudTrailArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) ARN for the CloudTrail\"\n    },\n    \"StartLogging\" : {\n      \"description\" : \"(Optional) When true process initiates CloudTrail Logging, when false process ends CloudTrail Logging\",\n      \"type\" : \"String\",\n      \"default\" : \"True\",\n      \"allowedValues\" : [ \"True\", \"False\" ]\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"GetCloudTrailStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"isCritical\" : false,\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"GetTrailStatus\",\n      \"Name\" : \"{{CloudTrailArn}}\",\n      \"PropertySelector\" : \"$.IsLogging\",\n      \"DesiredValues\" : [ \"{{StartLogging}}\" ]\n    },\n    \"onFailure\" : \"step:AscertainOperation\",\n    \"nextStep\" : \"End\"\n  }, {\n    \"name\" : \"AscertainOperation\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"isCritical\" : false,\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"GetTrailStatus\",\n      \"Name\" : \"{{CloudTrailArn}}\",\n      \"PropertySelector\" : \"$.IsLogging\",\n      \"DesiredValues\" : [ \"False\" ]\n    },\n    \"nextStep\" : \"EnableLogging\",\n    \"onFailure\" : \"step:DisableLogging\"\n  }, {\n    \"name\" : \"EnableLogging\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"StartLogging\",\n      \"Name\" : \"{{CloudTrailArn}}\"\n    },\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"DisableLogging\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"StopLogging\",\n      \"Name\" : \"{{CloudTrailArn}}\"\n    },\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"End\",\n    \"action\" : \"aws:sleep\",\n    \"inputs\" : {\n      \"Duration\" : \"PT1S\"\n    }\n  } ]\n}",
+  "CreatedDate": "2020-05-12T17:34:36.579Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureCloudTrailLogging",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b8cdda4c-5fd9-44c9-bfc8-47d868d0799b",
+    "Metadata": {}
+  },
+  "ContentLength": 2508,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-08T07:10:34.6240306+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Grant user access\",\n  \"parameters\" : {\n    \"pubkey\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) public key to add\"\n    },\n    \"authorizedKeysFile\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Path to authorized_keys file.\",\n      \"default\" : \"/home/ec2-user/.ssh/authorized_keys\"\n    },\n    \"AccountID\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Account ID\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"#!/bin/sh\", \"set -e\", \"sudo yum install jq -y\", \"pubkey=\\\"{{pubkey}}\\\"\", \"authorized_key_file={{authorizedKeysFile}}\", \"AccountID={{AccountID}}\", \"\", \"echo Switching role to $iamrole\", \"mkdir -p ~/.aws\", \"aws sts assume-role --role-arn  arn:aws:iam::$AccountID:role/SSHPubKeyAccess --role-session-name sshkeyaccess > ~/.aws/sshkeyaccess.txt\", \"export AWS_ACCESS_KEY_ID=$(cat ~/.aws/sshkeyaccess.txt | jq -r .Credentials.AccessKeyId)\", \"export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/sshkeyaccess.txt | jq -r .Credentials.SecretAccessKey)\", \"export AWS_SESSION_TOKEN=$(cat ~/.aws/sshkeyaccess.txt | jq -r .Credentials.SessionToken)\", \"\", \"\", \"[[ -e $authorized_key_file ]] || touch $authorized_key_file && chmod 744 $authorized_key_file\", \"\", \"  echo \\\"Installing key $pubkey into $authorized_key_file\\\"\", \"  echo \\\"$pubkey \\\" >> $authorized_key_file\", \"\", \"cat $authorized_key_file\", \"echo 'Keys installed!'\", \"\", \"unset AWS_ACCESS_KEY_ID\", \"unset AWS_SECRET_ACCESS_KEY\", \"unset AWS_SESSION_TOKEN\", \"rm ~/.aws/sshkeyaccess.txt\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2019-09-12T16:54:53.914Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "15",
+  "Name": "arn:aws:ssm:us-west-2:962372610737:document/GrantSSHKeyAccess",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "92435788-6db3-46ad-8c4c-4730c55251bf",
+    "Metadata": {}
+  },
+  "ContentLength": 1996,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-09T07:12:47.2560705+00:00"
+}

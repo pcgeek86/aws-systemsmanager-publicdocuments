@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.0\",\n  \"description\": \"Software Inventory Policy Document.\",\n  \"parameters\": {\n    \"applications\": {\n      \"type\": \"String\",\n      \"default\": \"Enabled\",\n      \"description\": \"(Optional) Collect data for installed applications.\",\n      \"allowedValues\": [\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    },\n    \"awsComponents\": {\n      \"type\": \"String\",\n      \"default\": \"Enabled\",\n      \"description\": \"(Optional) Collect data for AWS Components like amazon-ssm-agent.\",\n      \"allowedValues\": [\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    },\n    \"networkConfig\": {\n      \"type\": \"String\",\n      \"default\": \"Enabled\",\n      \"description\": \"(Optional) Collect data for Network configurations.\",\n      \"allowedValues\": [\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    },\n    \"windowsUpdates\": {\n      \"type\": \"String\",\n      \"default\": \"Enabled\",\n      \"description\": \"(Optional) Collect data for all Windows Updates.\",\n      \"allowedValues\": [\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    },\n    \"instanceDetailedInformation\": {\n      \"type\": \"String\",\n      \"default\": \"Enabled\",\n      \"description\": \"(Optional) Collect additional information about the instance, including the CPU model, speed, and the number of cores, to name a few.\",\n      \"allowedValues\": [\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    },\n    \"customInventory\": {\n      \"type\": \"String\",\n      \"default\": \"Enabled\",\n      \"description\": \"(Optional) Collect data for custom inventory.\",\n      \"allowedValues\": [\n        \"Enabled\",\n        \"Disabled\"\n      ]\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:softwareInventory\",\n      \"name\": \"collectSoftwareInventoryItems\",\n      \"inputs\": {\n        \"applications\": \"{{ applications }}\",\n        \"awsComponents\": \"{{ awsComponents }}\",\n        \"networkConfig\": \"{{ networkConfig }}\",\n        \"windowsUpdates\": \"{{ windowsUpdates }}\",\n        \"instanceDetailedInformation\": \"{{ instanceDetailedInformation }}\",\n        \"customInventory\": \"{{ customInventory }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2018-01-30T18:26:33.352Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:965242668498:document/PerInstanceApplicationInventory",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f8475dd9-09f0-4f59-bc0e-1b06aea8786a",
+    "Metadata": {}
+  },
+  "ContentLength": 2508,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-10T07:11:44.3544583+00:00"
+}

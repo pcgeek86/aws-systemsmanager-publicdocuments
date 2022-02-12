@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-ConfigureLambdaFunctionXRayTracing\\n\\n## What does this document do?\\nThis document enables X-Ray tracing on a given AWS Lambda function using the [UpdateFunctionConfiguration](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionConfiguration.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* FunctionName: (Required) The name or ARN of the AWS Lambda function.\\n\\n## Output Parameters\\n* UpdateLambdaFunctionXRayConfig.OutputResponse: The standard HTTP response from the UpdateFunctionConfiguration API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+$\"\n    },\n    \"FunctionName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The name or ARN of the AWS Lambda function.\",\n      \"allowedPattern\" : \"(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}(-gov)?-[a-z]+-\\\\d{1}:)?(\\\\d{12}:)?(function:)?([a-zA-Z0-9-_\\\\.]+)(:(\\\\$LATEST|[a-zA-Z0-9-_]+))?\"\n    }\n  },\n  \"outputs\" : [ \"UpdateLambdaFunctionXRayConfig.OutputResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"UpdateLambdaFunctionXRayConfig\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## UpdateLambdaFunctionXRayConfig\\nEnables X-Ray tracing on the AWS Lambda function.\\n## Outputs\\n* OutputResponse: The standard HTTP response from the UpdateFunctionConfiguration API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"UpdateFunctionConfiguration\",\n      \"FunctionName\" : \"{{ FunctionName }}\",\n      \"TracingConfig\" : {\n        \"Mode\" : \"Active\"\n      }\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"OutputResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyLambdaFunctionXRayTracingEnabled\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"description\" : \"## VerifyLambdaFunctionXRayTracingEnabled\\nChecks that X-Ray tracing is enabled on the AWS Lambda function.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"GetFunctionConfiguration\",\n      \"FunctionName\" : \"{{ FunctionName }}\",\n      \"PropertySelector\" : \"$.TracingConfig.Mode\",\n      \"DesiredValues\" : [ \"Active\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-10-06T15:07:19.568Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-ConfigureLambdaFunctionXRayTracing",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "7675ada1-77c6-4484-a824-768bec5c3961",
+    "Metadata": {}
+  },
+  "ContentLength": 3019,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-12T07:10:25.5822429+00:00"
+}

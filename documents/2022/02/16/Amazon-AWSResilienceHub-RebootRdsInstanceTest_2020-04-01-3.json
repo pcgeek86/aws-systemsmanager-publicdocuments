@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"## Intent\\n'Test that the application automatically recovers in case of a database reboot'\\n\\n## Type\\nTest\\n\\n## Risk\\nSmall\\n\\n## Requirements\\n  * RDS database\\n  * There is a canary alarm setup for application\\n\\n## Permissions required for AutomationAssumeRole\\n  * rds:DescribeDBInstances\\n  * rds:RebootDBInstance\\n  * cloudwatch:DescribeAlarms\\n\\n## Supports Rollback\\nNo.\\n\\n## Cancellation behavior\\nAbort.\\n\\n## Inputs\\n### (Required) AutomationAssumeRole:\\n  * type: String\\n  * description: (Required) The ARN of the role that allows Automation to perform the actions on your behalf\\n\\n### (Required) DbInstanceId:\\n  * type: String\\n  * description: (Required) Identifies the db instance subject to action.\\n\\n### (Required) CanaryAlarmName:\\n  * type: String\\n  * description: (Required) Canary Alarm which should be green within recovery time.\\n\\n## Details\\n  * Reboot rds instance.\\n  * Assert canary alarm to be green within expected recovery time.\\n\\n## Steps executed in normal flow\\n  * AssertAlarmToBeGreenBeforeTest\\n  * AssertInstanceInAvailableState\\n  * RebootDbInstance\\n  * WaitForAvailableState\\n  * AssertAlarmToBeGreen\\n\\n## Outputs\\nNone\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"DbInstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Identifies the db instance subject to action.\"\n    },\n    \"CanaryAlarmName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Alarm which should be green after test.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"AssertAlarmToBeGreenBeforeTest\",\n    \"description\" : \"Ensure alarm is green before starting test. Fail if alarm is not green within expected time.\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"maxAttempts\" : 1,\n    \"timeoutSeconds\" : 300,\n    \"inputs\" : {\n      \"Service\" : \"cloudwatch\",\n      \"Api\" : \"DescribeAlarms\",\n      \"AlarmNames\" : [ \"{{CanaryAlarmName}}\" ],\n      \"PropertySelector\" : \"$.MetricAlarms[0].StateValue\",\n      \"DesiredValues\" : [ \"OK\" ]\n    }\n  }, {\n    \"name\" : \"AssertInstanceInAvailableState\",\n    \"description\" : \"Assert instance is in available state before test.\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"onFailure\" : \"Abort\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{DbInstanceId}}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"RebootDbInstance\",\n    \"description\" : \"Reboot rds instance.\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"RebootDBInstance\",\n      \"DBInstanceIdentifier\" : \"{{DbInstanceId}}\"\n    }\n  }, {\n    \"name\" : \"WaitForAvailableState\",\n    \"description\" : \"Wait for database to be in available state.\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"maxAttempts\" : 10,\n    \"timeoutSeconds\" : 600,\n    \"onFailure\" : \"Abort\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{DbInstanceId}}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"AssertAlarmToBeGreen\",\n    \"description\" : \"Wait for the alarm to be green after test is complete.\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"maxAttempts\" : 10,\n    \"timeoutSeconds\" : 600,\n    \"onFailure\" : \"Abort\",\n    \"inputs\" : {\n      \"Service\" : \"cloudwatch\",\n      \"Api\" : \"DescribeAlarms\",\n      \"AlarmNames\" : [ \"{{CanaryAlarmName}}\" ],\n      \"PropertySelector\" : \"$.MetricAlarms[0].StateValue\",\n      \"DesiredValues\" : [ \"OK\" ]\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2021-11-09T00:15:58.391Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "AWSResilienceHub-RebootRdsInstanceTest_2020-04-01",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c8a8c947-acfb-48ff-b787-5951b5c26a5e",
+    "Metadata": {}
+  },
+  "ContentLength": 4490,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-16T07:11:33.4261157+00:00"
+}

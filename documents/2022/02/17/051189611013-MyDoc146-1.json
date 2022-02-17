@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.2\",\n  \"description\": \"Check ip configuration of a Linux instance.\",\n  \"parameters\": {\n \n  },\n  \"runtimeConfig\": {\n    \"aws:runShellScript\": {\n      \"properties\": [\n        {\n          \"id\": \"0.aws:runShellScript\",\n          \"runCommand\": [\"ifconfig\"]\n        }\n      ]\n    }\n  }\n}",
+  "CreatedDate": "2016-06-16T15:59:41.241Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:051189611013:document/MyDoc146",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9afeda42-0bd8-4df6-bbc4-305443b61e10",
+    "Metadata": {}
+  },
+  "ContentLength": 540,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-17T07:12:37.0383891+00:00"
+}

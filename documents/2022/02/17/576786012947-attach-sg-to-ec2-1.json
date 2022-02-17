@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\"description\":\"Custom designed by Spiceworks Ops for use by AWS Config in order to run remediations against an EC2 instance that does not have a specific, required Security Group attached to all ENIs (thus is non-compliant) that allows access from resources such as security scanners.\",\"assumeRole\":\"{{AutomationAssumeRole}}\",\"schemaVersion\":\"0.3\",\"parameters\":{\"AutomationAssumeRole\":{\"description\":\"(Required) automation execution assumed role.\",\"type\":\"String\"},\"securityGroupName\":{\"description\":\"(Required) name of security group to attach\",\"type\":\"String\"},\"instanceId\":{\"description\":\"(Required) ec2 instance id\",\"type\":\"String\"}},\"mainSteps\":[{\"inputs\":{\"Script\":\"def script_handler(events, context):\\n  print(events)\\n  \\n  instanceId = events['instance_id']\\n  sgNameToAttach = events['security_group_name']\\n  \\n  import boto3\\n  resource = boto3.resource('ec2')\\n  client = boto3.client('ec2')\\n  \\n  instance = resource.Instance(instanceId)\\n  print('found instance: ', instance.id)\\n  \\n  # need to get the SG's id value from name, per instance vpc:\\n  security_groups_dict = client.describe_security_groups(\\n    Filters=[\\n        {\\n            'Name': 'vpc-id',\\n            'Values': [\\n                instance.vpc_id,\\n            ]\\n        },\\n         {\\n            'Name': 'group-name',\\n            'Values': [\\n                sgNameToAttach,\\n            ]\\n        },\\n        \\n    ]\\n  )\\n  \\n  for eni in instance.network_interfaces_attribute:\\n    eni_sg_ids = [sg['GroupId'] for sg in eni['Groups']]\\n    # should only be one item here:\\n    for groupobj in security_groups_dict['SecurityGroups']:\\n      print('found sg group id:', groupobj['GroupId'])\\n      if groupobj['GroupId'] in eni_sg_ids:                                          \\n        print('noop: security group already attached to this instance eni')                                    \\n      else:\\n        eni_sg_ids.append(groupobj['GroupId'])\\n        client.modify_network_interface_attribute(Groups=eni_sg_ids,NetworkInterfaceId=eni['NetworkInterfaceId'])\\n        print('security group attached to instance eni')     \\n  \",\"Runtime\":\"python3.6\",\"InputPayload\":{\"instance_id\":\"{{ instanceId }}\",\"security_group_name\":\"{{ securityGroupName }}\"},\"Handler\":\"script_handler\"},\"name\":\"attachSecurityGroupToInstance\",\"action\":\"aws:executeScript\"}]}",
+  "CreatedDate": "2020-07-31T06:04:38.384Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:576786012947:document/attach-sg-to-ec2",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "43a0e306-32a7-4628-aa6b-6cfa47510415",
+    "Metadata": {}
+  },
+  "ContentLength": 2680,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-17T07:12:49.4547204+00:00"
+}

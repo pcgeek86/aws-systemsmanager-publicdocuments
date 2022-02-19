@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-RemoveVPCDefaultSecurityGroupRules\\n\\n## What does this document do?\\nThis document removes all inbound and outbound rules from the default security group in an Amazon VPC. A default security group is defined as any security group whose name is `default`. If the security group ID passed to this automation document belongs to a non-default security group, this document does not perform any changes to the AWS account.\\n\\n## Input Parameters\\n* GroupId: (Required) The unique ID of the security group.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* RemoveRulesAndVerify.Output - Success message or failure exception.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"GroupId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The unique ID of the security group.\",\n      \"allowedPattern\" : \"sg-[a-z0-9]+$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+$\"\n    }\n  },\n  \"outputs\" : [ \"RemoveRulesAndVerify.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"CheckDefaultSecurityGroup\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"isCritical\" : true,\n    \"onFailure\" : \"Abort\",\n    \"maxAttempts\" : 3,\n    \"timeoutSeconds\" : 20,\n    \"description\" : \"## CheckDefaultSecurityGroup\\nVerifies that the security group name does match `default`. If the group name does match `default`, go to the next step: DescribeSecurityGroups.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"DescribeSecurityGroups\",\n      \"GroupIds\" : [ \"{{ GroupId }}\" ],\n      \"PropertySelector\" : \"$.SecurityGroups[0].GroupName\",\n      \"DesiredValues\" : [ \"default\" ]\n    },\n    \"nextStep\" : \"RemoveRulesAndVerify\"\n  }, {\n    \"name\" : \"RemoveRulesAndVerify\",\n    \"action\" : \"aws:executeScript\",\n    \"isCritical\" : true,\n    \"onFailure\" : \"Abort\",\n    \"maxAttempts\" : 3,\n    \"timeoutSeconds\" : 180,\n    \"isEnd\" : true,\n    \"description\" : \"## RemoveRulesAndVerify\\nRemoves all rules from the default security group.\\n## Outputs\\n* Output: Success message or failure exception.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"GroupId\" : \"{{ GroupId }}\"\n      },\n      \"Script\" : \"import boto3\\nfrom botocore.exceptions import ClientError\\nfrom time import sleep\\n\\n\\nec2_client = boto3.client(\\\"ec2\\\")\\n\\n\\ndef get_permissions(group_id):\\n    default_group = ec2_client.describe_security_groups(GroupIds=[group_id]).get(\\\"SecurityGroups\\\")[0]\\n    return default_group.get(\\\"IpPermissions\\\"), default_group.get(\\\"IpPermissionsEgress\\\")\\n\\n\\ndef handler(event, context):\\n    group_id = event.get(\\\"GroupId\\\")\\n    ingress_permissions, egress_permissions = get_permissions(group_id)\\n\\n    if ingress_permissions:\\n        ec2_client.revoke_security_group_ingress(GroupId=group_id, IpPermissions=ingress_permissions)\\n    if egress_permissions:\\n        ec2_client.revoke_security_group_egress(GroupId=group_id, IpPermissions=egress_permissions)\\n\\n    ingress_permissions, egress_permissions = get_permissions(group_id)\\n    if ingress_permissions or egress_permissions:\\n        raise Exception(f\\\"VERIFICATION FAILED. SECURITY GROUP {group_id} NOT CLOSED.\\\")\\n\\n    return {\\n        \\\"output\\\": \\\"Security group closed successfully.\\\"\\n    }\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"String\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:10:14.184Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-RemoveVPCDefaultSecurityGroupRules",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6b6e1f68-f39d-4592-928f-c357b64dc0fd",
+    "Metadata": {}
+  },
+  "ContentLength": 4252,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-19T07:11:08.096355+00:00"
+}

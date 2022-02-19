@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"## What does this document do?\\nIt runs disk filling stress on an instance via stress-ng tool.\\nstress-ng --fallocate {{ Workers }} --fallocate-bytes {{ Filesize }} -t {{ Duration }}s\\n## Input Parameters\\n* Duration: (Required) The duration - in seconds - of the Disk stress.\\n* Workers: Specify the number of workers continually fallocating (preallocating file space).\\n* Filesize: Allocated  file  size in GB (default  is 1).\\n* InstallDependencies: If set to True, Systems Manager installs the required dependencies on the target instances. (default True)\\n\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"Duration\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The duration - in seconds - of the Disk stress.\",\n      \"allowedPattern\" : \"^[0-9]+$\",\n      \"default\" : \"60\"\n    },\n    \"Workers\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Specify the number of Fallocate workers to use (default: 4)\",\n      \"default\" : \"4\",\n      \"allowedPattern\" : \"^[0-9]+$\"\n    },\n    \"Filesize\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Specify the Filesize in GB to use (default: 1)\",\n      \"default\" : \"1\",\n      \"allowedPattern\" : \"^[0-9]+$\"\n    },\n    \"InstallDependencies\" : {\n      \"type\" : \"String\",\n      \"description\" : \"If set to True, Systems Manager installs the required dependencies on the target instances (default: True)\",\n      \"default\" : \"True\",\n      \"allowedValues\" : [ \"True\", \"False\" ]\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"name\" : \"InstallDependencies\",\n    \"description\" : \"## Parameter: InstallDependencies\\nIf set to True, this step installs the required dependency via operating system's repository. It supports both\\nDebian (apt) and CentOS (yum) based package managers.\\n\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"#!/bin/bash\\nif  [[ \\\"{{ InstallDependencies }}\\\" == True ]] ; then\\n  if [[ \\\"$( which stress-ng 2>/dev/null )\\\" ]] ; then echo Dependency is already installed. ; exit ; fi\\n  echo \\\"Installing required dependencies\\\"\\n  if [ -f  \\\"/etc/system-release\\\" ] ; then\\n    if cat /etc/system-release | grep -i 'Amazon Linux' ; then\\n      sudo amazon-linux-extras install testing\\n      sudo yum -y install stress-ng\\n    else\\n      echo \\\"There was a problem installing dependencies.\\\"\\n      exit 1\\n    fi\\n  elif cat /etc/issue | grep -i Ubuntu ; then\\n    sudo apt-get update -y\\n    sudo DEBIAN_FRONTEND=noninteractive sudo apt-get install -y stress-ng\\n  else\\n    echo \\\"There was a problem installing dependencies.\\\"\\n    exit 1\\n  fi\\nfi\\n\" ]\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"name\" : \"ExecuteStressNg\",\n    \"description\" : \"## Parameters: Duration, Workers, Filesize\\nThis step will stress the Disk with the specified Filesize for the specified Duration time\\nin seconds.\\n\",\n    \"inputs\" : {\n      \"maxAttempts\" : 1,\n      \"runCommand\" : [ \"if [ {{ Duration }} -lt 1 ] || [ {{ Duration }} -gt 43200 ] ; then echo Duration parameter value must be between 1 and 43200 seconds && exit; fi\\npgrep stress-ng && echo Another stress-ng command is running, exiting... && exit\\necho Initiating Disk stress for {{ Duration }} seconds...\\nstress-ng --fallocate {{ Workers }} --fallocate-bytes {{ Filesize }}g -t {{ Duration }}s\\necho Finished Disk stress.\\n\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-06-18T07:41:24.16Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:509533653767:document/AWSFISDiskspaceStress",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b36c556f-47d3-414c-b6ca-e6a3cb755050",
+    "Metadata": {}
+  },
+  "ContentLength": 3947,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-19T07:11:18.7431256+00:00"
+}

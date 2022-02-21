@@ -1,0 +1,28 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"Tarminates stress command on healthy EC2 instances\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf\"\n    },\n    \"AutoScalingGroupName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Name of auto scaling group\"\n    },\n    \"InstanceIds\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Otional) Instances on which command will be executed, if healthy\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"FilterHealthyAsgInstances\",\n    \"action\" : \"aws:executeScript\",\n    \"onFailure\" : \"Abort\",\n    \"outputs\" : [ {\n      \"Name\" : \"InstanceIds\",\n      \"Selector\" : \"$.Payload.InstanceIds\",\n      \"Type\" : \"StringList\"\n    }, {\n      \"Name\" : \"Count\",\n      \"Selector\" : \"$.Payload.Count\",\n      \"Type\" : \"Integer\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"filter_healthy_instance_ids_in_asg\",\n      \"InputPayload\" : {\n        \"InstanceIds\" : \"{{InstanceIds}}\",\n        \"AutoScalingGroupName\" : \"{{AutoScalingGroupName}}\"\n      },\n      \"Script\" : \"import logging\\nimport random\\nimport time\\nfrom math import ceil\\n\\nimport boto3\\nfrom botocore.config import Config\\n\\nlogger = logging.getLogger(__name__)\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\n\\ndef filter_healthy_instance_ids_in_asg(events, context):\\n    if 'AutoScalingGroupName' not in events or 'InstanceIds' not in events:\\n        raise KeyError('Requires AutoScalingGroupName, InsatnceIds in events')\\n    config = Config(retries={'max_attempts': 20, 'mode': 'standard'})\\n    autoscaling = boto3.client('autoscaling', config=config)\\n\\n    auto_scaling_groups = autoscaling.describe_auto_scaling_groups(\\n        AutoScalingGroupNames=[\\n            events['AutoScalingGroupName']\\n        ]\\n    )\\n\\n    # Take all healthy ASG EC2 instances\\n    asg_healthy_instances = []\\n    for instance in auto_scaling_groups['AutoScalingGroups'][0]['Instances']:\\n        if instance['HealthStatus'] == 'Healthy' and instance['LifecycleState'] == 'InService':\\n            asg_healthy_instances.append(instance['InstanceId'])\\n\\n    output = {}\\n    output['InstanceIds'] = []\\n    given_instance_ids = events['InstanceIds']\\n    # Take only healthy given EC2 instances\\n    for instance_id in given_instance_ids:\\n        if instance_id in asg_healthy_instances:\\n            output['InstanceIds'].append(instance_id)\\n    output['Count'] = len(output['InstanceIds'])\\n    return output\"\n    }\n  }, {\n    \"name\" : \"CheckInstancesExist\",\n    \"action\" : \"aws:branch\",\n    \"inputs\" : {\n      \"Choices\" : [ {\n        \"NextStep\" : \"ExecutingCommand\",\n        \"Variable\" : \"{{FilterHealthyAsgInstances.Count}}\",\n        \"NumericGreater\" : 0\n      } ]\n    },\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"ExecutingCommand\",\n    \"action\" : \"aws:runCommand\",\n    \"maxAttempts\" : 3,\n    \"onFailure\" : \"Abort\",\n    \"inputs\" : {\n      \"DocumentName\" : \"AWSResilienceHub-KillStressCommand_2020-07-28\",\n      \"InstanceIds\" : [ \"{{ FilterHealthyAsgInstances.InstanceIds }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-01-18T14:35:27.06Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSResilienceHub-KillStressOnHealthyInstances_2020-07-28",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "00c44829-4407-467c-ae40-b7cc3e895308",
+    "Metadata": {}
+  },
+  "ContentLength": 3663,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-21T07:12:06.9721041+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"This document is used to schedule an instance reboot at a later time with custom provided script to be run as post-reboot hook. Requires SSM Agent 3.0.502 or higher, and Patching Operation running at least once prior to the execution. \",\n  \"parameters\": {\n    \"PostRebootHookDocName\": {\n      \"type\": \"String\",\n      \"description\": \"Document Name for Post Reboot Hook\",\n      \"default\": \"AWS-Noop\",\n      \"allowedPattern\": \"(^[a-zA-Z0-9_\\\\-.]{3,128}$)|(^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:document\\\\/[a-zA-Z0-9_\\\\-.]{3,128}$)\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"VerifyPendingRebootPatchesAndRebootLinux\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"localFile=/var/log/amazon/ssm/patch-configuration/patch-inventory-from-last-operation.json\",\n          \"[[ ! -f \\\"$localFile\\\" ]] && exit 169\",\n          \"installedPendingRebootCount=$(cat $localFile | grep 'InstalledPendingRebootCount' | sed 's/[^0-9]*//g')\",\n          \"if [[ \\\"$installedPendingRebootCount\\\" -eq 0 ]]; then\",\n          \"     echo \\\"No pending reboot patches were found. Exiting document execution.\\\"\",\n          \"     exit 168\",\n          \"fi\",\n          \"instanceRebootFile=/var/log/amazon/ssm/patch-instance-reboot-with-hooks\",\n          \"if [[ ! -f \\\"$instanceRebootFile\\\" ]]; then\",\n          \"  touch ${instanceRebootFile}\",\n          \"  exit 194\",\n          \"fi\",\n          \"rm -f ${instanceRebootFile}\",\n          \"echo \\\"Reboot is done, proceed to next step.\\\"\"\n        ]\n      }\n    },\n    {\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"VerifyPendingRebootPatchesAndRebootWindows\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"$appName = 'PatchBaselineOperations'\",\n          \"$fileName = 'PatchInventoryFromLastOperation.json'\",\n          \"$localFileLocation = [IO.Path]::Combine($env:ProgramData, 'Amazon', $appName, 'State')\",\n          \"$localFile = [IO.Path]::Combine($localFileLocation, $fileName)\",\n          \"if (-Not (Test-Path $localFile -PathType Leaf)) {\",\n          \"     exit 169\",\n          \"}\",\n          \"$installedPendingRebootCountLine = Get-Content $localFile | Select-String 'InstalledPendingRebootCount'\",\n          \"$installedPendingRebootCount = $installedPendingRebootCountLine -replace '\\\\D+(\\\\d+)','$1'\",\n          \"if ($installedPendingRebootCount -eq 0) {\",\n          \"     echo \\\"No pending reboot patches were found. Exiting document execution\\\"\",\n          \"     exit 168\",\n          \"}\",\n          \"$instanceRebootFile = [IO.Path]::Combine($localFileLocation, 'PatchInstanceRebootWithHooks')\",\n          \"if (-Not (Test-Path $instanceRebootFile -PathType Leaf)) {\",\n          \"  New-Item $instanceRebootFile -ItemType File | Out-Null\",\n          \"  exit 3010\",\n          \"}\",\n          \"Remove-Item $instanceRebootFile -Force\",\n          \"echo \\\"Reboot is done, proceed to next step.\\\"\"\n        ]\n      }\n    },\n    {\n      \"action\": \"aws:runDocument\",\n      \"name\": \"PostRebootScan\",\n      \"inputs\": {\n        \"documentType\": \"SSMDocument\",\n        \"documentPath\": \"AWS-RunPatchBaseline\",\n        \"documentParameters\": \"{\\\"Operation\\\":\\\"Scan\\\",\\\"RebootOption\\\":\\\"NoReboot\\\"}\"\n      }\n    },\n    {\n      \"action\": \"aws:runDocument\",\n      \"name\": \"CustomerProvidedPostRebootHook\",\n      \"inputs\": {\n        \"documentType\": \"SSMDocument\",\n        \"documentPath\": \"{{PostRebootHookDocName}}\",\n        \"finallyStep\": true\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-03-22T20:42:54.644Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-InstanceRebootWithHooks",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "20d25e54-61ec-45d4-bde3-bcdeb7af7045",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4277,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-24T07:11:11.0160561+00:00"
+}

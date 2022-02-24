@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableAccountAccessAnalyzer\\n\\n## What does this document do?\\nThis document creates an AWS Identity and Access Management (IAM) Access Analyzer on an AWS Account level. This document uses the [CreateAnalyzer API](https://docs.aws.amazon.com/access-analyzer/latest/APIReference/API_CreateAnalyzer.html) to create the Access Analyzer.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* AnalyzerName: (Required) Name of the Access Analyzer to be created.\\n\\n## Output Parameters\\n* CreateAnalyzer.CreateAnalyzerResponse: The standard HTTP response from the CreateAnalyzer API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"AnalyzerName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the analyzer to create.\",\n      \"allowedPattern\" : \"^[A-Za-z][\\\\w-.]{1,255}\"\n    }\n  },\n  \"outputs\" : [ \"CreateAnalyzer.CreateAnalyzerResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"CreateAnalyzer\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## CreateAnalyzer\\nCreates an AWS IAM Access Analyzer for your account using CreateAnalyzer API call.\\n## Outputs\\n* CreateAnalyzerResponse: The standard HTTP response from the CreateAnalyzer API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"accessanalyzer\",\n      \"Api\" : \"CreateAnalyzer\",\n      \"analyzerName\" : \"{{ AnalyzerName }}\",\n      \"type\" : \"ACCOUNT\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"CreateAnalyzerResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"GetAnalyzerStatus\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"description\" : \"## GetAnalyzerStatus\\nWaits for the AWS IAM Access Analyzer created from the previous step to be in 'ACTIVE' state.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"accessanalyzer\",\n      \"Api\" : \"GetAnalyzer\",\n      \"analyzerName\" : \"{{ AnalyzerName }}\",\n      \"PropertySelector\" : \"$.analyzer.status\",\n      \"DesiredValues\" : [ \"ACTIVE\" ]\n    }\n  }, {\n    \"name\" : \"VerifyCreateAnalyzer\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyCreateAnalyzer\\nChecks that the AWS IAM Access Analyzer that was created in the previous step exists.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"accessanalyzer\",\n      \"Api\" : \"GetAnalyzer\",\n      \"analyzerName\" : \"{{ AnalyzerName }}\",\n      \"PropertySelector\" : \"$.analyzer.status\",\n      \"DesiredValues\" : [ \"ACTIVE\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-10-29T15:10:08.012Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableAccountAccessAnalyzer",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "50d2225c-71d8-4c7d-8db5-3fc403daf756",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3423,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-02-24T07:11:39.4594199+00:00"
+}

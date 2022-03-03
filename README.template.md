@@ -16,6 +16,8 @@ documents\
 
 # Documents
 
+The table below contains the most recent execution's snapshot of AWS Systems Manager documents, for viewing convenience.
+
 | Owner | Name | Type | Format | Version | CreateDate | Attachments |
 |-------|------|------|--------|---------|------------|-------------|
 {{DOCUMENT_LIST}}

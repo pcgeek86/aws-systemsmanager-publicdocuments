@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\":\"1.2\",\n    \"description\":\"Run a shell script or specify the commands to run.\",\n    \"parameters\":{\n        \"commands\":{\n            \"type\":\"StringList\",\n            \"description\":\"(Required) Specify a shell script or a command to run.\",\n            \"minItems\":1,\n            \"displayType\":\"textarea\"\n        }\n    },\n    \"runtimeConfig\":{\n        \"aws:runShellScript\":{\n            \"properties\":[\n                {\n                    \"id\":\"0.aws:runShellScript\",\n                    \"runCommand\":\"{{ commands }}\"\n                }\n            ]\n        }\n    }\n}",
+  "CreatedDate": "2020-09-03T06:55:38.41Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:677879766855:document/AWS_S3Aspect",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "34fa6c26-749f-417e-b168-3e68ccba8ff4",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 844,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-03-04T07:12:33.9700707+00:00"
+}

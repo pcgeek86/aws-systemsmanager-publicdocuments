@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"centrify-domain-join\",\n  \"parameters\" : {\n    \"resourceDomainName\" : {\n      \"description\" : \"The FQDN of the Directory Service.\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"CentrifyLinuxDomainJoin\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"cd /tmp\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/dev/centrify-linux-join.py .\", \"python3 ./centrify-linux-join.py {{ resourceDomainName }}\", \"rm ./centrify-linux-join.py\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"CentrifyWindowsDomainJoin\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"cd c:/windows/temp\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/dev/ad-windows-join.ps1 .\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/dev/centrify-windows-join.ps1 .\", \". c:/windows/temp/ad-windows-join.ps1 {{ resourceDomainName }}\", \". c:/windows/temp/centrify-windows-join.ps1 {{ resourceDomainName }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-01-14T18:11:08.53Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "7",
+  "Name": "arn:aws:ssm:us-west-2:998617134153:document/CentrifyDomainJoin",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f03e36ef-8f18-43f3-9328-d11bef21bdee",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1647,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-03-11T07:13:03.3014507+00:00"
+}

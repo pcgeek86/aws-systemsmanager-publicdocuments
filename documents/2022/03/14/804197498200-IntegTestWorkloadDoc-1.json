@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"1.0\",\n  \"description\" : \"My Example CloudFormation Document\",\n  \"templateBody\" : {\n    \"AWSTemplateFormatVersion\" : \"2010-09-09\",\n    \"Parameters\" : {\n      \"QueueName\" : {\n        \"Default\" : \"lwdkQueue\",\n        \"Description\" : \"Name of SQS Queue\",\n        \"Type\" : \"String\"\n      },\n      \"SecretParameter\" : {\n        \"Default\" : \"secretParam\",\n        \"Description\" : \"Name of parameter that is treated as sensitive parameter in LWDK flow\",\n        \"Type\" : \"String\",\n        \"NoEcho\" : \"true\"\n      }\n    },\n    \"Resources\" : {\n      \"testQueue\" : {\n        \"Type\" : \"AWS::SQS::Queue\",\n        \"Properties\" : {\n          \"QueueName\" : \"QueueName\"\n        }\n      }\n    },\n    \"Outputs\" : {\n      \"SecretParameterOutput\" : {\n        \"Description\" : \"Output for the secret parameter to be used\",\n        \"Value\" : \"SecretParameter\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2021-11-29T22:15:00.341Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "CloudFormation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:804197498200:document/IntegTestWorkloadDoc",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "1.0.0",
+  "ResponseMetadata": {
+    "RequestId": "052e5a0e-0130-4650-baf7-d1d7cc22911a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1222,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-03-14T07:13:36.3341985+00:00"
+}

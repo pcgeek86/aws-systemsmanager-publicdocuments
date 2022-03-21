@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "b2f2e4305c7561f228fbf4e179b5f03f783a52199a404f04aae6e98f8fffac47",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "custom.py",
+      "Size": 94,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/b5d/995970905458/Automation/CustomHello%2171c71434-80bc-44ba-8657-f4d58f5cb5e2/7/custom.py?x-attachment-size=94&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQD313aisZQsbV%2BmW2BswxcbfEiTdP3sjRpVp%2BJ13tUosAIgAPEQBncY%2Fpt6RnUchl99cQXALsqc7wZ%2FzqbyQSkOx6wqgwQI%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgwyNDk5MjQ1Mjc0MTAiDKRjhK0r8%2BjLeEICASrXAxFN5gPUhVOVNp4KBdnYY0QVCMeOxGUvsFOq7AfxRgI1kYMJyHYvWyKrRMrR5WI79VK5ISCc1LG3b%2Bm3%2FfDBhRmiJ9SbnbBmW%2BpWsXl2I2UrE4p%2Bqs0wEpZvHzO3jwOrl4DyHaSyBPfyTxVvswoe0roc%2BJmBP9k3Y6JNuLL3tQphR65EYSzioFYht4%2Bxe35zGAAxZ3gzwJjNPDGSe1V%2Bekv9pc3MGlcUJ3U4gjOKH%2B6KVMazbUhQ3SfUx8%2FFXhBiWne2MdQOKsPsiWGY9xvtYyLTBIblOvvJUYMoMA9TOCaAHHpGEHpjoWcrpjtZM8FpqRFQlqhnsJeHcPTi6OtS%2Buq5xztnai2tqQtCrXMJtou0OLYnQ%2Bfw1TwJkQM27B5dwXBXwTq7xGiHZz7KmORxk41UwUIiNxtycVlwMliZ%2BVCMEeekN3FFhAeKMt0VRcMQVBUV13ivSvWVTiIZJP6bMDDnWGsuHoqu9ZhyUWuOPf2leVRSY%2Bp4C2w78wSVZfa52CVp41debwYb%2BcILQSpe5J4cjxmfHlI3LGv5lCnDG4AIhvNdTEsAYJ3eM%2B7skdHKLQ7H3h7bTDj5%2Bu9MfGFOBJzk9%2Bd0lj0Q6AS2vuUR4oaIrAIQ344dqTCcreCRBjqlAQ6K6ENL0WqmNydN%2FvcpW8PaHFNOJWD9XUxfublF5vnN9V0ACE%2BcLpNTm6WTe%2Bx3dT57W%2FAr59v959gS%2Fqz7oWAlz1e249xVRBQ%2Bj0Zn2QU6UCFE%2FoAUjdAlBa%2FtTVK2BqhA5lcKGrS1hncJDInlVdUMoG4DwFiht5JJSBkOHm9vbdZujMCpriymwd%2F2ZRIGwkJIGHvB%2FCkXHtqzceq9uDD1BsVSGw%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220321T071325Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=ASIATUMFJUUZIJ6TIAOA%2F20220321%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f145108235908c9c33fa41261f6d6fd2929a25d3e13fb7ff3dd33131cdf072fa"
+    }
+  ],
+  "Content": "{\n  \"description\" : \"custom hello\",\n  \"schemaVersion\" : \"0.3\",\n  \"mainSteps\" : [ {\n    \"name\" : \"NiceHllo\",\n    \"action\" : \"aws:executeScript\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"custom.customhello2\",\n      \"Script\" : \"\",\n      \"Attachment\" : \"custom.py\"\n    }\n  } ],\n  \"files\" : {\n    \"custom.py\" : {\n      \"checksums\" : {\n        \"sha256\" : \"b2f2e4305c7561f228fbf4e179b5f03f783a52199a404f04aae6e98f8fffac47\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2021-01-18T09:55:25.149Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "7",
+  "Name": "arn:aws:ssm:us-west-2:995970905458:document/CustomHello",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "cba00a2a-0439-4a9a-8dd4-bf6f3afd4057",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2576,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-03-21T07:13:25.4515026+00:00"
+}

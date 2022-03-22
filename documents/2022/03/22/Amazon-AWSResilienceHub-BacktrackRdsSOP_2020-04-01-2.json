@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"SOP from AWS ResilienceHub to backtrack an RDS Aurora cluster\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"OutputRecoveryTime.RecoveryTime\", \"BacktrackDb.RecoveryPoint\" ],\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf\"\n    },\n    \"DbClusterIdentifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The identifier for the db cluster\"\n    },\n    \"BacktrackTo\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) An ISO 8601 date and time\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"RecordStartTime\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"StartTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"start_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef start_time(events, context):\\n    return datetime.now(timezone.utc).isoformat()\"\n    }\n  }, {\n    \"name\" : \"BacktrackDb\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"Backtrack an RDS Aurora cluster to a date\",\n    \"outputs\" : [ {\n      \"Name\" : \"RecoveryPoint\",\n      \"Selector\" : \"$.BacktrackTo\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"BacktrackDBCluster\",\n      \"DBClusterIdentifier\" : \"{{DbClusterIdentifier}}\",\n      \"BacktrackTo\" : \"{{BacktrackTo}}\",\n      \"UseEarliestTimeOnPointInTimeUnavailable\" : true\n    }\n  }, {\n    \"name\" : \"WaitForBacktrackCompletion\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusterBacktracks\",\n      \"DBClusterIdentifier\" : \"{{ DbClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusterBacktracks[0].Status\",\n      \"DesiredValues\" : [ \"COMPLETED\", \"FAILED\" ]\n    }\n  }, {\n    \"name\" : \"VerifyBacktrackSuccess\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusterBacktracks\",\n      \"DBClusterIdentifier\" : \"{{ DbClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusterBacktracks[0].Status\",\n      \"DesiredValues\" : [ \"COMPLETED\" ]\n    }\n  }, {\n    \"name\" : \"OutputRecoveryTime\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"RecoveryTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"Integer\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"recovery_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef recovery_time(events, context):\\n    return (datetime.now(timezone.utc) - parser.parse(events['StartTime'])).seconds\",\n      \"InputPayload\" : {\n        \"StartTime\" : \"{{ RecordStartTime.StartTime }}\"\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2022-01-18T14:35:47.031Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSResilienceHub-BacktrackRdsSOP_2020-04-01",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a368a21e-4986-4a9f-a4fd-601ffe71d266",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3866,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-03-22T07:12:04.55596+00:00"
+}

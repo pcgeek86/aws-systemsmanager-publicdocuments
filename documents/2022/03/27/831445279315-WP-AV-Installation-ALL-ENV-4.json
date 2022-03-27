@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"outputs\" : [ \"runcommand.Output\" ],\n  \"description\" : \"Automation Document Example JSON Template\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Required) EC2 Instance(s) to start\"\n    },\n    \"commands\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Required) Specify a shell script or a command to run.\",\n      \"minItems\" : 1,\n      \"displayType\" : \"textarea\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"runcommand\",\n    \"action\" : \"aws:runCommand\",\n    \"onFailure\" : \"Abort\",\n    \"inputs\" : {\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"DocumentName\" : \"AWS-RunShellScript\",\n      \"Parameters\" : {\n        \"commands\" : [ \"{{commands}}\" ]\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2020-01-30T09:34:55.27Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:831445279315:document/WP-AV-Installation-ALL-ENV",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "5b2e96e4-dcb9-47e6-b07d-1d1c2ffe098c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1345,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-03-27T07:12:55.029533+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"\",\n  \"schemaVersion\" : \"0.3\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Instance Id of the instance to install the package.\"\n    },\n    \"action\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Specify whether or not to install or uninstall the package.\",\n      \"allowedValues\" : [ \"Install\", \"Uninstall\" ]\n    },\n    \"installationType\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Specify the type of installation. Uninstall and reinstall: The application is taken offline until the reinstallation process completes. In-place update: The application is available while new or updated files are added to the installation.\",\n      \"allowedValues\" : [ \"Uninstall and reinstall\", \"In-place update\" ],\n      \"default\" : \"Uninstall and reinstall\"\n    },\n    \"name\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The package to install/uninstall.\"\n    },\n    \"version\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The version of the package to install or uninstall. If you don’t specify a version, the system installs the latest published version by default. The system will only attempt to uninstall the version that is currently installed. If no version of the package is installed, the system returns an error.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"InstallPackage\",\n    \"action\" : \"aws:runCommand\",\n    \"inputs\" : {\n      \"DocumentName\" : \"AWS-ConfigureAWSPackage\",\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"Parameters\" : {\n        \"action\" : \"{{action}}\",\n        \"installationType\" : \"{{installationType}}\",\n        \"name\" : \"{{name}}\",\n        \"version\" : \"{{version}}\"\n      }\n    },\n    \"description\" : \"Install or uninstall a Distributor package. You can install the latest version, default version, or a version of the package you specify. Packages provided by AWS such as AmazonCloudWatchAgent, AwsEnaNetworkDriver, and AWSPVDriver are also supported.\"\n  } ]\n}",
+  "CreatedDate": "2020-07-01T17:05:15.709Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:714087066724:document/Install-Empower-NessusAgent",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "2b31ccdf-cec3-4617-b294-d1d11d701172",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2434,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-02T07:13:02.9348285+00:00"
+}

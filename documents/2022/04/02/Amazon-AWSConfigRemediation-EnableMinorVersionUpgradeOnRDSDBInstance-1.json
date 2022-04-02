@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableMinorVersionUpgradeOnRDSDBInstance\\n\\n## What does this document do?\\nThis document enables AutoMinorVersionUpgrade on the Amazon Relational Database Service (Amazon RDS) instance using the [ModifyDBInstance](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_ModifyDBInstance.html) API.\\n\\n## Input parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* DbiResourceId: (Required) Resource ID of the Amazon RDS instance to be modified.\\n\\n## Output parameters\\n* ModifyDBInstance.Output: The standard HTTP response from the ModifyDBInstance API.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"ModifyDBInstance.Output\" ],\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"DbiResourceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Resource ID of the Amazon RDS instance for which AutoMinorVersionUpgrade needs to be enabled.\",\n      \"allowedPattern\" : \"^db-[A-Z0-9]{26}$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"GetRDSInstanceIdentifier\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetRDSInstanceIdentifier\\nMakes DescribeDBInstances API call using the database instance resource identifier to get DBInstanceIdentifier.\\n## Outputs\\n* DBInstanceIdentifier: DBInstance identifier of the Amazon RDS instance.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"Filters\" : [ {\n        \"Name\" : \"dbi-resource-id\",\n        \"Values\" : [ \"{{ DbiResourceId }}\" ]\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DBInstanceIdentifier\",\n      \"Selector\" : \"$.DBInstances[0].DBInstanceIdentifier\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBInstanceStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"description\" : \"## VerifyDBInstanceStatus\\nVerifies whether AWS RDS DBInstance status is available before enabling AutoMiniorVersionUpgrade.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ GetRDSInstanceIdentifier.DBInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"ModifyDBInstance\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## ModifyDBInstance\\nMakes ModifyDBInstance API call to enable AutoMinorVersionUpgrade on the Amazon RDS instance using the DBInstanceIdentifier.\\n## Outputs\\n* Output: The standard HTTP response from the ModifyDBInstance API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"ModifyDBInstance\",\n      \"DBInstanceIdentifier\" : \"{{ GetRDSInstanceIdentifier.DBInstanceIdentifier }}\",\n      \"AutoMinorVersionUpgrade\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBInstanceState\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyDBInstanceState\\nVerifies the Amazon RDS Instance's \\\"AutoMinorVersionUpgrade\\\" property is set to \\\"True\\\".\\n\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ GetRDSInstanceIdentifier.DBInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].AutoMinorVersionUpgrade\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-23T16:05:57.18Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableMinorVersionUpgradeOnRDSDBInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b28ba730-5f20-4b6a-bcc4-2c6c7574a41c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4456,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-02T07:12:01.3933488+00:00"
+}

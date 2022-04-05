@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableNLBCrossZoneLoadBalancing\\n\\n## What does this document do?\\nThis document enables `Cross Zone Load Balancing` on a given AWS Network load balancer using the [ModifyLoadBalancerAttributes](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_ModifyLoadBalancerAttributes.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* LoadBalancerArn: (Required) The Amazon Resource Name (ARN) of the AWS Network load balancer.\\n\\n## Output Parameters\\n* ModifyLoadBalancer.Response: The standard HTTP response from the ModifyLoadBalancerAttributes API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"LoadBalancerArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the AWS Network load balancer, for which `Cross Zone Load Balancing` is to be enabled.\",\n      \"allowedPattern\" : \"^arn:aws[a-z-]*?:elasticloadbalancing:.*:\\\\d{12}:loadbalancer/net/.*$\"\n    }\n  },\n  \"outputs\" : [ \"ModifyLoadBalancer.Response\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"ModifyLoadBalancer\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## ModifyLoadBalancer\\nMakes ModifyLoadBalancerAttributes API call to enable 'Cross Zone Load Balancing' on a given AWS Network load balancer.\\n## Outputs\\n* Response: The standard HTTP response from the ModifyLoadBalancerAttributes API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"elbv2\",\n      \"Api\" : \"ModifyLoadBalancerAttributes\",\n      \"LoadBalancerArn\" : \"{{ LoadBalancerArn }}\",\n      \"Attributes\" : [ {\n        \"Key\" : \"load_balancing.cross_zone.enabled\",\n        \"Value\" : \"true\"\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyLoadBalancerState\",\n    \"action\" : \"aws:executeScript\",\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"description\" : \"## VerifyLoadBalancerState\\nVerifies that 'Cross Zone Load Balancing' is enabled on a given AWS Network load balancer.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"LoadBalancerArn\" : \"{{ LoadBalancerArn }}\"\n      },\n      \"Script\" : \"import boto3\\n\\ndef verify_cross_zone_status(nlb_client, arn):\\n    load_balancer_attributes = nlb_client.describe_load_balancer_attributes(\\n        LoadBalancerArn=arn\\n    ).get(\\\"Attributes\\\", [{}])\\n    for attribute in load_balancer_attributes:\\n        if (\\n            attribute[\\\"Key\\\"] == \\\"load_balancing.cross_zone.enabled\\\"\\n            and attribute[\\\"Value\\\"] == \\\"true\\\"\\n        ):\\n            return True\\n    return False\\n\\ndef handler(event, context):\\n    elbv2_client = boto3.client(\\\"elbv2\\\")\\n    load_balancer_arn = event[\\\"LoadBalancerArn\\\"]\\n    cross_zone_status = verify_cross_zone_status(elbv2_client, load_balancer_arn)\\n    if cross_zone_status:\\n        return {\\n            \\\"output\\\": \\\"Verification of 'Cross Zone Load Balancing' on AWS Network load balancer is successful.\\\"\\n        }\\n    raise Exception(\\n        \\\"VERIFICATION OF CROSS ZONE LOAD BALANCING ON AWS NETWORK LOAD BALANCER FAILED.\\\"\\n    )\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"String\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:08:59.123Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableNLBCrossZoneLoadBalancing",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0802f54f-aa30-4399-a167-2bb53ed60b17",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4234,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-05T07:12:51.6023337+00:00"
+}

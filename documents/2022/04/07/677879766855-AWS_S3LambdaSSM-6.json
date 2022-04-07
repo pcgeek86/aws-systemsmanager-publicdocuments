@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"bucket\": {\n      \"type\": \"String\",\n      \"description\": \"bucket\",\n      \"default\": \"bucket\"\n    },\n    \"key\": {\n      \"type\": \"String\",\n      \"description\": \"key\",\n      \"default\": \"key\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"runPowerShellScript\",\n      \"inputs\": {\n        \"runCommand\": [ \"Add-Content -Path D:\\\\ProgramData\\\\log.txt -Value \\\"{{bucket}} {{key}}\\\" \" ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2020-09-03T06:36:18.154Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "6",
+  "Name": "arn:aws:ssm:us-west-2:677879766855:document/AWS_S3LambdaSSM",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "cea0dc5d-3b90-4baf-90d0-6676eb4007d7",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 839,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-07T07:15:02.4167415+00:00"
+}

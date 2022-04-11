@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"0.3\", \n  \"assumeRole\": \"{{ AutomationAssumeRole }}\", \n  \"description\": \"Attach EBS Volume\", \n  \"parameters\": {\n    \"Device\": {\n      \"type\": \"String\", \n      \"description\": \"(Required) The device name (for example, /dev/sdh or xvdh )\"\n    }, \n    \"InstanceId\": {\n      \"type\": \"String\", \n      \"description\": \"(Required) The ID of the instance\"\n    },\n    \"VolumeId\": {\n      \"type\": \"String\", \n      \"description\": \"(Required) The ID of the EBS volume. The volume and instance must be within the same Availability Zone\"\n    }, \n    \"AutomationAssumeRole\": {\n      \"default\": \"\", \n      \"type\": \"String\", \n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf. \"\n    }\n  }, \n  \"mainSteps\": [\n    {\n      \"action\": \"aws:createStack\", \n      \"inputs\": {\n        \"StackName\": \"AttachEBSVolumeStack{{automation:EXECUTION_ID}}\", \n        \"TemplateBody\": \"AWSTemplateFormatVersion: '2010-09-09'\\nDescription: Template to attach a EBS volume to an EC2 Instance\\nParameters:\\n  Device: {Description: 'The device name (for example, /dev/sdh or xvdh )\\n\\n      ', Type: String}\\n  InstanceId: {Description: 'The ID of the instance\\n\\n      ', Type: String}\\n  VolumeId: {Description: 'The ID of the EBS volume. The volume and instance must\\n      be within the same Availability Zone\\n\\n      ', Type: String}\\nResources:\\n  TestResource:\\n    DeletionPolicy: Retain\\n    Properties:\\n      Device: {Ref: Device}\\n      InstanceId: {Ref: InstanceId}\\n      VolumeId: {Ref: VolumeId}\\n    Type: AWS::EC2::VolumeAttachment\\n\", \n        \"Parameters\": [\n          {\n            \"ParameterValue\": \"{{Device}}\", \n            \"ParameterKey\": \"Device\"\n          }, \n          {\n            \"ParameterValue\": \"{{InstanceId}}\", \n            \"ParameterKey\": \"InstanceId\"\n          }, \n          {\n            \"ParameterValue\": \"{{VolumeId}}\", \n            \"ParameterKey\": \"VolumeId\"\n          }\n        ], \n        \"Capabilities\": [\n          \"CAPABILITY_IAM\"\n        ]\n      }, \n      \"name\": \"createDocumentStack\"\n    }, \n    {\n      \"action\": \"aws:deleteStack\", \n      \"inputs\": {\n        \"StackName\": \"AttachEBSVolumeStack{{automation:EXECUTION_ID}}\"\n      }, \n      \"name\": \"deleteCloudFormationTemplate\"\n    }\n  ]\n}\n",
+  "CreatedDate": "2018-02-16T23:03:38.693Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-AttachEBSVolume",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "cdc98c8b-dc18-4ee3-831d-a779f9ef79bf",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2650,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-11T07:13:11.3336091+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Execute composite or nested Systems Manager documents (SSM documents) stored in a remote location. The following remote locations are currently supported: GitHub (public and private), Amazon S3 (S3), and Systems Manager documents. The following SSM document types are currently supported: JSON and YAML.\",\n  \"parameters\": {\n    \"sourceType\": {\n      \"description\": \"(Required) Specify the source type.\",\n      \"type\": \"String\",\n      \"allowedValues\": [\n        \"GitHub\",\n        \"S3\",\n        \"SSMDocument\",\n        \"HTTP\"\n      ]\n    },\n    \"sourceInfo\": {\n      \"description\": \"(Required) Specify the information required to access the resource from the source. If source type is GitHub, then you can specify any of the following: 'owner', 'repository', 'path', 'getOptions', 'tokenInfo'. If source type is S3, then you can specify 'path'. If source type is SSM document, then you can specify 'name'.\",\n      \"type\": \"StringMap\",\n      \"displayType\": \"textarea\",\n      \"default\": {}\n    },\n    \"documentParameters\": {\n      \"description\": \"(Optional) Parameters to be passed to the SSM document that will be executed.\",\n      \"type\": \"StringMap\",\n      \"displayType\": \"textarea\",\n      \"default\": {}\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:downloadContent\",\n      \"name\": \"downloadContent\",\n      \"inputs\": {\n        \"sourceType\": \"{{ sourceType }}\",\n        \"sourceInfo\": \"{{ sourceInfo }}\",\n        \"destinationPath\": \"ssmdocument\"\n      }\n    },\n    {\n      \"action\": \"aws:runDocument\",\n      \"name\": \"runDocument\",\n      \"inputs\": {\n        \"documentType\": \"LocalPath\",\n        \"documentPath\": \"ssmdocument\",\n        \"documentParameters\": \"{{ documentParameters }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-10-19T22:46:10.358Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:028606780797:document/ESRI-RunDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "38ea0928-3704-46c7-92af-3f1a613a87ce",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2111,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-15T07:13:59.0589451+00:00"
+}

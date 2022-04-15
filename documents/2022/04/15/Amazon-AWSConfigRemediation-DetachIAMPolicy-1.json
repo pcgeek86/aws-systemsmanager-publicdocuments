@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-DetachIAMPolicy\\n\\n## What does this document do?\\nThis document detaches an AWS IAM Policy using the [DetachGroupPolicy](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachGroupPolicy.html), [DetachRolePolicy](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachRolePolicy.html) and [DetachUserPolicy](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachUserPolicy.html) APIs.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* IAMResourceId: (Required) IAM resource unique identifier for the IAM Policy.\\n\\n## Output Parameters\\n* DetachIAMPolicy.Output - Success message and HTTP response metadata or failure exception.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+$\"\n    },\n    \"IAMResourceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) IAM resource unique identifier for the IAM Policy.\",\n      \"allowedPattern\" : \"^[\\\\w+=,.@_-]{1,128}$\"\n    }\n  },\n  \"outputs\" : [ \"DetachIAMPolicyAndVerify.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"DetachIAMPolicyAndVerify\",\n    \"action\" : \"aws:executeScript\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## DetachIAMPolicyAndVerify\\nDetaches the specified managed policy from every IAM entity it is currently attached and verifies it was properly detached.\\n## Outputs\\n* Output: Success message and HTTP response metadata or failure exception.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"detach_policy_handler\",\n      \"InputPayload\" : {\n        \"IAMResourceId\" : \"{{ IAMResourceId }}\"\n      },\n      \"Script\" : \"import boto3\\n\\n\\niam_client = boto3.client(\\\"iam\\\")\\nconfig_client = boto3.client(\\\"config\\\")\\n\\nresponses = {}\\nresponses[\\\"DetachGroupPolicyResponses\\\"] = []\\nresponses[\\\"DetachUserPolicyResponses\\\"] = []\\nresponses[\\\"DetachRolePolicyResponses\\\"] = []\\n\\ndef get_policy_arn(resource_id):\\n  response = config_client.get_resource_config_history(\\n    resourceType='AWS::IAM::Policy',\\n    resourceId=resource_id\\n  )\\n  policy_arn = response.get(\\\"configurationItems\\\")[0].get(\\\"arn\\\")\\n  return policy_arn\\n\\ndef detach_policy_handler(event, context):\\n  iam_resource_id = event.get(\\\"IAMResourceId\\\")\\n  policy_arn = get_policy_arn(iam_resource_id)\\n\\n  policy_usage = iam_client.list_entities_for_policy(\\n    PolicyArn=policy_arn\\n  )\\n  for group in policy_usage.get(\\\"PolicyGroups\\\"):\\n    responses[\\\"DetachGroupPolicyResponses\\\"].append({\\\"GroupName\\\": group.get(\\\"GroupName\\\"), \\\"Response\\\": iam_client.detach_group_policy(GroupName=group.get(\\\"GroupName\\\"), PolicyArn=policy_arn)})\\n  for user in policy_usage.get(\\\"PolicyUsers\\\"):\\n    responses[\\\"DetachUserPolicyResponses\\\"].append({\\\"UserName\\\": user.get(\\\"UserName\\\"), \\\"Response\\\": iam_client.detach_user_policy(UserName=user.get(\\\"UserName\\\"), PolicyArn=policy_arn)})\\n  for role in policy_usage.get(\\\"PolicyRoles\\\"):\\n    responses[\\\"DetachRolePolicyResponses\\\"].append({\\\"RoleName\\\": role.get(\\\"RoleName\\\"), \\\"Response\\\": iam_client.detach_role_policy(RoleName=role.get(\\\"RoleName\\\"), PolicyArn=policy_arn)})\\n\\n  current_policy_usage = iam_client.list_entities_for_policy(\\n    PolicyArn=policy_arn\\n  )\\n\\n  if current_policy_usage.get(\\\"PolicyGroups\\\") or current_policy_usage.get(\\\"PolicyUsers\\\") or current_policy_usage.get(\\\"PolicyRoles\\\"):\\n    error_message = \\\"IAM POLICY {} STILL IN USE.\\\".format(policy_arn)\\n    raise Exception(error_message)\\n\\n  return {\\n    \\\"output\\\": \\\"IAM Policy detached successfully.\\\",\\n    \\\"http_response\\\": responses\\n  }\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"StringMap\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:08:33.172Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DetachIAMPolicy",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "11690d0d-92fc-4d8b-8493-7bbd40423b9b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4596,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-15T07:12:57.90838+00:00"
+}

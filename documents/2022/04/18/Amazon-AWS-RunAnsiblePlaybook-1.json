@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.0\",\n  \"description\": \"Use this document to run Ansible playbooks on Amazon EC2 managed instances. Specify either YAML text or URL. If you specify both, the URL parameter will be used. Use the extravar parameter to send runtime variables to the Ansible execution. Use the check parameter to perform a dry run of the Ansible execution. The output of the dry run shows the changes that will be made when the playbook is executed.\",\n  \"parameters\": {\n    \"playbook\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) If you don't specify a URL, then you must specify playbook YAML in this field.\",\n      \"default\": \"\",\n      \"displayType\": \"textarea\"\n    },\n    \"playbookurl\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) If you don't specify playbook YAML, then you must specify a URL where the playbook is stored. You can specify the URL in the following formats: http://example.com/playbook.yml  or s3://examplebucket/plabook.url. For security reasons, you can't specify a URL with quotes.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^\\\\s*$|^(http|https|s3)://[^']*$\"\n    },\n    \"extravars\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) Additional variables to pass to Ansible at runtime. Enter a space separated list of key/value pairs. For example: color=red flavor=lime\",\n      \"default\": \"SSM=True\",\n      \"displayType\": \"textarea\",\n      \"allowedPattern\": \"^$|^\\\\w+\\\\=(([^\\\\s|:();&]+)|('[^|:();&]+'))(\\\\s+\\\\w+\\\\=(([^\\\\s|:();&]+)|('[^|:();&]+')))*$\"\n    },\n    \"check\": {\n      \"type\": \"String\",\n      \"description\": \" (Optional) Use the check parameter to perform a dry run of the Ansible execution.\",\n      \"allowedValues\": [\n        \"True\",\n        \"False\"\n      ],\n      \"default\": \"False\"\n    },\n    \"timeoutSeconds\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The time in seconds for a command to be completed before it is considered to have failed.\",\n      \"default\": \"3600\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"runShellScript\",\n      \"inputs\": {\n        \"timeoutSeconds\": \"{{ timeoutSeconds }}\",\n        \"runCommand\": [\n          \"#!/bin/bash\",\n          \"ansible --version\",\n          \"if [ $? -ne 0 ]; then\",\n          \" echo \\\"Ansible is not installed. Please install Ansible and rerun the command\\\" >&2\",\n          \" exit 1\",\n          \"fi\",\n          \"execdir=$(dirname $0)\",\n          \"cd $execdir\",\n          \"if [ -z '{{playbook}}' ] ; then\",\n          \" if [[ \\\"{{playbookurl}}\\\" == http* ]]; then\",\n          \"   wget '{{playbookurl}}' -O playbook.yml\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"       echo \\\"There was a problem downloading the playbook. Make sure the URL is correct and that the playbook exists.\\\" >&2\",\n          \"       exit 1\",\n          \"   fi\",\n          \" elif [[ \\\"{{playbookurl}}\\\" == s3* ]] ; then\",\n          \"   aws --version\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"       echo \\\"The AWS CLI is not installed. The CLI is required to process Amazon S3 URLs. Install the AWS CLI and run the command again.\\\" >&2\",\n          \"       exit 1\",\n          \"   fi\",\n          \"   aws s3 cp '{{playbookurl}}' playbook.yml\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"       echo \\\"Error while downloading the document from S3\\\" >&2\",\n          \"       exit 1\",\n          \"   fi\",\n          \" else\",\n          \"   echo \\\"The playbook URL is not valid. Verify the URL and try again.\\\"\",\n          \" fi\",\n          \"else\",\n          \" echo '{{playbook}}' > playbook.yml\",\n          \"fi\",\n          \"if  [[ \\\"{{check}}\\\" == True ]] ; then\",\n          \"   ansible-playbook -i \\\"localhost,\\\" --check -c local -e \\\"{{extravars}}\\\" playbook.yml\",\n          \"else\",\n          \"   ansible-playbook -i \\\"localhost,\\\" -c local -e \\\"{{extravars}}\\\" playbook.yml\",\n          \"fi\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2022-03-15T17:06:02.942Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-RunAnsiblePlaybook",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "44bbee43-2010-4ab5-8c11-b8fd5add7f2f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4404,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-18T07:13:11.9997814+00:00"
+}

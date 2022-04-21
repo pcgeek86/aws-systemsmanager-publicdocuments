@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document Name - AWS-SetRequiredTags\\n\\n## What does this document do?\\nThis document adds the specified tags to one or more AWS resources.\\n\\n## Notes\\n* Not all resources support tagging. For a list of services that support tagging, see the [Resource Groups Tagging API Reference](https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html).\\n* Each resource can have up to 50 tags. For other limits, see the [Tag Naming and Usage Conventions in the AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions).\\n* You can only tag resources that are located in the current region for the AWS account.\\n* To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information see the [Resource Groups Tagging API Reference](https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/Welcome.html).\\n* This document will execute successfully even if setting tags fails for one or more resources. Please check the execution output for complete information on the successes and failures.\\n\\n## Input Parameters\\n* RequiredTags: (Required) The tags to add to the resources.\\n* ResourceARNs: (Required) The ARNs of the resources to add the tags to.\\n* AutomationAssumeRole: (Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* SetRequiredTags.SuccessfulResources: A list of the resources that were successfully tagged.\\n* SetRequiredTags.FailedResources : A mapList of the resources where tagging failed and the reason for the failure.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"RequiredTags\" : {\n      \"type\" : \"StringMap\",\n      \"description\" : \"(Required) The tags to add to the resources.\",\n      \"displayType\" : \"textarea\"\n    },\n    \"ResourceARNs\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Required) The ARNs of the resources to add the tags to.\",\n      \"minItems\" : 1,\n      \"displayType\" : \"textarea\",\n      \"allowedPattern\" : \"^(.*\\\\S.*)|^$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\",\n      \"allowedPattern\" : \"^arn:aws(-cn|-us-gov)?:iam::\\\\d{12}:role\\\\/[\\\\w+=,.@_\\\\/-]+|^$\"\n    }\n  },\n  \"outputs\" : [ \"SetRequiredTags.SuccessfulResources\", \"SetRequiredTags.FailedResources\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"SetRequiredTags\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"## SetRequiredTags\\nAdds the specified tags to the target resources.\\n## Inputs\\n* RequiredTags: The tags to add to the resources.\\n* ResourceARNs: The ARNs of the resources to add the tags to.\\n## Outputs\\n* SuccessfulResources: A list of the resources that were successfully tagged.\\n* FailedResources: A mapList of the resources where tagging failed and the reason for the failure.\\n\",\n    \"onFailure\" : \"Abort\",\n    \"isCritical\" : true,\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"set_required_tags_handler\",\n      \"InputPayload\" : {\n        \"RequiredTags\" : \"{{RequiredTags}}\",\n        \"ResourceARNs\" : \"{{ResourceARNs}}\"\n      },\n      \"Script\" : \"import json\\nimport boto3\\n\\ndef set_required_tags_handler(event, context):\\n  client = boto3.client('resourcegroupstaggingapi')\\n\\n  successesResources = []\\n  FailedResources = []\\n  resourcesArn = event[\\\"ResourceARNs\\\"]\\n  tags = event[\\\"RequiredTags\\\"]\\n\\n  for arn in resourcesArn:\\n      try:\\n          response = client.tag_resources(ResourceARNList = [arn], Tags = tags)\\n          successesResources.append(arn)\\n\\n      except Exception as e:\\n        errorMsg = str(e)\\n        FailedResources.append({'ResourceArn': arn , \\\"error\\\": errorMsg})\\n\\n  out = {\\n      \\\"SuccessesResources\\\": successesResources,\\n      \\\"FailedResources\\\": FailedResources\\n  }\\n  return out\\n\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"SuccessfulResources\",\n      \"Selector\" : \"$.Payload.SuccessesResources\",\n      \"Type\" : \"StringList\"\n    }, {\n      \"Name\" : \"FailedResources\",\n      \"Selector\" : \"$.Payload.FailedResources\",\n      \"Type\" : \"MapList\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2021-05-25T17:42:05.973Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-SetRequiredTags",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c71d5997-539a-4e78-b275-1aa9d64904ac",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4827,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-21T07:13:42.9272553+00:00"
+}

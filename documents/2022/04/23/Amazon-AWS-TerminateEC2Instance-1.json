@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Terminate EC2 instances(s)\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) EC2 Instance(s) to terminate\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"stopInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"terminated\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-11-20T22:33:39.83Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-TerminateEC2Instance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d16960b6-8afa-40af-a490-574f2419f89f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 928,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-23T07:12:52.6405865+00:00"
+}

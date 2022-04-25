@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Enable CloudTrail\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"TrailName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the new trail.\"\n    },\n    \"S3BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Name of the Amazon S3 bucket designated for publishing log files.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"EnableCloudTrail\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"CreateTrail\",\n      \"Name\" : \"{{TrailName}}\",\n      \"S3BucketName\" : \"{{S3BucketName}}\"\n    }\n  } ]\n}",
+  "CreatedDate": "2018-12-04T18:02:59.803Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-EnableCloudTrail",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6145fdc5-d9ff-4189-934e-4c3344a02b58",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1136,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-25T07:12:56.3247502+00:00"
+}

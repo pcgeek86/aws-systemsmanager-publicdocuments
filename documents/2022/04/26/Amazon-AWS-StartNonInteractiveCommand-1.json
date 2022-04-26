@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.0\",\n  \"description\": \"Document to run single non-interactive command on an instance\",\n  \"sessionType\": \"NonInteractiveCommands\",\n  \"parameters\": {\n    \"command\": {\n      \"type\": \"String\",\n      \"description\": \"The command to run on the instance\"\n    }\n  },\n  \"properties\": {\n    \"windows\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"linux\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"macos\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    }\n  }\n}",
+  "CreatedDate": "2021-05-05T17:44:33.409Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StartNonInteractiveCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "91f38746-04c0-4968-82fa-a1e9c0dcfdc4",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 805,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-26T07:14:09.2309191+00:00"
+}

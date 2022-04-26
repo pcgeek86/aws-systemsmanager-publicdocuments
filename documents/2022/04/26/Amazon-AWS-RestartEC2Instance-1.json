@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Restart EC2 instances(s)\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) EC2 Instance(s) to restart\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"stopInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"stopped\"\n      }\n    },\n    {\n      \"name\": \"startInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"running\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-11-20T22:33:49.956Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-RestartEC2Instance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "086326b8-d6cd-4c5d-895d-6d46604a5b91",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1137,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-04-26T07:14:05.7548734+00:00"
+}

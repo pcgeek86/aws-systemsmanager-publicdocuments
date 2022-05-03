@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n  \"schemaVersion\": \"2.2\",\r\n  \"description\": \"Execute Automox install scripts stored in a remote location.\",\r\n  \"parameters\": {\r\n    \"URL\": {\r\n      \"type\": \"String\",\r\n      \"default\": \"{{ssm:/CORP/Automox/URLGCR}}\"\r\n    },\r\n    \"Key\": {\r\n      \"type\": \"String\",\r\n      \"default\": \"{{ssm:/CORP/Automox/KeyGCR}}\"\r\n    }\r\n  },\r\n  \"mainSteps\": [\r\n    {\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Windows\"\r\n        ]\r\n      },\r\n      \"action\": \"aws:runPowerShellScript\",\r\n      \"name\": \"runPowerShellScript\",\r\n      \"inputs\": {\r\n        \"runCommand\": [\r\n          \"\",\r\n          \"$directory = Convert-Path .\",\r\n          \"$env:PATH += \\\";$directory\\\"\",\r\n          \"powershell\",\r\n          \"mkdir C:/ssmtemp/\",\r\n          \"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\",\r\n          \"iwr -uri \\\"https://agent-scripts.ipc.corp.amway.net/automox-scripts/Automox_Installer.msi\\\" -OutFile C:\\\\ssmtemp\\\\Automox_Installer.msi\",\r\n          \"C:\\\\ssmtemp\\\\Automox_Installer.msi accesskey='{{Key}}' /quiet\",\r\n          \"Start-Sleep -s 30\",\r\n          \"Remove-Item -LiteralPath \\\"C:/ssmtemp/\\\" -Force -Recurse\",\r\n          \"if ($?) {\",\r\n          \"    exit $LASTEXITCODE\",\r\n          \"} else {\",\r\n          \"    exit 255\",\r\n          \"}\",\r\n          \"\"\r\n        ],\r\n        \"timeoutSeconds\": \"3600\"\r\n      }\r\n    },\r\n    {\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Linux\"\r\n        ]\r\n      },\r\n      \"action\": \"aws:runShellScript\",\r\n      \"name\": \"runShellScript\",\r\n      \"inputs\": {\r\n        \"runCommand\": [\r\n          \"\",\r\n          \"sudo yum-config-manager --enable epel\",\r\n          \"directory=$(pwd)\",\r\n          \"curl -sS {{URL}} | sudo bash\",\r\n          \"sudo service amagent start\",\r\n          \"\"\r\n        ],\r\n        \"timeoutSeconds\": \"3600\"\r\n      }\r\n    }\r\n  ]\r\n}",
+  "CreatedDate": "2020-06-11T16:31:11.92Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:624341408189:document/AutomoxAgentInstallDocumentGCR",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "3ce0cf42-0fda-4fea-9c46-f7678c3fae19",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2385,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-03T07:14:33.3335457+00:00"
+}

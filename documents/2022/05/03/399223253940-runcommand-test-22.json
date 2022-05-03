@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Run PowerShell commands on Windows instances and shell commands on Linux instances\",\n  \"mainSteps\" : [ {\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScriptLinux\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"set -e\", \"curl -s https://gn-allorg-s3.s3-us-west-2.amazonaws.com/installers/nielsen-sectools/install_sectools.sh | sudo bash\" ]\n    }\n  }, {\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"runPowerShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"Write-Output \\\"Windows not supported\\\"\" ]\n    }\n  }, {\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"MacOS\" ]\n    },\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScriptMac\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"echo \\\"MacOS not supported\\\"\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-05-03T04:53:04.777Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "22",
+  "Name": "arn:aws:ssm:us-west-2:399223253940:document/runcommand-test",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "bf3da611-8d5c-45f1-9968-1aaf01a98f04",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1306,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-03T07:14:50.2718855+00:00"
+}

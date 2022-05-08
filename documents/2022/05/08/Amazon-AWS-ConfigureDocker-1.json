@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Configure an instance to work with containers and Docker\",\n  \"parameters\": {\n    \"action\": {\n      \"type\": \"String\",\n      \"description\": \"The type of action to perform.\",\n      \"allowedValues\": [\n        \"Install\",\n        \"Uninstall\"\n      ]\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"Cleanup\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"  $TempFolder = \\\"/\\\"\",\n          \"  if ( $env:Temp -ne $null ) {\",\n          \"    $TempFolder = $env:Temp\",\n          \"  }\",\n\n          \" $none = Remove-Item (Join-Path $TempFolder '7a9c516e7a710e2a290ccf30fb5a46f2fdd99d10') -Force 2>&1\",\n          \" $none = Remove-Item (Join-Path $TempFolder '7a9c516e7a710e2a290ccf30fb5a46f2fdd99d10.etag') -Force 2>&1\"\n        ]\n      }\n    },\n    {\n      \"action\": \"aws:configureDocker\",\n      \"name\": \"ConfigureDocker\",\n      \"inputs\": {\n        \"action\": \"{{ action }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-04-09T19:49:19.692Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureDocker",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "219fd137-7204-4300-87c3-357d47799b38",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1374,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-08T07:13:17.5673703+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\":\"2.0\",\n  \"description\":\"Use this document to run Salt States on Amazon EC2 managed instances. Specify either YAML text or the URL to download a YAML file containing the state. If you specify both, the URL parameter will be used.\",\n  \"parameters\":{\n    \"state\":{\n      \"type\":\"String\",\n      \"description\":\"(Optional) If you don't specify a URL, then you must specify the State YAML in this field.\",\n      \"default\": \"\",\n      \"displayType\":\"textarea\"\n    },\n    \"stateurl\":{\n      \"type\":\"String\",\n      \"description\":\"(Optional) If you don't specify YAML, then you must specify a URL where the state file is stored. You can specify the URL in the following formats: http://example.com/state.sls or s3://examplebucket/state.sls. For security reasons, you can't specify a URL with quotes.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^\\\\s*$|^(http|https|s3):\\/\\/[^']*$\"\n    },\n    \"pillars\":{\n      \"type\":\"String\",\n      \"description\":\"(Optional) Additional variables to pass to Salt at runtime. They must be entered in the format '{\\\"test1\\\":\\\"value1\\\", \\\"test2\\\":\\\"value2\\\"}'\",\n      \"default\": \"{\\\"SSM\\\":\\\"True\\\"}\" ,\n      \"displayType\":\"textarea\"\n    },\n    \"test\":{\n      \"type\":\"String\",\n      \"description\":\" (Optional) Use the test parameter to perform a dry run of the Salt execution.\",\n      \"allowedValues\":[\"True\", \"False\"],\n      \"default\": \"False\"\n    }\n  },\n  \"mainSteps\":[\n    {\n      \"action\":\"aws:runShellScript\",\n      \"name\":\"runShellScript\",\n      \"inputs\":{\n        \"runCommand\":[\n          \"#!/bin/bash\",\n          \"salt-call --version\",\n          \"if [ $? -ne 0 ]; then\",\n          \" echo \\\"Salt is not installed. Please install Salt and rerun the command\\\" >&2\",\n          \" exit 1\",\n          \"fi\",\n          \"sudo mkdir -p /srv/salt\",\n          \"if [ -z \\\"{{state}}\\\" ] ; then\",\n          \" if [[ \\\"{{stateurl}}\\\" == http* ]]; then\",\n          \"   wget '{{stateurl}}' -O /srv/salt/state.sls\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"       echo \\\"There was a problem downloading the salt state file. Make sure the URL is correct and that the state file exists.\\\" >&2\",\n          \"       exit 1\",\n          \"   fi\",\n          \" elif [[ \\\"{{stateurl}}\\\" == s3* ]] ; then\",\n          \"   aws --version\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"       echo \\\"The AWS CLI is not installed. The CLI is required to process Amazon S3 URLs. Install the AWS CLI and run the command again.\\\" >&2\",\n          \"       exit 1\",\n          \"   fi\",\n          \"   aws s3 cp '{{stateurl}}' /srv/salt/state.sls\",\n          \" else\",\n          \" echo \\\"The salt state file  URL is not valid. Verify the URL and try again. \\\"\",\n          \" exit 1\",\n          \" fi\",\n          \"else\",\n          \" echo \\\"{{state}}\\\" > /srv/salt/state.sls\",\n          \"fi\",\n          \"if  [[ \\\"{{test}}\\\" == True ]] ; then\",\n          \"   sudo salt-call --local state.apply state test=True pillar='{{pillars}}'\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"     exit 1\",\n          \"   fi\",\n          \"else\",\n          \"   sudo salt-call --local state.apply state pillar='{{pillars}}'\",\n          \"   if [ $? -ne 0 ]; then\",\n          \"     exit 1\",\n          \"   fi\",\n          \"fi\",\n          \"rm -f /srv/salt/state.sls\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-07-13T22:26:17.385Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-RunSaltState",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "3f1d7d3f-025c-4330-8d43-fc79d015b748",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3766,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-13T07:13:58.3933153+00:00"
+}

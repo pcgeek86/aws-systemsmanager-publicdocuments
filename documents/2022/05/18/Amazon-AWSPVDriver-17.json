@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "a9063dc4bf65967d9ba34781a05b6c431ab0c48680224e78d2bbf90fe5f54a90",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "AWSPVDriver-8.4.2.5.zip",
+      "Size": 6238341,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/2f7/316874961013/AWSPVDriver%21578ca595-4d78-487b-ad77-d207ae38232c/17/AWSPVDriver-8.4.2.5.zip?x-attachment-size=6238341&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEPb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIE8xSzZfBLozHWAQVATlpIZEOBXlNgnePsGJIeUq7IrrAiA8XL9yq7%2FLkuIPNDkAv7vK43NwmUnN6IIOVhS2GEjxjSrbBAjO%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAMaDDI0OTkyNDUyNzQxMCIMVwRiAJ%2FStiIx6R0GKq8EOOESRkcKTGjaXc97Ao7bJNYBQfYks2J3bUxAGtS5ayhCLj5MbR02MiCK%2BG4yOrEnJ9rYceJ7aCkSYEfF45z3k0pSZugpN%2Fa9pEgnJwt0F4%2FD%2BFi9wIRfnfTyPh0awnVXNbsHXe1%2BlZamalwCsM8unwf1Zt2Sk6WVsiODoQYlx%2F2Y72oo9IFTBo6r%2FZc2MgkRLKA0lMX2NcktA5PE5QwEoADyxM2sRBqFBAAibOTF3YNAVtVfxnKXTsdExWNREeXvSw0go4KQXT5%2Bjbvmjxm0xh6W4Gdpbac5nBTOVg0lFKGNHbVvny93wAkBatoD7PZu8YiOOkQBjzvQDpBNt73kvLciUxK5NBD8Rx%2BdelaDOy2oig61Dtl%2F4WsowqhZbjHqMsjfK7tWTZhmmdyMh4xEzJOv3Lm0mJHR9dfgx07%2FgBxa%2F8Udx1zN%2BWa%2BtvfpzBSG7GpfUHMzLXkNrTxy3m9gFRwMZ609P%2FhJzz8jXU2tQOlJp%2FdLKCS4z%2Bb%2BFd1NaAS2IvQdC0yoIX7f5d7ASgS43L9S6nkIzcZ0etEib3uHhlsImKEQqUrvYJ2UEyljIFGMT9aNk%2B2p49%2FnhY8%2BtL8KwabNwFocNq0T2UXbuSIXEGMouQVqA1Y%2Bm%2Fwy%2FeqbsGrRaBM5y6BTQrRYeN8YUP1OH0xR9BaVEldoJMv9XMDkmtaC1ZLhgip7bAfkjk00yrq0%2BW7%2FP7ZCqhlsqnomxbMm5fzGhhvxgrxm1kdHBc8ojTDnhJKUBjqqAUYN3wBM0EmpGkXmbpAJkMpL5y4NrrQ%2FwJzgC9ReD5TtoSsUtm%2FbHDoIFeK5GTmyaM7wh9dOdPpyqyyPK7YOaU2mT%2FSpGqT3OHS773xiOpSFVpN%2BWJScQmFG8AV7bZfppLhztAoIwRYdX4Z9l1qilcIZMmNPkDTL1H2HH4kAJa443LfNnbK%2BLaDjZ9hnSIUAX7zLT1FlGczw%2B7m0GN44ma0e9WJF45EMTarW&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220518T071409Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIATUMFJUUZK6B5KJNX%2F20220518%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=9ed29e46392123aa63cbdca75a63539f95af360ae8832fa503cfed8b62b1c35b"
+    }
+  ],
+  "Content": "{\n    \"schemaVersion\": \"2.0\",\n    \"name\": \"AWSPVDriver\",\n    \"version\": \"8.4.2\",\n    \"packageArn\": \"arn:aws:ssm:::package/AWSPVDriver\",\n    \"publisher\": \"Amazon AWS\",\n    \"url\": \"https://amazonaws.com\",\n    \"packages\": {\n        \"windows\": {\n            \"_any\": {\n                \"x86_64\": {\n                    \"file\": \"AWSPVDriver-8.4.2.5.zip\"\n                }\n            }\n        }\n    },\n    \"files\": {\n        \"AWSPVDriver-8.4.2.5.zip\": {\n            \"checksums\": {\n                \"sha256\": \"a9063dc4bf65967d9ba34781a05b6c431ab0c48680224e78d2bbf90fe5f54a90\"\n            },\n            \"downloadLocation\": \"https://us-west-2-birdwatcher-prod.s3.amazonaws.com/316874961013/AWSPVDriver-8.4.2.zip\"\n        }\n    }\n}",
+  "CreatedDate": "2022-04-14T18:58:37.943Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Package"
+  },
+  "DocumentVersion": "17",
+  "Name": "AWSPVDriver",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "8.4.2",
+  "ResponseMetadata": {
+    "RequestId": "c06e687d-dd34-4f4c-aaf8-50a21fd34e65",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2961,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-18T07:14:09.5238667+00:00"
+}

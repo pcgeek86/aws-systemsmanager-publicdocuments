@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n    \"description\": \"Run Flexera standalone inventory agent.\",\r\n    \"schemaVersion\": \"2.2\",\r\n    \"mainSteps\": [\r\n        {\r\n            \"name\": \"runShellScript\",\r\n            \"action\": \"aws:runShellScript\",\r\n            \"precondition\": {\r\n                \"StringEquals\": [\r\n                    \"platformType\",\r\n                    \"Linux\"\r\n                ]\r\n            },\r\n            \"inputs\": {\r\n                \"timeoutSeconds\": \"3600\",\r\n                \"runCommand\": [\r\n                    \"\",\r\n                    \"ZIPFILE='StandaloneInventoryAgent_LinuxRPM_14_1.zip'\",\r\n                    \"rm -f /var/flexera/agent/*\",\r\n                    \"mkdir -p /var/flexera/agent/\",\r\n                    \"[ ! -f /var/flexera/$ZIPFILE ] && curl -s https://agent-scripts.ipc.corp.amway.net/flexera-scripts/${ZIPFILE} -o /var/flexera/$ZIPFILE\",\r\n                    \"unzip /var/flexera/$ZIPFILE -d /var/flexera/agent/\",\r\n                    \"chmod u+x /var/flexera/agent/ndtrack.sh\",\r\n                    \"/var/flexera/agent/ndtrack.sh -t machine -o Upload=False -o IncludeDirectory='/opt','/usr','/var' -o MachineInventoryDirectory=/var/flexera/agent -o LogFile=/var/flexera/agent/tracker.log\",\r\n                    \"sleep 60\",\r\n                    \"aws s3 cp /var/flexera/agent/*.ndi s3://flexera-inventory-files/ --acl bucket-owner-full-control\",\r\n                    \"sleep 30\",\r\n                    \"rm -f /var/flexera/agent/*\",\r\n                    \"\"\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"runPowerShellScript\",\r\n            \"action\": \"aws:runPowerShellScript\",\r\n            \"precondition\": {\r\n                \"StringEquals\": [\r\n                    \"platformType\",\r\n                    \"Windows\"\r\n                ]\r\n            },\r\n            \"inputs\": {\r\n                \"timeoutSeconds\": \"3600\",\r\n                \"runCommand\": [\r\n                    \"\",\r\n                    \"$ZIPFILE='StandaloneInventoryAgent_Windows_14_1.zip'\",\r\n                    \"New-Item -ItemType Directory -Path 'C:\\\\flexera\\\\agent' -Force\",\r\n                    \"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\",\r\n                    \"Invoke-WebRequest -Uri https://agent-scripts.ipc.corp.amway.net/flexera-scripts/$ZIPFILE -OutFile C:\\\\flexera\\\\$ZIPFILE\",\r\n                    \"Expand-Archive -LiteralPath C:\\\\flexera\\\\$ZIPFILE -DestinationPath C:\\\\flexera\\\\agent -Force\",\r\n                    \"C:\\\\flexera\\\\agent\\\\ndtrack.exe -t machine -o Upload=False -o IncludeDirectory='C:\\\\Program Files (x86)','D:\\\\Program Files (x86)','C:\\\\Program Files','D:\\\\Program Files' -o MachineZeroTouchDirectory=C:\\\\flexera\\\\agent -o LogFile=C:\\\\flexera\\\\agent\\\\tracker.log\",\r\n                    \"$SleepCounter = 0; While (Get-Process -Name 'ndtrack.exe' -ErrorAction 'SilentlyContinue') {Write-Host 'Sleeping'; $SleepCounter += 3; Start-Sleep -Seconds 3; If ($SleepCounter -gt 60) {break}}\",\r\n                    \"Start-Sleep -Seconds 60\",\r\n                    \"Write-S3Object -BucketName flexera-inventory-files -Folder C:\\\\flexera\\\\agent -KeyPrefix \\\\ -SearchPattern *.ndi -CannedACL bucket-owner-full-control\",\r\n                    \"Start-Sleep -Seconds 30\",\r\n                    \"\"\r\n                ]\r\n            }\r\n        }\r\n    ]\r\n}",
+  "CreatedDate": "2020-12-01T21:53:19.743Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:624341408189:document/CORP-FlexeraStandaloneInventoryDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "530864e8-1ba4-4155-a811-0506a0d25645",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3783,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-22T07:13:10.4826571+00:00"
+}

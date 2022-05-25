@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"## Id\\nAWSResilienceHub-ChangeLambdaProvisionedConcurrencySOP_2020-10-26\\n\\n## Intent\\nChange provisioned concurrency of a Lambda function\\n\\n## Type\\nSOP\\n\\n## Risk\\nMedium\\n\\n## Requirements\\n  * Lambda Function\\n\\n## Permissions required for AutomationAssumeRole\\n  * lambda:PutProvisionedConcurrencyConfig\\n  * lambda:GetProvisionedConcurrencyConfig\\n\\n## Cancellation behavior\\nFail\\n\\n## Inputs\\n### (Required) AutomationAssumeRole\\n  * type: String\\n  * description: ARN of the IAM role with permissions listed above\\n\\n### (Required) LambdaARN\\n  * type: String\\n  * description: The ARN of the Lambda function\\n\\n### (Required) ProvisionedConcurrentExecutions\\n  * type: Integer\\n  * description: New ProvisionedConcurrency value\\n\\n### (Required) LambdaQualifier\\n  * type: String\\n  * description: The version number or alias name\\n\\n## Details\\nThe document updates provisioned concurrency configuration of the specified Lambda function's version or alias and waits for the config to be in status \\\"ready\\\".\\n\\n## Steps executed in normal flow\\n  * RecordStartTime\\n  * PutProvisionedConcurrencyConfig\\n  * WaitForProvisionedConcurrencyConfigToBeReady\\n  * OutputRecoveryTime\\n\\n## Outputs\\n### SetMemorySize.NewMemorySizeValue\\n  * type: Integer\\n  * description: Updated memory size value\\n\\n### OutputRecoveryTime.RecoveryTime\\n  * type: Integer\\n  * description: Execution time in seconds\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"LambdaARN\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the Lambda function.\"\n    },\n    \"ProvisionedConcurrentExecutions\" : {\n      \"type\" : \"Integer\",\n      \"description\" : \"(Required) New ProvisionedConcurrency value.\"\n    },\n    \"LambdaQualifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The version number or alias name\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\"\n    }\n  },\n  \"outputs\" : [ \"PutProvisionedConcurrencyConfig.NewValueOfProvisionedConcurrency\", \"OutputRecoveryTime.RecoveryTime\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"RecordStartTime\",\n    \"description\" : \"Start recording execution time\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"StartTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"start_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef start_time(events, context):\\n    return datetime.now(timezone.utc).isoformat()\"\n    }\n  }, {\n    \"name\" : \"PutProvisionedConcurrencyConfig\",\n    \"description\" : \"Updates provisioned concurrency for the specified Lambda\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"PutProvisionedConcurrencyConfig\",\n      \"FunctionName\" : \"{{ LambdaARN }}\",\n      \"ProvisionedConcurrentExecutions\" : \"{{ ProvisionedConcurrentExecutions }}\",\n      \"Qualifier\" : \"{{ LambdaQualifier }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"NewValueOfProvisionedConcurrency\",\n      \"Selector\" : \"$.RequestedProvisionedConcurrentExecutions\",\n      \"Type\" : \"Integer\"\n    } ]\n  }, {\n    \"name\" : \"WaitForProvisionedConcurrencyConfigToBeReady\",\n    \"description\" : \"Wait for the provisioned concurrency config to be ready\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 1200,\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"GetProvisionedConcurrencyConfig\",\n      \"FunctionName\" : \"{{ LambdaARN }}\",\n      \"Qualifier\" : \"{{ LambdaQualifier }}\",\n      \"PropertySelector\" : \"$.Status\",\n      \"DesiredValues\" : [ \"READY\" ]\n    }\n  }, {\n    \"name\" : \"OutputRecoveryTime\",\n    \"description\" : \"Calculate execution time\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"RecoveryTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"Integer\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"recovery_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef recovery_time(events, context):\\n    return (datetime.now(timezone.utc) - parser.parse(events['StartTime'])).seconds\",\n      \"InputPayload\" : {\n        \"StartTime\" : \"{{ RecordStartTime.StartTime }}\"\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2022-04-25T18:26:02.539Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSResilienceHub-ChangeLambdaProvisionedConcurrencySOP_2020-10-26",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d808ac70-642f-41c4-94dc-1d59fe47e915",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5400,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-25T07:13:09.3325423+00:00"
+}

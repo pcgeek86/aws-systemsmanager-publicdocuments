@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Delete Snapshot\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"SnapshotId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ID of the EBS snapshot.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DeleteSnapshot\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"DeleteSnapshot\",\n      \"SnapshotId\" : \"{{SnapshotId}}\"\n    }\n  } ]\n}",
+  "CreatedDate": "2018-08-27T17:39:13.071Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-DeleteSnapshot",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "05cc4390-e5d5-4dbf-b447-5b192a2f5860",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 917,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-26T07:12:52.0374799+00:00"
+}

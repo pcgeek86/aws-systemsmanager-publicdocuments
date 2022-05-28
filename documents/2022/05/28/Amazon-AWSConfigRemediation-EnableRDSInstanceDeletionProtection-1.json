@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-EnableRDSInstanceDeletionProtection\\n\\n## What does this document do?\\nThis document enables `Deletion Protection` on a given Amazon RDS instance using the [ModifyDBInstance](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_ModifyDBInstance.html) API.\\n\\n## Input Parameters\\n* ApplyImmediately: (Optional) A value that indicates whether the modifications in this request and any pending modifications \\n  are asynchronously applied as soon as possible, regardless of the PreferredMaintenanceWindow setting for the DB instance.\\n  * Default: \\\"false\\\"\\n* DbInstanceResourceId: (Required) Amazon RDS Instance resourceId for which deletion protection needs to be enabled.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* EnableRDSInstanceDeletionProtection.ModifyDBInstanceResponse - The standard HTTP response from the ModifyDBInstance API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"ApplyImmediately\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"(Optional) A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the PreferredMaintenanceWindow setting for the DB instance.\",\n      \"default\" : false\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"DbInstanceResourceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Resource ID of the Amazon RDS instance for which deletion protection needs to be enabled.\",\n      \"allowedPattern\" : \"^db-[A-Z0-9]{26}$\"\n    }\n  },\n  \"outputs\" : [ \"EnableRDSInstanceDeletionProtection.ModifyDBInstanceResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"GetRDSInstanceIdentifier\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetRDSInstanceIdentifier\\nMakes DescribeDBInstances API call using Amazon RDS Instance DbiResourceId to get DBInstance Identifier.\\n## Outputs\\n* DbInstanceIdentifier: DBInstance Identifier of the Amazon RDS Instance.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"Filters\" : [ {\n        \"Name\" : \"dbi-resource-id\",\n        \"Values\" : [ \"{{ DbInstanceResourceId }}\" ]\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DbInstanceIdentifier\",\n      \"Selector\" : \"$.DBInstances[0].DBInstanceIdentifier\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"EnableRDSInstanceDeletionProtection\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableRDSInstanceDeletionProtection\\nMakes ModifyDBInstance API call to enable deletion protection on the Amazon RDS Instance using the DBInstanceId from the previous action.\\n## Outputs\\n* DbInstance: The standard HTTP response from the ModifyDBInstance API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"ModifyDBInstance\",\n      \"ApplyImmediately\" : \"{{ ApplyImmediately }}\",\n      \"DBInstanceIdentifier\" : \"{{ GetRDSInstanceIdentifier.DbInstanceIdentifier }}\",\n      \"DeletionProtection\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"ModifyDBInstanceResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBInstanceModification\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyDBInstanceModification\\nChecks whether deletion protection is enabled on Amazon RDS Instance.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ GetRDSInstanceIdentifier.DbInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DeletionProtection\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-10-20T15:04:56.074Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableRDSInstanceDeletionProtection",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "95431c51-5e53-4d7a-a98a-efc6ab3e2e0e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4646,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-28T07:13:07.9844343+00:00"
+}

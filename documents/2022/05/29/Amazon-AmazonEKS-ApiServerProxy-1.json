@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\": \"1.0\",\n    \"description\": \"Document to establish API Server Connection\",\n    \"sessionType\": \"InteractiveCommands\",\n    \"parameters\": {},\n    \"properties\": {\n        \"linux\": {\n            \"runAsElevated\": false,\n            \"commands\": \"/opt/amazon/eks/ssm/ssm-proxy\"\n        }\n    }\n}",
+  "CreatedDate": "2022-05-09T17:17:07.731Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "AmazonEKS-ApiServerProxy",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "1d0a1c14-41f2-4a4d-a994-3f34616ec40b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 511,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-29T07:14:06.5602846+00:00"
+}

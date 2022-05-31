@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Enables Logging on S3 Bucket\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the S3 Bucket whose logging will be configured.\"\n    },\n    \"GrantedPermission\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Logging permissions assigned to the Grantee for the bucket.\",\n      \"allowedValues\" : [ \"FULL_CONTROL\", \"READ\", \"WRITE\" ]\n    },\n    \"GranteeType\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Type of grantee\",\n      \"allowedValues\" : [ \"CanonicalUser\", \"AmazonCustomerByEmail\", \"Group\" ]\n    },\n    \"TargetBucket\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.\"\n    },\n    \"GranteeEmailAddress\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Email address of the grantee.\",\n      \"default\" : \"\"\n    },\n    \"GranteeId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The canonical user ID of the grantee.\",\n      \"default\" : \"\"\n    },\n    \"GranteeUri\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) URI of the grantee group.\",\n      \"default\" : \"\"\n    },\n    \"TargetPrefix\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Specifies a prefix for the keys under which the log files will be stored.\",\n      \"default\" : \"/\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"PutBucketLoggingByUri\",\n    \"isCritical\" : false,\n    \"action\" : \"aws:executeAwsApi\",\n    \"onFailure\" : \"step:PutBucketLoggingById\",\n    \"nextStep\" : \"End\",\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutBucketLogging\",\n      \"Bucket\" : \"{{BucketName}}\",\n      \"BucketLoggingStatus\" : {\n        \"LoggingEnabled\" : {\n          \"TargetBucket\" : \"{{TargetBucket}}\",\n          \"TargetPrefix\" : \"{{TargetPrefix}}\",\n          \"TargetGrants\" : [ {\n            \"Grantee\" : {\n              \"Type\" : \"{{GranteeType}}\",\n              \"URI\" : \"{{GranteeUri}}\"\n            },\n            \"Permission\" : \"{{GrantedPermission}}\"\n          } ]\n        }\n      }\n    }\n  }, {\n    \"name\" : \"PutBucketLoggingById\",\n    \"isCritical\" : false,\n    \"action\" : \"aws:executeAwsApi\",\n    \"onFailure\" : \"step:PutBucketLoggingByEmailAddress\",\n    \"nextStep\" : \"End\",\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutBucketLogging\",\n      \"Bucket\" : \"{{BucketName}}\",\n      \"BucketLoggingStatus\" : {\n        \"LoggingEnabled\" : {\n          \"TargetBucket\" : \"{{TargetBucket}}\",\n          \"TargetPrefix\" : \"{{TargetPrefix}}\",\n          \"TargetGrants\" : [ {\n            \"Grantee\" : {\n              \"Type\" : \"{{GranteeType}}\",\n              \"ID\" : \"{{GranteeId}}\"\n            },\n            \"Permission\" : \"{{GrantedPermission}}\"\n          } ]\n        }\n      }\n    }\n  }, {\n    \"name\" : \"PutBucketLoggingByEmailAddress\",\n    \"isCritical\" : true,\n    \"onFailure\" : \"Abort\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"nextStep\" : \"End\",\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutBucketLogging\",\n      \"Bucket\" : \"{{BucketName}}\",\n      \"BucketLoggingStatus\" : {\n        \"LoggingEnabled\" : {\n          \"TargetBucket\" : \"{{TargetBucket}}\",\n          \"TargetPrefix\" : \"{{TargetPrefix}}\",\n          \"TargetGrants\" : [ {\n            \"Grantee\" : {\n              \"Type\" : \"{{GranteeType}}\",\n              \"EmailAddress\" : \"{{GranteeEmailAddress}}\"\n            },\n            \"Permission\" : \"{{GrantedPermission}}\"\n          } ]\n        }\n      }\n    }\n  }, {\n    \"name\" : \"End\",\n    \"action\" : \"aws:sleep\",\n    \"inputs\" : {\n      \"Duration\" : \"PT1S\"\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2018-08-31T00:44:48.957Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureS3BucketLogging",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "728f8384-925f-49d5-8e54-e3fefebddfde",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4827,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-05-31T07:13:24.6680811+00:00"
+}

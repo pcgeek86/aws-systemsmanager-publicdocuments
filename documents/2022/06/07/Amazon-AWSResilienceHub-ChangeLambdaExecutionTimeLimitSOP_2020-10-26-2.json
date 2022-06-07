@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"## Id\\nAWSResilienceHub-ChangeLambdaExecutionTimeLimitSOP_2020-10-26\\n\\n## Intent\\nChange execution time limit of a Lambda function\\n\\n## Type\\nSOP\\n\\n## Risk\\nMedium\\n\\n## Requirements\\n  * Lambda Function\\n\\n## Permissions required for AutomationAssumeRole\\n  * lambda:UpdateFunctionConfiguration\\n\\n## Cancellation behavior\\nFail\\n\\n## Inputs\\n### (Required) AutomationAssumeRole\\n  * type: String\\n  * description: ARN of the IAM role with permissions listed above\\n\\n### (Required) LambdaARN\\n  * type: String\\n  * description: The ARN of the Lambda function\\n\\n### (Required) NewTimeoutValueSeconds\\n  * type: Integer\\n  * description: New execution time limit for Lambda function in seconds. The maximum allowed value is 900 seconds.\\n\\n## Details\\nThe document updates execution time limit value for the specified Lambda function.\\n\\n## Steps executed in normal flow\\n  * RecordStartTime\\n  * SetTimeout\\n  * OutputRecoveryTime\\n\\n## Outputs\\n### SetTimeout.NewTimeoutValueSeconds\\n  * type: Integer\\n  * description: Updated execution time limit value\\n\\n### OutputRecoveryTime.RecoveryTime\\n  * type: Integer\\n  * description: Execution time in seconds\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"NewTimeoutValueSeconds\" : {\n      \"type\" : \"Integer\",\n      \"description\" : \"(Required) New execution time limit for Lambda function in seconds. The maximum allowed value is 900 seconds.\"\n    },\n    \"LambdaARN\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the Lambda function\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf\"\n    }\n  },\n  \"outputs\" : [ \"SetTimeout.NewTimeoutValueSeconds\", \"OutputRecoveryTime.RecoveryTime\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"RecordStartTime\",\n    \"description\" : \"Start recording execution time\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"StartTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"start_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef start_time(events, context):\\n    return datetime.now(timezone.utc).isoformat()\"\n    }\n  }, {\n    \"name\" : \"SetTimeout\",\n    \"description\" : \"Update execution time limit for Lambda function with the new one\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"UpdateFunctionConfiguration\",\n      \"FunctionName\" : \"{{ LambdaARN }}\",\n      \"Timeout\" : \"{{ NewTimeoutValueSeconds }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"NewTimeoutValueSeconds\",\n      \"Selector\" : \"$.Timeout\",\n      \"Type\" : \"Integer\"\n    } ]\n  }, {\n    \"name\" : \"OutputRecoveryTime\",\n    \"description\" : \"Calculate execution time\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"RecoveryTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"Integer\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"recovery_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef recovery_time(events, context):\\n    return (datetime.now(timezone.utc) - parser.parse(events['StartTime'])).seconds\",\n      \"InputPayload\" : {\n        \"StartTime\" : \"{{ RecordStartTime.StartTime }}\"\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2022-04-25T18:26:02.533Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSResilienceHub-ChangeLambdaExecutionTimeLimitSOP_2020-10-26",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9d93b854-08e2-4e47-9762-3e95ed536f95",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4346,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-07T07:13:50.2019106+00:00"
+}

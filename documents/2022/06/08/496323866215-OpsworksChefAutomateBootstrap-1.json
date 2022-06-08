@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"schemaVersion\": \"2.0\",\n\t\"description\": \"Associate an EC2 Linux instance with an AWS Opsworks Chef Automate server\",\n\t\"parameters\": {\n    \"region\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"\",\n\t\t\t\"description\": \"AWS Region (us-east-1, us-west-2 and eu-west-1 are currently supported)\",\n\t\t\t\"allowedValues\": [\n\t\t\t\t\"us-east-1\",\n\t\t\t\t\"us-west-2\",\n\t\t\t\t\"eu-west-1\"\n\t\t\t]\n    },\n\t\t\"chefServerName\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"description\": \"(Required) The short name of your Opsworks for Chef Automate server\"\n\t\t},\n\t\t\"chefServerEndpoint\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"\",\n\t\t\t\"description\": \"(Required) the fully qualified domain name of your Opsworks for Chef Automate server\"\n\t\t},\n\t\t\"runList\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"description\": \"(Optional) Specify the run list to apply to the node.\",\n\t\t\t\"default\": \"\"\n\t\t}\n\t},\n  \"mainSteps\":[\n    {\n      \"action\":\"aws:runShellScript\",\n      \"name\":\"runShellScript\",\n      \"inputs\":{\n        \"runCommand\": [\n\"#!/bin/bash -x\",\n\"\",\n\"# Hack to get this working on RHEL/Centos\",\n\"yum -y install zip unzip\",\n\"\",\n\"# required settings\",\n\"NODE_NAME=\\\"$(curl --silent --show-error --retry 3 http://169.254.169.254/latest/meta-data/instance-id)\\\" # this uses the EC2 instance ID as the node name\",\n\"REGION=\\\"{{ region }}\\\" # use one of us-east-1, us-west-1, eu-west-1\",\n\"CHEF_SERVER_NAME=\\\"{{ chefServerName }}\\\" # The name of your Chef Server\",\n\"CHEF_SERVER_ENDPOINT=\\\"{{ chefServerEndpoint }}\\\" # The FQDN of your Chef Server\",\n\"\",\n\"# optional\",\n\"CHEF_ORGANIZATION=\\\"default\\\"    # AWS OpsWorks for Chef Server always creates the organization \\\"default\\\"\",\n\"NODE_ENVIRONMENT=\\\"\\\"            # E.g. development, staging, onebox ...\",\n\"CHEF_CLIENT_VERSION=\\\"12.16.42\\\" # latest if empty\",\n\"\",\n\"# recommended: upload the chef-client cookbook from the chef supermarket  https://supermarket.chef.io/cookbooks/chef-client\",\n\"# Use this to apply sensible default settings for your chef-client config like logrotate and running as a service\",\n\"# you can add more cookbooks in the run list, based on your needs\",\n\"RUN_LIST=\\\"\\\" # e.g. \\\"recipe[chef-client],recipe[apache2]\\\"\",\n\"\",\n\"# ---------------------------\",\n\"set -e -o pipefail\",\n\"\",\n\"AWS_CLI_TMP_FOLDER=$(mktemp --directory \\\"/tmp/awscli_XXXX\\\")\",\n\"CHEF_CA_PATH=\\\"/etc/chef/opsworks-cm-ca-2016-root.pem\\\"\",\n\"\",\n\"install_aws_cli() {\",\n\"# see: http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os\",\n\"cd \\\"$AWS_CLI_TMP_FOLDER\\\"\",\n\"curl --retry 3 -L -o \\\"awscli-bundle.zip\\\" \\\"https://s3.amazonaws.com/aws-cli/awscli-bundle.zip\\\"\",\n\"unzip \\\"awscli-bundle.zip\\\"\",\n\"./awscli-bundle/install -i \\\"$PWD\\\"\",\n\"}\",\n\"\",\n\"aws_cli() {\",\n\"\\\"${AWS_CLI_TMP_FOLDER}/bin/aws\\\" opsworks-cm --region \\\"${REGION}\\\" --output text \\\"$@\\\" --server-name \\\"${CHEF_SERVER_NAME}\\\"\",\n\"}\",\n\"\",\n\"associate_node() {\",\n\"client_key=\\\"/etc/chef/client.pem\\\"\",\n\"mkdir /etc/chef\",\n\"( umask 077; openssl genrsa -out \\\"${client_key}\\\" 2048 )\",\n\"\",\n\"aws_cli associate-node --node-name \\\"${NODE_NAME}\\\" --engine-attributes \\\"Name=CHEF_ORGANIZATION,Value=${CHEF_ORGANIZATION}\\\" \\\"Name=CHEF_NODE_PUBLIC_KEY,Value='$(openssl rsa -in \\\"${client_key}\\\" -pubout)'\\\"\",\n\"}\",\n\"\",\n\"write_chef_config() {\",\n\"(\",\n\"echo \\\"chef_server_url   'https://${CHEF_SERVER_ENDPOINT}/organizations/${CHEF_ORGANIZATION}'\\\"\",\n\"echo \\\"node_name         '${NODE_NAME}'\\\"\",\n\"echo \\\"ssl_ca_file       '${CHEF_CA_PATH}'\\\"\",\n\") >> /etc/chef/client.rb\",\n\"}\",\n\"\",\n\"install_chef_client() {\",\n\"# see: https://docs.chef.io/install_omnibus.html\",\n\"curl --silent --show-error --retry 3 --location https://omnitruck.chef.io/install.sh | bash -s -- -v \\\"${CHEF_CLIENT_VERSION}\\\"\",\n\"}\",\n\"\",\n\"install_trusted_certs() {\",\n\"curl --silent --show-error --retry 3 --location --output \\\"${CHEF_CA_PATH}\\\" \\\"https://opsworks-cm-${REGION}-prod-default-assets.s3.amazonaws.com/misc/opsworks-cm-ca-2016-root.pem\\\"\",\n\"}\",\n\"\",\n\"wait_node_associated() {\",\n\"aws_cli wait node-associated --node-association-status-token \\\"$1\\\"\",\n\"}\",\n\"\",\n\"install_aws_cli\",\n\"node_association_status_token=\\\"$(associate_node)\\\"\",\n\"install_chef_client\",\n\"write_chef_config\",\n\"install_trusted_certs\",\n\"wait_node_associated \\\"${node_association_status_token}\\\"\",\n\"\",\n\"if [ -z \\\"${NODE_ENVIRONMENT}\\\" ]; then\",\n\"chef-client -r \\\"${RUN_LIST}\\\"\",\n\"else\",\n\"chef-client -r \\\"${RUN_LIST}\\\" -E \\\"${NODE_ENVIRONMENT}\\\"\",\n\"fi\"\n\n\t\t\t\t\t]\n        }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-05-02T17:44:42.784Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:496323866215:document/OpsworksChefAutomateBootstrap",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d15a5d89-83c6-4344-815d-42ee0b697a1f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5154,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-08T07:14:13.9917732+00:00"
+}

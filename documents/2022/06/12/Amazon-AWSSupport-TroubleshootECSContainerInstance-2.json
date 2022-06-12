@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "09c49f4e037e54089c8e2d121118aa851044d8eb71db9d9366e4fa332d9c2e4b",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "attachment.zip",
+      "Size": 22523,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/c7b/190294270367/Automation/AWSSupport-TroubleshootECSContainerInstance%213d97b95f-c993-4218-9d53-5a35311308a0/2/attachment.zip?x-attachment-size=22523&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEE8aCXVzLXdlc3QtMiJGMEQCIDoj27mQIskIlFtZgZoxfkvzKMjl7JiVOqnuxkaHH1uKAiANDRZyxfKWlZ5mHExxgtZrPJIdoUTaAmItKs14En0DUSrSBAhYEAMaDDI0OTkyNDUyNzQxMCIMqkKF9H69dj2kXdFMKq8EoJXY%2FISUnNz6EEaCLZLgiqCoHj7A8DQFVGVyja9g9IyRVwSbT4DrPERuOLXKgQxtSu8OHTdLKRhrmsn0RsuMMgQJIQmVOrnjJKFMtU5OejTvCAda%2BSJ9tKUyHNtSHHV86q4B6T3%2BvKFz7%2B0g%2FQGKfEmjbtxDqit4%2Fx6l8%2BnC4EERDz7Cl1DVBsjKT96e%2FUOoqck4Ny1nAAwK5oemeO7r9tOLcMnZ40k8GWSnF1opzSiWyMj7gsY0Nn1ClHSySKgnLD5Y%2Fgl8VPUtg1hY30BR1rpSNEB6cJknYfRm3pXYY1WtvkFNhaqwCHYm0y0kC5vp5Qy%2FdKfaEFVUUIcJHdjCizrYpe7d5VZ8RgjZ3j93y%2Fa7YIQGtXA3ZY6UaD39c7%2BD8A3KqI%2FlkKjrQ19MX%2FsPQia7NH88YCDhP57WEKQ9dzq6sJj0aDphYxhQL1%2BIR9DKeWHmE4jqKCluAOjWVQ%2FQTCDc9xzi3ywKlmADjT%2BHNnIsaaW29kqdEa6%2F6rOogkU02fplaHSB%2BqEdZFGhkKS7ES%2Fm3X%2BTcbNZlwe3tK1ZRu2M%2FDUy7k0MkWyo6ecss2gVwvWkMhkfuyNTxcsclH7qmwha63CqcwN%2BsZrtgowIcFzDi8tWws3zOZ0KFgKr%2Br4lpKSgb3rNl7Q%2B%2FZ1hDzW1Lx0wEBSZadh%2BJxuqbasAeLXHMhwuw7C9TgvkLpj%2FDy96fpKUTtqt6QHynnbty42PRHfoylQTsWEYp8baiyF72TC7k5aVBjqqAT8xgJ4YEwkbb55oAMWDCpJO5za%2F5KOdpfaV4x1l4vD%2BJDOGVk3L6v183m%2BTPZDk344NhgZnuocwSC7%2BJ7Pdpxx%2FOG1ucZpJ7CY%2BPTFx8f8TsuGyAcTCcN7CfruLzqK4cIuDXRTbKG8kb3S%2BIyTzxaIO33UeO%2Fq6Go8sU7n3%2FkKLYut7wwppiOfSjaUEOx4s%2FMwHMeuZJb3w2Ed6IO8vvz28hFwA%2F0%2B2UhsG&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220612T071157Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=ASIATUMFJUUZFC2K4ICJ%2F20220612%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=02c7a493456ffa2ed5e19a3cd4e586fdf21a92aa68785c35b65d2afb9f29a6da"
+    }
+  ],
+  "Content": "{\n  \"schemaVersion\": \"0.3\",\n  \"description\": \"The **AWSSupport-TroubleshootECSContainerInstance** runbook helps you troubleshoot an Amazon Elastic Compute Cloud (Amazon EC2) instance that fails to register with an Amazon ECS cluster. This automation reviews whether the user data for the instance contains the correct cluster information, whether the instance profile contains the required permissions, and network configuration issues.\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"AutomationAssumeRole\": {\n      \"default\": \"\",\n      \"type\": \"String\",\n      \"description\": \"(Optional) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf. If no role is specified, Systems Manager Automation uses the permissions of the user that starts this runbook.\",\n      \"allowedPattern\": \"^$|^arn:(aws|aws-cn|aws-us-gov):iam::\\\\d{12}:role\\\\/[\\\\w+=/,.@-]+$\"\n    },\n    \"ClusterName\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The name of the Amazon ECS cluster that the instance failed to register with.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^[a-zA-Z0-9_-]{1,255}$\"\n    },\n    \"InstanceId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The ID of the Amazon EC2 instance you want to troubleshoot.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^i-[a-z0-9]{8,17}$\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"executeChecker\",\n      \"action\": \"aws:executeScript\",\n      \"description\": \"Reviews whether the Amazon EC2 instance meets the prerequisites needed to register with an Amazon ECS cluster.\",\n      \"isCritical\": true,\n      \"timeoutSeconds\": 540,\n      \"inputs\": {\n        \"Runtime\": \"python3.7\",\n        \"InputPayload\": {\n          \"InstanceId\": \"{{InstanceId}}\",\n          \"ClusterName\": \"{{ClusterName}}\"\n        },\n        \"Handler\": \"lambda_handler\",\n        \"Script\": \"import boto3\\n\\nfrom saw_ecs.ec2 import EC2Instance\\nfrom saw_ecs.cluster import ECSCluster\\nfrom saw_ecs import __main__\\n\\n\\ndef lambda_handler(events, context):\\n    ec2_client = boto3.client(\\\"ec2\\\")\\n    instance = EC2Instance(id=events[\\\"InstanceId\\\"], ec2_client=ec2_client)\\n    cluster = ECSCluster(name=events[\\\"ClusterName\\\"])\\n\\n    stdout, info_codes = __main__.generate_stdout(instance, cluster)\\n\\n    # return {\\\"statusCode\\\": 200, \\\"body\\\": stdout}\\n    return {\\\"stdout\\\": stdout, \\\"info_codes\\\": info_codes}\\n\",\n        \"Attachment\": \"attachment.zip\"\n      },\n      \"outputs\": [\n        {\n          \"Name\": \"stdout\",\n          \"Selector\": \"$.Payload.stdout\",\n          \"Type\": \"String\"\n        },\n        {\n          \"Name\": \"info_codes\",\n          \"Selector\": \"$.Payload.info_codes\",\n          \"Type\": \"StringList\"\n        }\n      ]\n    }\n  ],\n  \"files\": {\n    \"attachment.zip\": {\n      \"checksums\": {\n        \"sha256\": \"09c49f4e037e54089c8e2d121118aa851044d8eb71db9d9366e4fa332d9c2e4b\"\n      }\n    }\n  },\n  \"outputs\": [\n    \"executeChecker.stdout\"\n  ]\n}",
+  "CreatedDate": "2022-04-27T16:02:29.627Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSSupport-TroubleshootECSContainerInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "8e379c63-da7f-466f-8282-0733a5a7ba21",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5439,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-12T07:11:57.7439046+00:00"
+}

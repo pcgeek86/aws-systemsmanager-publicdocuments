@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document Name - AWS-EnableCloudTrailLogFileValidation\\n\\n## What does this document do?\\nThis document updates the configuration of one or more CloudTrail trails to enable log file integrity validation.\\n\\n## Input Parameters\\n* TrailNames: (Required) A comma separated list of CloudTrail trail names.\\n* AutomationAssumeRole: (Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\nThis document has no outputs.\\n\\n## Minimum Permissions Required\\n* `cloudtrail:GetTrail`\\n* `cloudtrail:UpdateTrail`\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"TrailNames\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Required) The name(s) of the targeted CloudTrail trail(s) separated by commas.\",\n      \"allowedPattern\" : \"^[\\\\w][\\\\w\\\\.,\\\\-_/]+[\\\\w]$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\",\n      \"allowedPattern\" : \"^arn:aws(-cn|-us-gov)?:iam::\\\\d{12}:role\\\\/[\\\\w+=,.@_\\\\/-]+|^$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"EnableLogFileValidation\",\n    \"action\" : \"aws:executeScript\",\n    \"timeoutSeconds\" : 300,\n    \"onFailure\" : \"Abort\",\n    \"isCritical\" : true,\n    \"isEnd\" : true,\n    \"description\" : \"## EnableLogFileValidation\\nEnables log file validation on the target trails.\\n## Inputs\\n* trailNames: The list of trail names.\\n## Outputs\\nThis step has no outputs.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"enable_log_file_validation_handler\",\n      \"InputPayload\" : {\n        \"trailNames\" : \"{{TrailNames}}\"\n      },\n      \"Script\" : \"import boto3\\n\\ndef enable_log_file_validation_handler(event, bucket):\\n  client = boto3.client('cloudtrail')\\n\\n  trail_names = event[\\\"trailNames\\\"]\\n  for trail_name in trail_names:\\n    response = client.get_trail(Name = trail_name)\\n    if response['Trail']['LogFileValidationEnabled']:\\n      print(f'Log file validation is already enabled for trail {trail_name}.')\\n    else:\\n      try:\\n        client.update_trail(Name = trail_name, EnableLogFileValidation = True)\\n        print(f'Log file validation is now enabled for trail {trail_name}.')\\n      except Exception as e:\\n        errorMsg = str(e)\\n        raise Exception(\\\"Unable to perform the required action on trail '{}'. error = '{}'.\\\".format(trail_name, errorMsg))\\n\"\n    }\n  } ]\n}",
+  "CreatedDate": "2021-05-25T17:41:22.419Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-EnableCloudTrailLogFileValidation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "15d1e91b-a006-4d17-b637-4d55bbb74e2c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2906,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-14T07:12:32.2738068+00:00"
+}

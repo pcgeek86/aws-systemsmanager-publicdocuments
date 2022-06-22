@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n   \"schemaVersion\": \"2.2\",\n   \"description\": \"This is a sample document\",\n   \"mainSteps\": [\n       {\n         \"action\": \"aws:runShellScript\",\n         \"name\": \"ListFiles\",\n         \"inputs\": {\n            \"commands\": [\"ls\"],\n            \"workingDirectory\": \"/home/ec2-user\",\n            \"executionTimeout\": \"120\"\n         }\n        }\n    ]\n}",
+  "CreatedDate": "2022-06-22T06:37:42.524Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:779076350731:document/AssociationDocumentPublicSharingDocument918489255",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "821feba8-c425-4f3b-bb11-328e6d0abbb3",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 626,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-22T07:12:30.4673386+00:00"
+}

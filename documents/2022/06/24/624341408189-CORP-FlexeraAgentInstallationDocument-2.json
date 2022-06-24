@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n    \"description\": \"Install Flexera agent in beacon connected configuration.\",\r\n    \"schemaVersion\": \"2.2\",\r\n    \"parameters\": {\r\n        \"FlexeraServerFQDN\": {\r\n            \"type\": \"String\",\r\n            \"default\": \"{{ssm:/CORP/Flexera/FlexeraServerFQDN}}\"\r\n        }\r\n    },\r\n    \"mainSteps\": [\r\n        {\r\n            \"name\": \"runShellScript\",\r\n            \"action\": \"aws:runShellScript\",\r\n            \"precondition\": {\r\n                \"StringEquals\": [\r\n                    \"platformType\",\r\n                    \"Linux\"\r\n                ]\r\n            },\r\n            \"inputs\": {\r\n                \"timeoutSeconds\": \"3600\",\r\n                \"runCommand\": [\r\n                    \"\",\r\n                    \"ping -c 5 -w 5 {{FlexeraServerFQDN}} || exit 1\",\r\n                    \"curl -s https://agent-scripts.ipc.corp.amway.net/flexera-scripts/AgentInstallation_LinuxRPM_14_2.zip -o /var/tmp/AgentInstallation_LinuxRPM_14_2.zip\",\r\n                    \"unzip -u /var/tmp/AgentInstallation_LinuxRPM_14_2.zip -d /var/tmp/\",\r\n                    \"sudo rpm --upgrade --verbose /var/tmp/managesoft-14.2.0-1.x86_64.rpm\",\r\n                    \"sleep 30\",\r\n                    \"\"\r\n                ]\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"runPowerShellScript\",\r\n            \"action\": \"aws:runPowerShellScript\",\r\n            \"precondition\": {\r\n                \"StringEquals\": [\r\n                    \"platformType\",\r\n                    \"Windows\"\r\n                ]\r\n            },\r\n            \"inputs\": {\r\n                \"timeoutSeconds\": \"3600\",\r\n                \"runCommand\": [\r\n                    \"\",\r\n                    \"$ErrorActionPreference = 'Stop'\",\r\n                    \"Test-Connection -ComputerName '{{FlexeraServerFQDN}}'\",\r\n                    \"$ZIPFILE='AgentInstallation_Windows_14_2.zip'\",\r\n                    \"$TEMPDIR=[System.IO.Path]::GetTempPath()\",\r\n                    \"$OUTFILE=Join-Path -Path $TEMPDIR -ChildPath $ZIPFILE\",\r\n                    \"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\",\r\n                    \"Invoke-WebRequest -Uri https://agent-scripts.ipc.corp.amway.net/flexera-scripts/$ZIPFILE -OutFile $OUTFILE\",\r\n                    \"Expand-Archive -LiteralPath $OUTFILE -DestinationPath $TEMPDIR -Force\",\r\n                    \"Set-Location -Path $TEMPDIR\",\r\n                    \"msiexec.exe /i 'FlexNet Inventory Agent.msi' /qn\",\r\n                    \"Start-Sleep -Seconds 60\",\r\n                    \"\"\r\n                ]\r\n            }\r\n        }\r\n    ]\r\n}",
+  "CreatedDate": "2021-01-25T19:52:46.426Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:624341408189:document/CORP-FlexeraAgentInstallationDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "311cb8e7-6b07-4064-bcf3-0b4a96d51f8e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3003,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-24T07:14:02.4602852+00:00"
+}

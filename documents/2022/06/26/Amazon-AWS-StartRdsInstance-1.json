@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Start RDS instance\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) RDS Instance Id to start\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"AssertNotStartingOrAvailable\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"isCritical\" : false,\n    \"onFailure\" : \"step:StartInstance\",\n    \"nextStep\" : \"CheckStart\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{InstanceId}}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\", \"starting\" ]\n    }\n  }, {\n    \"name\" : \"StartInstance\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"StartDBInstance\",\n      \"DBInstanceIdentifier\" : \"{{InstanceId}}\"\n    }\n  }, {\n    \"name\" : \"CheckStart\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"onFailure\" : \"Abort\",\n    \"maxAttempts\" : 10,\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{InstanceId}}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2018-08-24T23:41:27.992Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StartRdsInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ed424566-55a7-42d4-844f-25798056bb34",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1905,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-26T07:11:09.3812701+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"*This is a test.*  \",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Run powershell command against\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"'(Optional) The Amazon Resource Name (ARN) of the IAM role that allows Automation to perform the actions on your behalf. If no role is specified, Systems Manager Automation uses your IAM permissions to operate this runbook.'\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"runPowerShell\",\n    \"action\" : \"aws:runCommand\",\n    \"inputs\" : {\n      \"DocumentName\" : \"AWS-RunPowerShellScript\",\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"Parameters\" : {\n        \"commands\" : [ \"$computer = hostname\", \"$Cert = New-SelfSignedCertificate -DnsName \\\"$computer\\\" -certstorelocation cert:/localmachine/my;\", \"$thumbprint = $Cert.Thumbprint\", \"$port=5986\", \"WinRM e winrm/config/listener\", \"Start-Sleep -Seconds 10\", \"New-Item WSMan:\\\\localhost\\\\Listener -Address * -Transport HTTPS -HostName $computer -CertificateThumbPrint $thumbprint -Force\" ]\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2022-06-24T16:26:49.527Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:436437695588:document/enablehttps",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d63e7364-e5c6-4b60-99b6-5e6e75612900",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1518,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-06-28T07:13:22.7964916+00:00"
+}

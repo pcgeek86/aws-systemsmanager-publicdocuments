@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"String\",\n      \"description\": \"Example\",\n      \"default\": \"Hello World\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": [ \"Write-Output {{Message}}\" ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-03-10T15:04:30.505Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:958123553953:document/Test_Document_HG",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9e4e531b-e0c7-4492-ab9c-0852f3107873",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 664,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-07-10T07:14:34.0571866+00:00"
+}

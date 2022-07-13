@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Upload nprinting data from fsx to s3\",\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"uploadtos3\",\n      \"inputs\": {\n        \"runCommand\": [\"aws s3 cp '\\\\\\\\amznfsx6vjqafxt.corp.intuit.net\\\\share\\\\qliksensedata\\\\Data Intelligence\\\\2.UserData\\\\Reload Monitoring.xlsx' 's3://qliksense-nprinting-data/delayed-task/Reload-Task-Monitor.xlsx'\",\n        \"aws s3 cp '\\\\\\\\amznfsx6vjqafxt.corp.intuit.net\\\\share\\\\qliksensedata\\\\Data Intelligence\\\\2.UserData\\\\Sessions Monitor.xlsx' 's3://qliksense-nprinting-data/session-details/Session-Monitor.xlsx'\"]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2022-02-11T17:27:53.087Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:022782181354:document/qliksense-nprinting-uploadtos3",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "bc39002a-52e2-47de-87be-b2eff95ca790",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 926,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-07-13T07:12:54.1121306+00:00"
+}

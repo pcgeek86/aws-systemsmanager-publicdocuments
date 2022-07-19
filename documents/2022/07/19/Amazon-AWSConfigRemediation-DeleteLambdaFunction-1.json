@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-DeleteLambdaFunction\\n\\n## What does this document do?\\nThis document deletes a given AWS Lambda function using the [DeleteFunction](https://docs.aws.amazon.com/lambda/latest/dg/API_DeleteFunction.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* LambdaFunctionName: (Required) AWS Lambda function name or ARN which needs to be deleted.\\n\\n## Output Parameters\\n* DeleteAWSLambdaFunction.DeleteFunctionResponse: The standard HTTP response from the DeleteFunction API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"LambdaFunctionName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) AWS Lambda function name or ARN which needs to be deleted.\",\n      \"allowedPattern\" : \"(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}(-gov)?-[a-z]+-\\\\d{1}:)?(\\\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:(\\\\$LATEST|[a-zA-Z0-9-_]+))?\"\n    }\n  },\n  \"outputs\" : [ \"DeleteAWSLambdaFunction.DeleteFunctionResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"DeleteAWSLambdaFunction\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DeleteAWSLambdaFunction\\nDeletes the given AWS Lambda function using the DeleteFunction API.\\n## Outputs\\n* DeleteFunctionResponse: Response from the DeleteFunction API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"DeleteFunction\",\n      \"FunctionName\" : \"{{ LambdaFunctionName }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DeleteFunctionResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyAWSLambdaFunctionDeletion\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"## VerifyAWSLambdaFunctionDeletion\\nVerifies that the AWS Lambda function is deleted in the previous step.\\n## Outputs\\n* Output: Success message or failure exception.\\n\",\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"FunctionName\" : \"{{ LambdaFunctionName }}\"\n      },\n      \"Script\" : \"import boto3\\nimport botocore\\n\\ndef handler(event, context):\\n    lambda_client = boto3.client('lambda')\\n    function_name = event['FunctionName']\\n    try:\\n        lambda_client.get_function(FunctionName=function_name)\\n        error_message = f\\\"VERIFICATION FAILED. AWS LAMBDA FUNCTION {function_name} NOT DELETED.\\\"\\n        raise Exception(error_message)\\n    except lambda_client.exceptions.ResourceNotFoundException:\\n        return {\\\"output\\\": \\\"Verification of 'DeleteAWSLambdaFunction' is successful.\\\"}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"String\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-12-17T16:03:29.958Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DeleteLambdaFunction",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0e6308ac-2b4e-4ace-9ff2-789a6e0fa14d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3578,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-07-19T07:12:36.7769027+00:00"
+}

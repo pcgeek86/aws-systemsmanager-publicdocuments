@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableSecurityHub\\n\\n## What does this document do?\\nThis document enables AWS Security Hub for the AWS account in current region using the [EnableSecurityHub](https://docs.aws.amazon.com/securityhub/1.0/APIReference/API_EnableSecurityHub.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* EnableSecurityHub.Output: The standard HTTP Response from the EnableSecurityHub API call.\\n* VerifySecurityHubStatus.Output: The standard HTTP Response from the DescribeHub API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"EnableDefaultStandards\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"(Optional) Enable the security standards that AWS Security Hub has designated as automatically enabled.\",\n      \"default\" : true\n    }\n  },\n  \"outputs\" : [ \"EnableSecurityHub.Output\", \"VerifySecurityHubStatus.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"EnableSecurityHub\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableSecurityHub\\nEnables the AWS Security Hub for the AWS account in current region using the EnableSecurityHub API.\\n## Outputs\\n* Output: The standard HTTP Response from the EnableSecurityHub API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"securityhub\",\n      \"Api\" : \"EnableSecurityHub\",\n      \"EnableDefaultStandards\" : \"{{ EnableDefaultStandards }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifySecurityHubStatus\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## VerifySecurityHubStatus\\nVerifies that AWS Security Hub is enabled for the AWS account in current region using DescribeHub API call execution and a successful execution confirms the status.\\n## Outputs\\n* Output: The standard HTTP Response from the DescribeHub API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"securityhub\",\n      \"Api\" : \"DescribeHub\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:09:16.114Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableSecurityHub",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c122fe77-bbf9-4cdd-8066-8346947fb6ff",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2971,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-07-21T07:12:03.6235951+00:00"
+}

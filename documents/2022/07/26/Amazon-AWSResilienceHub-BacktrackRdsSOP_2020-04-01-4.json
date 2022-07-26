@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"# Id\\n  rds:sop:backtrack:2020-04-01\\n\\n## Intent\\n  SOP to backtrack an RDS Aurora cluster.\\n\\n## Type\\n  Software\\n\\n## Risk\\n  Small\\n\\n## Requirements\\n  * Aurora Cluster\\n\\n## Permission required for AutomationAssumeRole\\n  * rds:BacktrackDBCluster\\n  * rds:DescribeDBClusters\\n  * rds:DescribeDBClusterBacktracks\\n\\n## Supports Rollback\\n  No.\\n\\n## Inputs\\n### DbClusterIdentifier\\n  * Description: (Required) The identifier for the db cluster\\n  * Type: String\\n### BacktrackTo\\n  * Description: (Required) An ISO 8601 date and time\\n  * Type: String\\n### AutomationAssumeRole:\\n  * Description: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n  * Type: String\\n\\n## Details of SSM Document steps:\\n * RecordStartTime\\n * BacktracDb\\n * WaitUntilInstancesAvailable\\n * VerifyBacktrackSuccess\\n * OutputRecoveryTime\\n\\n## Outputs\\n  * OutputRecoveryTime.RecoveryTime: recovery time in seconds\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"OutputRecoveryTime.RecoveryTime\", \"BacktrackDb.RecoveryPoint\" ],\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf\"\n    },\n    \"DbClusterIdentifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The identifier for the db cluster\"\n    },\n    \"BacktrackTo\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) An ISO 8601 date and time\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"RecordStartTime\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"StartTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"start_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef start_time(events, context):\\n    return datetime.now(timezone.utc).isoformat()\"\n    }\n  }, {\n    \"name\" : \"BacktrackDb\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"Backtrack an RDS Aurora cluster to a date\",\n    \"outputs\" : [ {\n      \"Name\" : \"RecoveryPoint\",\n      \"Selector\" : \"$.BacktrackTo\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"BacktrackDBCluster\",\n      \"DBClusterIdentifier\" : \"{{DbClusterIdentifier}}\",\n      \"BacktrackTo\" : \"{{BacktrackTo}}\",\n      \"UseEarliestTimeOnPointInTimeUnavailable\" : true\n    }\n  }, {\n    \"name\" : \"WaitForBacktrackCompletion\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusterBacktracks\",\n      \"DBClusterIdentifier\" : \"{{ DbClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusterBacktracks[0].Status\",\n      \"DesiredValues\" : [ \"COMPLETED\", \"FAILED\" ]\n    }\n  }, {\n    \"name\" : \"VerifyBacktrackSuccess\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusterBacktracks\",\n      \"DBClusterIdentifier\" : \"{{ DbClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusterBacktracks[0].Status\",\n      \"DesiredValues\" : [ \"COMPLETED\" ]\n    }\n  }, {\n    \"name\" : \"OutputRecoveryTime\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"RecoveryTime\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"Integer\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"recovery_time\",\n      \"Script\" : \"import boto3\\nimport logging\\nfrom datetime import datetime, timezone\\nimport time\\n\\nfrom botocore.exceptions import ClientError\\nfrom dateutil import parser\\n\\nlogger = logging.getLogger()\\nlogger.setLevel(logging.INFO)\\n\\n\\n\\ndef recovery_time(events, context):\\n    return (datetime.now(timezone.utc) - parser.parse(events['StartTime'])).seconds\",\n      \"InputPayload\" : {\n        \"StartTime\" : \"{{ RecordStartTime.StartTime }}\"\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2022-04-25T18:28:08.911Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "4",
+  "Name": "AWSResilienceHub-BacktrackRdsSOP_2020-04-01",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "8b3cb696-21d2-4db1-9ce4-e13a2b166bec",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4792,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-07-26T07:13:02.91739+00:00"
+}

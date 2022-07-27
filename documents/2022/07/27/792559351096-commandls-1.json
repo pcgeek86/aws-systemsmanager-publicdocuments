@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n               \"schemaVersion\":\"1.2\",\n               \"description\":\"Run a shell script or specify the commands to run.\",\n               \"parameters\":{\n                  \"commands\":{\n                     \"type\":\"StringList\",\n                     \"description\":\"(Required) Specify a shell script or a command to run.\",\n                     \"minItems\":1,\n                     \"displayType\":\"textarea\"\n                  },\n                  \"workingDirectory\":{\n                     \"type\":\"String\",\n                     \"default\":\"\",\n                     \"description\":\"(Optional) The path to the working directory on your instance.\",\n                     \"maxChars\":4096\n                  },\n                  \"executionTimeout\":{\n                     \"type\":\"String\",\n                     \"default\":\"3600\",\n                     \"description\":\"(Optional) The time in seconds for a command to complete before it is considered to have failed. Default is 3600 (1 hour). Maximum is 28800 (8 hours).\",\n                     \"allowedPattern\":\"([1-9][0-9]{0,3})|(1[0-9]{1,4})|(2[0-7][0-9]{1,3})|(28[0-7][0-9]{1,2})|(28800)\"\n                  }\n               },\n               \"runtimeConfig\":{\n                  \"aws:runShellScript\":{\n                     \"properties\":[\n                        {\n                           \"id\":\"0.aws:runShellScript\",\n                           \"runCommand\": [\"ls\"],\n                           \"workingDirectory\":\"{{ workingDirectory }}\",\n                           \"timeoutSeconds\":\"{{ executionTimeout }}\"\n                        }\n                     ]\n                  }\n               }\n            }",
+  "CreatedDate": "2017-07-11T23:50:39.802Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:792559351096:document/commandls",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6f0e4e31-eff7-43ce-bc30-255d6d7d6680",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1949,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-07-27T07:14:44.2848012+00:00"
+}

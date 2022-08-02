@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"eis-branding-config\",\n  \"parameters\" : {\n    \"customer\" : {\n      \"description\" : \"The customer short name (lowercase)\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"EisBrandingConfig\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"mkdir -p /root/eisbranding\", \"brandingType=\\\"custom\\\"\", \"aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/nonprod/scripts/$brandingType-branding.py /root/eisbranding/\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-07-29T15:35:38.307Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:376137557039:document/EIS-Branding",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d0643f09-08ae-440b-a980-0ddb74b267e9",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 914,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-02T07:14:21.6717722+00:00"
+}

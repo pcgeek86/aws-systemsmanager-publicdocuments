@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"StringList\",\n      \"description\": \"Example\",\n      \"default\": [\n        \"Add-Content -Path \\\"D:\\\\ProgramData\\\\Aspect\\\\Workforce Management\\\\WFMData\\\\Listen\\\\Stream5\\\\log.txt\\\" -Value \\\"default\\\"\"\n      ]\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": \"{{Message}}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2020-09-08T05:10:30.905Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:677879766855:document/AWS_S3Lambda",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0d3c0240-c933-41e1-bf42-54837bf3db49",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 799,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-04T07:13:03.3329795+00:00"
+}

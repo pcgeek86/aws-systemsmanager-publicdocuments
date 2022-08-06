@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"delinea-domain-join\",\n  \"parameters\" : {\n    \"resourceDomainName\" : {\n      \"description\" : \"The FQDN of the Directory Service.\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"DelineaLinuxDomainJoin\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"cd /tmp\", \"Uniqueness='07_05_2022_15_57_29'\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/delinea/scripts/dev/delinea-linux-join.py .\", \"python3 ./delinea-linux-join.py {{ resourceDomainName }}\", \"rm ./delinea-linux-join.py\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"DelineaWindowsDomainJoin\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"cd c:/windows/temp\", \"$Uniqueness='07_05_2022_15_57_29'\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/delinea/scripts/dev/ad-windows-join.ps1 .\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/delinea/scripts/dev/delinea-windows-join.ps1 .\", \". c:/windows/temp/ad-windows-join.ps1 {{ resourceDomainName }}\", \". c:/windows/temp/delinea-windows-join.ps1 {{ resourceDomainName }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-07-05T15:58:20.372Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "14",
+  "Name": "arn:aws:ssm:us-west-2:998617134153:document/DelineaDomainJoin",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ce05097e-bf75-4bab-bb2f-39671ea4d495",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1714,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-06T07:13:08.7682613+00:00"
+}

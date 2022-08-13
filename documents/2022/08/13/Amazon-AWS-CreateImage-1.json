@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Creates a new Amazon Machine Image (AMI) from an Amazon EC2 instance\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The ID of the Amazon EC2 instance.\"\n    },\n    \"NoReboot\": {\n      \"type\": \"Boolean\",\n      \"description\": \"(Optional) Do not reboot the instance before creating the image.\",\n      \"default\": false\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf. \",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"createImage\",\n      \"action\": \"aws:createImage\",\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n        \"InstanceId\": \"{{ InstanceId }}\",\n        \"ImageName\": \"{{ InstanceId }}_{{automation:EXECUTION_ID}}\",\n        \"NoReboot\": \"{{ NoReboot }}\"\n      }\n    }\n  ],\n  \"outputs\": [\n    \"createImage.ImageId\"\n  ]\n}",
+  "CreatedDate": "2018-08-07T17:04:38.787Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-CreateImage",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "1cce48ca-eac9-4ce6-b7ab-8383c3b8b888",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1291,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-13T07:12:35.7082484+00:00"
+}

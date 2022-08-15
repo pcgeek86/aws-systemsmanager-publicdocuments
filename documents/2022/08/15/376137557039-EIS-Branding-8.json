@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"eis-branding-config\",\n  \"parameters\" : {\n    \"brandingType\" : {\n      \"description\" : \"The branding type the customer has\",\n      \"type\" : \"String\"\n    },\n    \"eisShortname\" : {\n      \"description\" : \"The customer shortname\",\n      \"type\" : \"String\"\n    },\n    \"customerRegion\" : {\n      \"description\" : \"The customer region\",\n      \"type\" : \"String\"\n    },\n    \"eisDeploymentVersion\" : {\n      \"description\" : \"The eis version\",\n      \"type\" : \"String\"\n    },\n    \"eisDeploymentEnvironment\" : {\n      \"description\" : \"The eis environment\",\n      \"type\" : \"String\"\n    },\n    \"brandingColorsDark\" : {\n      \"description\" : \"The rgb dark colors for branding\",\n      \"type\" : \"String\"\n    },\n    \"brandingColorsLight\" : {\n      \"description\" : \"The rgb light colors for branding\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"EisBrandingConfig\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"tempPath='/root/eisbranding'\", \"webappsPath='/u01/app/ellucian/EllucianEthosIdentity/wso2is-5.10.0/repository/deployment/server/webapps/authenticationendpoint'\", \"mkdir -p $tempPath\", \"aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/nonprod/scripts/{{ brandingType }}-branding.py $tempPath/\", \"if [ {{ brandingType }} == 'custom' ]; then python3 $tempPath/{{ brandingType }}-branding.py {{ eisShortname }} {{ customerRegion }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }}; fi\", \"if [ {{ brandingType }} == 'basic' ]; then aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/nonprod/scripts/auth_index.css.j2 $webappsPath/ellucian/index.css; aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/nonprod/scripts/auth_basicauth.jsp $webappsPath/basicauth.jsp; aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/nonprod/scripts/auth_login.jsp $webappsPath/login.jsp; aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/nonprod/scripts/auth_logout.jsp $webappsPath/logout.jsp; python3 $tempPath/{{ brandingType }}-branding.py {{ eisShortname }} {{ customerRegion }} {{ brandingColorsDark }} {{ brandingColorsLight }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }}; fi\", \"rm -rf $tempPath\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-08-12T16:59:28.807Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "8",
+  "Name": "arn:aws:ssm:us-west-2:376137557039:document/EIS-Branding",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6b4d720f-35ca-4e8b-aa4f-d2e586e7b09a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2781,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-15T07:13:37.1530013+00:00"
+}

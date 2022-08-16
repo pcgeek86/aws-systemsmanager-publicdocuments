@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableRDSClusterDeletionProtection\\n\\n## What does this document do?\\nThis document enables `Deletion Protection` on a given Amazon RDS cluster using the [ModifyDBCluster](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_ModifyDBCluster.html) API.\\nPlease note, AWS Config is required to be enabled in this region for this document to work as it requires the resource ID recorded by the AWS Config service.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* ClusterId: (Required) Resource ID of the Amazon RDS cluster.\\n\\n## Output Parameters\\n* EnableRDSClusterDeletionProtection.ModifyDBClusterResponse: The standard HTTP response from the ModifyDBCluster API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"ClusterId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Amazon RDS cluster resourceId for which deletion protection needs to be enabled.\",\n      \"allowedPattern\" : \"^[a-zA-Z0-9-]{1,35}$\"\n    }\n  },\n  \"outputs\" : [ \"EnableRDSClusterDeletionProtection.ModifyDBClusterResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"GetRDSClusterIdentifer\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetRDSClusterIdentifer\\nAccepts the resource ID of the Amazon RDS Cluster as input and returns the cluster name.\\n## Outputs\\n* DbClusterIdentifier: The ID of the DB cluster for which the input parameter matches DbClusterResourceId element from the output of the DescribeDBClusters API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"config\",\n      \"Api\" : \"GetResourceConfigHistory\",\n      \"resourceId\" : \"{{ ClusterId }}\",\n      \"resourceType\" : \"AWS::RDS::DBCluster\",\n      \"limit\" : 1\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DbClusterIdentifier\",\n      \"Selector\" : \"$.configurationItems[0].resourceName\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBClusterStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"description\" : \"## VerifyDBClusterStatus\\nVerifies if the DB Cluster status is available before enabling cluster deletion protection.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusters\",\n      \"DBClusterIdentifier\" : \"{{ GetRDSClusterIdentifer.DbClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusters[0].Status\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"EnableRDSClusterDeletionProtection\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableRDSClusterDeletionProtection\\nEnables deletion protection on the Amazon RDS Cluster.\\n## Outputs\\n* ModifyDBClusterResponse: The standard HTTP response from the ModifyDBCluster API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"ModifyDBCluster\",\n      \"DBClusterIdentifier\" : \"{{ GetRDSClusterIdentifer.DbClusterIdentifier }}\",\n      \"DeletionProtection\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"ModifyDBClusterResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBClusterModification\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyDBClusterModification\\nVerifies that deletion protection has been enabled for the given Amazon RDS database cluster.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusters\",\n      \"DBClusterIdentifier\" : \"{{ GetRDSClusterIdentifer.DbClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusters[0].DeletionProtection\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-22T16:04:31.319Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableRDSClusterDeletionProtection",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "229e1d3e-3564-45a8-9d15-5a7229cc6bda",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4623,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-16T07:10:55.7272253+00:00"
+}

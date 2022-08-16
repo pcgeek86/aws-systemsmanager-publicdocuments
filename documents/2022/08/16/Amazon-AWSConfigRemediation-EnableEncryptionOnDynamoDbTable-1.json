@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-EnableEncryptionOnDynamoDbTable\\n\\n## What does this document do?\\nThis document is used to enable encryption on an Amazon DynamoDB table with AWS KMS Key.\\n\\n## Input Parameters\\n* TableName: (Required) Name of the DynamoDB table.\\n  * Example: dynamodb-table-example\\n* KMSKeyArn: (Required) ARN of the AWS KMS Key.\\n  * Example: arn:aws:kms:ap-southeast-2:123456789123:key/6c74f75d-c29e-4fdf-92b2-54eb6f3fd75f\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n  * Example: arn:aws:iam::123456789123:role/test-ssm-assume-role\\n\\n## Output Parameters\\n* UpdateTableEncryption.UpdateTableResponse: JSON formatted response from the UpdateTable API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"TableName\" : {\n      \"description\" : \"(Required) Name of the DynamoDB table.\",\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"[a-zA-Z0-9_.-]{3,255}\"\n    },\n    \"KMSKeyArn\" : {\n      \"description\" : \"(Required) ARN of the AWS KMS Key.\",\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:kms:.*:\\\\d{12}:key/[\\\\w+=,.@-]+\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    }\n  },\n  \"outputs\" : [ \"UpdateTableEncryption.UpdateTableResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"UpdateTableEncryption\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## UpdateTableEncryption\\nEnables encyption on the Amazon DynamoDB table using UpdateTable API with the given AWS KMS key ARN.\\n## Outputs\\n* UpdateTableResponse: The standard HTTP response from the UpdateTable API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"UpdateTable\",\n      \"TableName\" : \"{{ TableName }}\",\n      \"SSESpecification\" : {\n        \"KMSMasterKeyId\" : \"{{ KMSKeyArn }}\",\n        \"SSEType\" : \"KMS\"\n      }\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"UpdateTableResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyTableEncryptionStatus\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"description\" : \"## VerifyTableEncryptionStatus\\nWaits for the DynamoDB Table encryption status to be set to 'ENABLED'.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"DescribeTable\",\n      \"TableName\" : \"{{ TableName }}\",\n      \"PropertySelector\" : \"Table.SSEDescription.Status\",\n      \"DesiredValues\" : [ \"ENABLED\" ]\n    }\n  }, {\n    \"name\" : \"VerifyTableEncryptionKey\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyTableEncryptionKey\\nChecks that the Amazon DynamoDB table is encrypted with the required KMS key ARN.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"DescribeTable\",\n      \"TableName\" : \"{{ TableName }}\",\n      \"PropertySelector\" : \"Table.SSEDescription.KMSMasterKeyArn\",\n      \"DesiredValues\" : [ \"{{ KMSKeyArn }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-09-24T15:08:06.511Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableEncryptionOnDynamoDbTable",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e4504a33-f899-4ef8-b844-d2c8a9f6fad9",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3809,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-16T07:10:54.6074085+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"eis-branding-config\",\n  \"parameters\" : {\n    \"brandingType\" : {\n      \"description\" : \"The branding type the customer has\",\n      \"type\" : \"String\"\n    },\n    \"eisShortname\" : {\n      \"description\" : \"The customer shortname\",\n      \"type\" : \"String\"\n    },\n    \"customerRegion\" : {\n      \"description\" : \"The customer region\",\n      \"type\" : \"String\"\n    },\n    \"eisDeploymentVersion\" : {\n      \"description\" : \"The eis version\",\n      \"type\" : \"String\"\n    },\n    \"eisDeploymentEnvironment\" : {\n      \"description\" : \"The eis environment\",\n      \"type\" : \"String\"\n    },\n    \"brandingColorsDark\" : {\n      \"description\" : \"The rgb dark colors for branding\",\n      \"type\" : \"String\"\n    },\n    \"brandingColorsLight\" : {\n      \"description\" : \"The rgb light colors for branding\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"EisBrandingConfig\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"mkdir -p /root/eisbranding\", \"aws s3 cp --only-show-errors s3://ellucian-capps-artifacts/eis-branding/branding-files/{{ brandingType }}-branding.py /root/eisbranding/\", \"if [ {{ brandingType }} == 'custom' ]; then python3 /root/eisbranding/custom-branding.py {{ eisShortname }} {{ customerRegion }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }}; fi\", \"if [ {{ brandingType }} == 'basic' ]; then python3 /root/eisbranding/basic-branding.py {{ eisShortname }} {{ customerRegion }} {{ brandingColorsDark }} {{ brandingColorsLight }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }}; fi\", \"rm -rf /root/eisbranding\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-08-16T13:33:31.935Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "9",
+  "Name": "arn:aws:ssm:us-west-2:376137557039:document/EIS-Branding",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a319889c-5169-4fdb-8ea8-57ad9f13d83b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2098,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-17T07:13:01.9277894+00:00"
+}

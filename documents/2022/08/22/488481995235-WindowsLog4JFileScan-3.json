@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n  \"schemaVersion\": \"2.2\",\r\n  \"description\": \"Scans Filesystem for Log4J Prints to stdout\",\r\n  \"mainSteps\": [\r\n    {\r\n      \"inputs\": {\r\n        \"runCommand\": [\r\n          \"$RunDate = (get-date).ToUniversalTime().ToString(\\\"yyyy-MM-ddTHH:mm+00:00\\\")\\n $header = @{\\\"X-aws-ec2-metadata-token-ttl-seconds\\\" = \\\"21600\\\"}\\n $token = Invoke-RestMethod -Method Put -Uri \\\"http://169.254.169.254/latest/api/token\\\" -Headers $header\\n $header = @{\\\"X-aws-ec2-metadata-token\\\" = $token}\\n $ec2info = Invoke-RestMethod -Headers $header -Method Get -Uri \\\"http://169.254.169.254/latest/meta-data/identity-credentials/ec2/info/\\\"\\n $instanceid = Invoke-RestMethod -Headers $header -Method Get -Uri \\\"http://169.254.169.254/latest/meta-data/instance-id\\\"\\n $region = Invoke-RestMethod -Headers $header -Method Get -Uri \\\"http://169.254.169.254/latest/meta-data/placement/availability-zone\\\"\\n $hostname_ip = $env:computername + \\\"_\\\"+(Get-NetIPAddress -AddressFamily IPv4).IPAddress[0]\\n $linecount = 0\\n $Drives = Get-PSDrive -PSProvider 'FileSystem'\\n foreach($Drive in $drives) { \\n $log4jfiles = Get-Childitem –Path $Drive.Root -Include *log4j-core-*.jar -File -Recurse -ErrorAction SilentlyContinue\\n   Foreach ($file in $log4jfiles)\\n { \\n Write-Host \\\"$($RunDate)`t$($ec2info.AccountId)`t$($region)`t$($instanceid)`t$($hostname_ip)`t$($file.FullName)\\\"\\n $linecount += 1 } }\\n if ($linecount -eq 0) {  Write-Host \\\"$($RunDate)`t$($ec2info.AccountId)`t$($region)`t$($instanceid)`t$($hostname_ip)`tnolog4jcore\\\" }\"\r\n        ]\r\n      },\r\n      \"name\": \"log4jFileSystemQuery\",\r\n      \"action\": \"aws:runPowerShellScript\",\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Windows\"\r\n        ]\r\n      }\r\n    }\r\n  ]\r\n}",
+  "CreatedDate": "2022-01-04T21:26:02.983Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:488481995235:document/WindowsLog4JFileScan",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f49da49c-eed6-43e2-b911-9238a88ccf84",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2089,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-22T07:13:05.2534308+00:00"
+}

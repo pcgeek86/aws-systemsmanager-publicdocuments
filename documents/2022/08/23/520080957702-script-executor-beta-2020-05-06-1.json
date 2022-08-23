@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Wrapper document\",\n  \"parameters\" : {\n    \"s3ScriptPath\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Path to wrapper script in S3.\"\n    },\n    \"scriptName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Name of the script.\"\n    },\n    \"scriptArgs\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Arguments to the script.\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"set -x;\", \"curl \\\"{{s3ScriptPath}}\\\" -o /tmp/{{scriptName}}\", \"chmod +x /tmp/{{scriptName}}\", \"/tmp/{{scriptName}} {{scriptArgs}}; returnCode=$?;\", \"rm -f /tmp/{{scriptName}}\", \"exit $returnCode\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-06-20T01:33:24.651Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:520080957702:document/script-executor-beta-2020-05-06",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "42bdd9d0-395b-4d1d-bd23-cb055d711e4a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1051,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-23T07:18:46.1887262+00:00"
+}

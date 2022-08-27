@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"A composite document for installing and configuring AWS Backint Agent.\",\n  \"parameters\": {\n    \"BucketName\": {\n      \"description\": \"Name of the S3 bucket to store SAP HANA database backups\",\n      \"type\": \"String\",\n      \"allowedPattern\": \"(^(([a-z0-9]|[a-z0-9][a-z0-9\\\\-]*[a-z0-9])\\\\.)*([a-z0-9]|[a-z0-9][a-z0-9\\\\-]*[a-z0-9])$)\",\n      \"maxChars\": \"63\",\n      \"minChars\":\"3\"\n    },\n    \"BucketFolder\": {\n      \"description\": \"Folder of the S3 bucket to store SAP HANA database backups (optional)\",\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^$|^[a-zA-Z0-9/!-_.*'()]*$\",\n      \"maxChars\": \"60\"\n    },\n    \"SystemID\": {\n      \"description\": \"SAP HANA system ID, for example HDB\",\n      \"type\": \"String\",\n      \"allowedPattern\": \"^([A-Z]{1}[0-9A-Z]{2})$\"\n    },\n    \"BucketRegion\": {\n      \"description\": \"S3 bucket region, for example us-east-1\",\n      \"type\": \"String\",\n      \"allowedPattern\": \"^[a-z0-9-]*$\",\n      \"maxChars\": \"30\"\n    },\n    \"BucketOwnerAccountID\": {\n      \"description\": \"12-digit account ID of the Amazon S3 bucket owner\",\n      \"type\": \"String\",\n      \"allowedPattern\": \"\\\\b[0-9]{12}\\\\b\"\n    },\n    \"KmsKey\": {\n      \"description\": \"ARN of the KMS key to use for the S3 encryption, for example arn:aws:kms:us-east-1:123456789012/123abcd-12ab-34cd-56ef-1234567890ab\",\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^$|^(?:(arn:(aws[a-zA-Z-]*)?:kms:[a-z0-9-]*:\\\\d{12}:(alias|key)/?[a-zA-Z_0-9+=,.@\\\\-_/]+)|(^[A-Za-z0-9_\\\\/]*$))$\"\n    },\n    \"InstallationDirectory\": {\n      \"description\": \"Name of the directory to install AWS Backint Agent for SAP HANA, for example /hana/shared\",\n      \"type\": \"String\",\n      \"default\": \"/hana/shared\",\n      \"allowedPattern\": \"^[A-Za-z0-9_/]*$\",\n      \"maxChars\": \"60\"\n    },\n    \"AgentVersion\": {\n      \"description\": \"(Optional) The version of the package to install. By default, the system installs the latest published version.\",\n      \"default\": \"\",\n      \"type\": \"String\",\n      \"allowedPattern\": \"^$|^[0-9_.]*$\",\n      \"maxChars\": \"20\"\n    },\n    \"ModifyGlobalIniFile\": {\n      \"description\": \"Select an option from the dropdown.  If you select Modify, the global.ini file will be modified by this installation. If you select SQL, SQL commands will be generated for you to modify the global.ini file.\",\n      \"type\": \"String\",\n      \"allowedValues\": [\"modify\", \"sql\", \"none\"],\n      \"default\": \"none\"\n    },\n    \"IgnoreBucketChecks\": {\n      \"description\": \"Select yes to ignore S3 bucket sanity checks.\",\n      \"type\": \"String\",\n      \"default\": \"no\",\n      \"allowedValues\": [\"yes\", \"no\"]\n    },\n    \"DebugMode\": {\n      \"description\": \"Activate debug mode\",\n      \"type\": \"String\",\n      \"default\": \"no\",\n      \"allowedValues\": [\"yes\", \"no\"]\n    },\n    \"EnsureNoBackupInProcess\": {\n      \"description\": \"Select yes to ensure that you don't have in-progress backups and have disabled the log backup before proceeding with the install. See AWS Backint documentation for details.\",\n      \"type\": \"String\",\n      \"default\": \"no\",\n      \"allowedValues\": [\"yes\", \"no\"]\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:configurePackage\",\n      \"name\": \"installAgent\",\n      \"inputs\": {\n        \"name\": \"AWSSAP-Backint\",\n        \"action\": \"Install\",\n        \"version\": \"{{AgentVersion}}\"\n      }\n    },\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"configureAgent\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"INSTALLERDIRSYMLINK='/usr/bin/aws-backint-installer'\",\n          \"INSTALLERDIR=$(readlink -f /usr/bin/aws-backint-installer)\",\n          \"if [ $(which python 2>/dev/null) ]; then\",\n          \"   PYTHON_BIN=$(which python)\",\n          \"elif [ $(which python2 2>/dev/null) ]; then\",\n          \"   PYTHON_BIN=$(which python2)\",\n          \"else\",\n          \"   exit 1\",\n          \"fi\",\n          \"if [[ \\\"{{DebugMode}}\\\" == no ]]; then\",\n          \"   DEBUGMODE=''\",\n          \"else\",\n          \"   DEBUGMODE='--debug'\",\n          \"fi\",\n          \"if [[ \\\"{{IgnoreBucketChecks}}\\\" == no ]]; then\",\n          \"   IGNORECHECKS=''\",\n          \"else\",\n          \"   IGNORECHECKS='-n'\",\n          \"fi\",\n          \"cd $INSTALLERDIR\",\n          \"$PYTHON_BIN install-aws-backint-agent -ssm -g \\\"s3_bucket_name={{BucketName}},s3_bucket_folder={{BucketFolder}},hana_sid={{SystemID}},s3_bucket_region={{BucketRegion}},s3_bucket_owner_account_id={{BucketOwnerAccountID}},installation_directory={{InstallationDirectory}},s3_sse_kms_arn={{KmsKey}},modify_global_ini={{ModifyGlobalIniFile}},install_awscli=n\\\" \",\n          \"$PYTHON_BIN install-aws-backint-agent -f default.rsp -m silent -ssm -a {{EnsureNoBackupInProcess}} $DEBUGMODE $IGNORECHECKS\"\n        ]\n      }\n    }\n  ]\n}\n\n",
+  "CreatedDate": "2022-02-24T16:03:50.275Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "8",
+  "Name": "AWSSAP-InstallBackint",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "20564d84-fc70-4e12-9af1-73135fd54bfd",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5393,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-27T07:13:57.494783+00:00"
+}

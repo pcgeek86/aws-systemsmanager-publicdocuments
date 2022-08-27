@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.0\",\n  \"description\": \"Document to run single non-interactive command on an instance\",\n  \"sessionType\": \"NonInteractiveCommands\",\n  \"parameters\": {\n    \"command\": {\n      \"type\": \"String\",\n      \"description\": \"The command to run on the instance\"\n    },\n    \"separateOutputStream\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) Separate the StdOut, StdErr and Exit code for Non-interactive command output\",\n      \"allowedValues\": [\n        \"true\",\n        \"false\"\n      ],\n      \"default\": \"false\"\n    },\n    \"stdoutSeparatorPrefix\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) Unique string as the prefix for StdOut partition, e.g. 'STDOUT:\\n'\",\n      \"allowedPattern\": \"^[0-9a-zA-Z\\r\\n_:-]{0,30}$\",\n      \"default\": \"\"\n    },\n    \"stderrSeparatorPrefix\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) Unique string as the prefix for StdErr partition, e.g. 'STDERR:\\n'\",\n      \"allowedPattern\": \"^[0-9a-zA-Z\\r\\n_:-]{0,30}$\",\n      \"default\": \"\"\n    }\n  },\n  \"properties\": {\n    \"windows\": {\n      \"commands\": \"{{ command }}\",\n      \"runAsElevated\": false,\n      \"separateOutputStream\": \"{{ separateOutputStream }}\",\n      \"stdoutSeparatorPrefix\": \"{{ stdoutSeparatorPrefix }}\",\n      \"stderrSeparatorPrefix\": \"{{ stderrSeparatorPrefix }}\"\n    },\n    \"linux\": {\n      \"commands\": \"{{ command }}\",\n      \"runAsElevated\": false,\n      \"separateOutputStream\": \"{{ separateOutputStream }}\",\n      \"stdoutSeparatorPrefix\": \"{{ stdoutSeparatorPrefix }}\",\n      \"stderrSeparatorPrefix\": \"{{ stderrSeparatorPrefix }}\"\n    },\n    \"macos\": {\n      \"commands\": \"{{ command }}\",\n      \"runAsElevated\": false,\n      \"separateOutputStream\": \"{{ separateOutputStream }}\",\n      \"stdoutSeparatorPrefix\": \"{{ stdoutSeparatorPrefix }}\",\n      \"stderrSeparatorPrefix\": \"{{ stderrSeparatorPrefix }}\"\n    }\n  }\n}",
+  "CreatedDate": "2022-06-21T22:58:56.042Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StartNonInteractiveCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "afe1923d-bee5-4511-8891-95828fe45a35",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2231,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-27T07:12:44.5042146+00:00"
+}

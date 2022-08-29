@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"1.0\",\n  \"description\" : \"Operational Best Practices for Amazon DynamoDB\",\n  \"templateBody\" : {\n    \"Parameters\" : {\n      \"DynamodbThroughputLimitCheckParamAccountRCUThresholdPercentage\" : {\n        \"Default\" : \"80\",\n        \"Type\" : \"String\"\n      },\n      \"DynamodbThroughputLimitCheckParamAccountWCUThresholdPercentage\" : {\n        \"Default\" : \"80\",\n        \"Type\" : \"String\"\n      },\n      \"ServiceVpcEndpointEnabledParamServiceName\" : {\n        \"Default\" : \"dynamodb\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"DaxEncryptionEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"dax-encryption-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DAX_ENCRYPTION_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"DynamodbAutoscalingEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"dynamodb-autoscaling-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::DynamoDB::Table\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_AUTOSCALING_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"DynamodbInBackupPlan\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"dynamodb-in-backup-plan\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_IN_BACKUP_PLAN\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"DynamodbPitrEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"dynamodb-pitr-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::DynamoDB::Table\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_PITR_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"DynamodbTableEncryptedKms\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"dynamodb-table-encrypted-kms\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::DynamoDB::Table\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_TABLE_ENCRYPTED_KMS\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"DynamodbThroughputLimitCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"dynamodb-throughput-limit-check\",\n          \"InputParameters\" : {\n            \"accountRCUThresholdPercentage\" : {\n              \"Fn::If\" : [ \"dynamodbThroughputLimitCheckParamAccountRCUThresholdPercentage\", {\n                \"Ref\" : \"DynamodbThroughputLimitCheckParamAccountRCUThresholdPercentage\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            },\n            \"accountWCUThresholdPercentage\" : {\n              \"Fn::If\" : [ \"dynamodbThroughputLimitCheckParamAccountWCUThresholdPercentage\", {\n                \"Ref\" : \"DynamodbThroughputLimitCheckParamAccountWCUThresholdPercentage\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_THROUGHPUT_LIMIT_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ServiceVpcEndpointEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"service-vpc-endpoint-enabled\",\n          \"InputParameters\" : {\n            \"serviceName\" : {\n              \"Fn::If\" : [ \"serviceVpcEndpointEnabledParamServiceName\", {\n                \"Ref\" : \"ServiceVpcEndpointEnabledParamServiceName\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"SERVICE_VPC_ENDPOINT_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    },\n    \"Conditions\" : {\n      \"dynamodbThroughputLimitCheckParamAccountRCUThresholdPercentage\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"DynamodbThroughputLimitCheckParamAccountRCUThresholdPercentage\"\n          } ]\n        } ]\n      },\n      \"dynamodbThroughputLimitCheckParamAccountWCUThresholdPercentage\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"DynamodbThroughputLimitCheckParamAccountWCUThresholdPercentage\"\n          } ]\n        } ]\n      },\n      \"serviceVpcEndpointEnabledParamServiceName\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"ServiceVpcEndpointEnabledParamServiceName\"\n          } ]\n        } ]\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:44:11.432Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-OperationalBestPracticesforAmazonDynamoDB",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "75f085f0-0598-4c35-9c9b-b5106e7d5582",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5444,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-08-29T07:20:27.2483906+00:00"
+}

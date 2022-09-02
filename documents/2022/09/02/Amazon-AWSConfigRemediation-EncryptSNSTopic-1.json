@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EncryptSNSTopic\\n\\n## What does this document do?\\n This document enables encryption on given Amazon Simple Notification Service (Amazon SNS) topic using \\n [SetTopicAttributes](https://docs.aws.amazon.com/sns/latest/api/API_SetTopicAttributes.html) API.\\n\\n This document must only be used as a baseline to ensure that your Amazon SNS topics are encrypted with the minimum security best practice of using an AWS KMS customer managed CMK. \\n Based on your data policy, Amazon SNS topic should be encrypted with different customer managed CMKs as documented [here](https://docs.aws.amazon.com/kms/latest/developerguide/best-practices.html).\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* TopicArn: (Required)  The ARN of the Amazon SNS Topic.\\n* KmsKeyArn: (Required) The ARN of AWS KMS Key.\\n\\n## Output Parameters \\n* EncryptSNSTopic.Response: The standard HTTP response from the SetTopicAttributes API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"TopicArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the Amazon SNS Topic.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:sns:[0-9a-zA-Z-]*:\\\\d{12}:[a-zA-Z0-9-_]+$\"\n    },\n    \"KmsKeyArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of AWS KMS Key.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:kms:.*:\\\\d{12}:key/[\\\\w+=,.@-]+\"\n    }\n  },\n  \"outputs\" : [ \"EncryptSNSTopic.Response\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"EncryptSNSTopic\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EncryptSNSTopic\\nMakes SetTopicAttributes API call using the Amazon SNS Topic ARN to enables encyption.\\n## Outputs\\n* Response: The standard HTTP response from the SetTopicAttributes API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"sns\",\n      \"Api\" : \"SetTopicAttributes\",\n      \"TopicArn\" : \"{{TopicArn}}\",\n      \"AttributeName\" : \"KmsMasterKeyId\",\n      \"AttributeValue\" : \"{{KmsKeyArn}}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyTopicEncryption\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyTopicEncryption\\nVerifies the given Amazon SNS Topic is encrypted with AWS KMS Key ARN.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"sns\",\n      \"Api\" : \"GetTopicAttributes\",\n      \"TopicArn\" : \"{{TopicArn}}\",\n      \"PropertySelector\" : \"Attributes.KmsMasterKeyId\",\n      \"DesiredValues\" : [ \"{{ KmsKeyArn }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:09:44.175Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EncryptSNSTopic",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "47d1aa69-b613-4c18-a271-a5dd19fe5f6e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3461,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-02T07:20:53.9334504+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Release ElasticIP\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AllocationId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Allocation ID of the Elastic IP address.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"ReleaseElasticIp\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"ReleaseAddress\",\n      \"AllocationId\" : \"{{AllocationId}}\"\n    }\n  } ]\n}",
+  "CreatedDate": "2018-12-11T18:04:56.188Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ReleaseElasticIP",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d78e1178-ef41-4360-9cdd-4380dc1e0999",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 946,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-07T07:38:01.9593736+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Installs Datadog.\",\n  \"parameters\": {\n    \"workingDirectory\": {\n      \"type\": \"String\",\n      \"default\": \"/tmp\",\n      \"description\": \"(Optional) The path to the working directory on your instance.\",\n      \"maxChars\": 4096\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"install_datadog\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"wget -O ddinstall.sh https://s3.amazonaws.com/dd-agent/scripts/install_script.sh\",\n          \"export DD_API_KEY=$(aws --region us-west-2 ssm get-parameters --names /datadog/default/pti/api_key --with-decryption --query Parameters[].Value --output text)\",\n          \"bash ./ddinstall.sh\"\n        ],\n        \"workingDirectory\": \"{{ workingDirectory }}\",\n        \"timeoutSeconds\": \"3600\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-05-31T11:54:15.96Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:155508938372:document/dd-agent-install-pti",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "291d54a7-7c99-4706-9b81-859288fcae8f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1245,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-09T07:21:44.5054012+00:00"
+}

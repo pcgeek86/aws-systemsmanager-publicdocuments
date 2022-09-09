@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"eis-branding-config\",\n  \"parameters\" : {\n    \"brandingType\" : {\n      \"description\" : \"The branding type the customer has\",\n      \"type\" : \"String\"\n    },\n    \"eisShortname\" : {\n      \"description\" : \"The customer shortname\",\n      \"type\" : \"String\"\n    },\n    \"customerRegion\" : {\n      \"description\" : \"The customer region\",\n      \"type\" : \"String\"\n    },\n    \"eisDeploymentVersion\" : {\n      \"description\" : \"The eis version\",\n      \"type\" : \"String\"\n    },\n    \"eisDeploymentEnvironment\" : {\n      \"description\" : \"The eis environment\",\n      \"type\" : \"String\"\n    },\n    \"brandingColorsDark\" : {\n      \"description\" : \"The rgb dark colors for branding\",\n      \"type\" : \"String\"\n    },\n    \"brandingColorsLight\" : {\n      \"description\" : \"The rgb light colors for branding\",\n      \"type\" : \"String\"\n    },\n    \"logoHeight\" : {\n      \"description\" : \"The logo height\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"EisBrandingConfig\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"mkdir -p /root/eisbranding\", \"if [ {{ eisShortname }} == 'capps' ]; then aws s3 cp --only-show-errors s3://ellucian-global-artifacts/eis-artifacts/branding-files/sandbox/{{ eisDeploymentVersion }}/{{ brandingType }}-branding.py /root/eisbranding/; else aws s3 cp --only-show-errors s3://ellucian-global-artifacts/eis-artifacts/branding-files/production/{{ eisDeploymentVersion }}/{{ brandingType }}-branding.py /root/eisbranding/; fi\", \"if [ {{ brandingType }} == 'custom' ]; then python /root/eisbranding/custom-branding.py {{ eisShortname }} {{ customerRegion }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }}; fi\", \"if [ {{ brandingType }} == 'basic' ]; then python /root/eisbranding/basic-branding.py {{ eisShortname }} {{ customerRegion }} {{ brandingColorsDark }} {{ brandingColorsLight }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }} {{ logoHeight }}; fi\", \"if [ {{ brandingType }} == 'default' ]; then python /root/eisbranding/default-branding.py {{ eisShortname }} {{ customerRegion }} {{ eisDeploymentVersion }} {{ eisDeploymentEnvironment }}; fi\", \"rm -rf /root/eisbranding\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-08-31T21:04:15.418Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "17",
+  "Name": "arn:aws:ssm:us-west-2:376137557039:document/EIS-Branding",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "4682e438-ed3f-4849-8617-672c46a37429",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2685,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-09T07:21:30.8070577+00:00"
+}

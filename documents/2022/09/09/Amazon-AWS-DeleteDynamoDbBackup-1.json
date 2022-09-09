@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Delete DynamoDB table backup\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"BackupArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) ARN of the DynamoDB table backup to delete.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DeleteDynamoDbBackup\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"DeleteBackup\",\n      \"BackupArn\" : \"{{BackupArn}}\"\n    }\n  } ]\n}",
+  "CreatedDate": "2018-08-31T00:44:47.89Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-DeleteDynamoDbBackup",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "da9a5bfc-b6e2-4650-8218-a44644f6237f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 957,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-09T07:20:37.5511747+00:00"
+}

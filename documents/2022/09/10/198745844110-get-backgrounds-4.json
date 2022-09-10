@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"get raindrop backgrounds\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"String\",\n      \"description\": \"getbackgrounds\",\n      \"default\": \"get backgrounds\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"getbackgrounds\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"takeown /F c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\*.* /R /A\",\n          \"$Acl = Get-Acl 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\'\",\n          \"Ar = New-Object System.Security.AccessControl.FileSystemAccessRule('Administrator', 'FullControl', 'ContainerInherit,ObjectInherit', 'None', 'Allow')\",\n          \"$Acl.SetAccessRule($Ar)\",\n          \"Set-Acl 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\' $Acl\",\n          \"Remove-Item -path 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\*.*'\",\n          \"Invoke-WebRequest -URI 'https://raindrop-images.s3-us-west-2.amazonaws.com/backgrounds/img0_1280x720.jpg' -OutFile 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\img0_1280x720.jpg'\",\n          \"Invoke-WebRequest -URI 'https://raindrop-images.s3-us-west-2.amazonaws.com/backgrounds/img0_1366x768.jpg' -OutFile 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\img0_1366x768.jpg'\",\n          \"Invoke-WebRequest -URI 'https://raindrop-images.s3-us-west-2.amazonaws.com/backgrounds/img0_1920x1080.jpg' -OutFile 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\img0_1920x1080.jpg'\",\n          \"Invoke-WebRequest -URI 'https://raindrop-images.s3-us-west-2.amazonaws.com/backgrounds/img0_3840x2160.jpg' -OutFile 'c:\\\\windows\\\\web\\\\4K\\\\Wallpaper\\\\Windows\\\\img0_3840x2160.jpg'\"\n          ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2020-07-25T10:10:38.871Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:198745844110:document/get-backgrounds",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c0e92e63-fecf-423c-b811-e373adbfe3b9",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2037,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-10T07:16:44.0931609+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for CloudTrail\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Resources\" : {\n      \"CloudTrailCloudWatchLogsEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"cloud-trail-cloud-watch-logs-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUD_TRAIL_CLOUD_WATCH_LOGS_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CloudTrailEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"cloudtrail-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUD_TRAIL_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CloudTrailEncryptionEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"cloud-trail-encryption-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUD_TRAIL_ENCRYPTION_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CloudTrailLogFileValidationEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"cloud-trail-log-file-validation-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUD_TRAIL_LOG_FILE_VALIDATION_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CloudtrailS3DataeventsEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"cloudtrail-s3-dataevents-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUDTRAIL_S3_DATAEVENTS_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CloudtrailSecurityTrailEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"cloudtrail-security-trail-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUDTRAIL_SECURITY_TRAIL_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"MultiRegionCloudTrailEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"multi-region-cloudtrail-enabled\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"MULTI_REGION_CLOUD_TRAIL_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:53:47.437Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforCloudTrail",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "668d471f-e552-4acc-a0a0-7f9a25c67a14",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2871,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-14T07:30:38.6152772+00:00"
+}

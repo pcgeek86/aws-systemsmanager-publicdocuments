@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-UpdateXRayKmsKey\\n\\n## What does this document do?\\nThis document enables encryption configuration for AWS X-Ray data with the provided AWS Key Management Service (AWS KMS) key using the [PutEncryptionConfig](https://docs.aws.amazon.com/xray/latest/api/API_PutEncryptionConfig.html) API.\\n\\nThis document must only be used as a baseline to ensure that your AWS X-Ray data is encrypted with the minimum security best practice of using an AWS KMS customer managed CMK.\\nBased on your data policy, AWS X-Ray data should be encrypted with different customer managed CMKs as documented [here](https://docs.aws.amazon.com/kms/latest/developerguide/best-practices.html).\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* KeyId: (Required) The AWS KMS Key alias, ID or ARN that is to be used for encryption.\\n\\n## Output Parameters\\n* EncryptXRayWithKMSKey.Output: The standard HTTP response from the PutEncryptionConfig API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"KeyId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The AWS KMS Key alias, Key ID, Key ID ARN, or Alias ARN that is to be used for encryption.\",\n      \"allowedPattern\" : \"(^arn:(aws[a-z-]*)?:kms:.*:\\\\d{12}:alias/[a-zA-Z0-9/_-]{1,256}$)|(^alias/[a-zA-Z0-9/_-]{1,256}$)|(^arn:(aws[a-z-]*)?:kms:.*:\\\\d{12}:key/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$)|(^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$)\"\n    }\n  },\n  \"outputs\" : [ \"EncryptXRayWithKMSKey.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"EncryptXRayWithKMSKey\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EncryptXRayWithKMSKey\\nUpdates encryption configuration for AWS X-Ray data with the provided AWS KMS key using the PutEncryptionConfig API.\\n## Outputs\\n* Output: The standard HTTP response from the PutEncryptionConfig API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"xray\",\n      \"Api\" : \"PutEncryptionConfig\",\n      \"KeyId\" : \"{{ KeyId }}\",\n      \"Type\" : \"KMS\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    }, {\n      \"Name\" : \"XRayKMSKeyID\",\n      \"Selector\" : \"$.EncryptionConfig.KMSKeyId\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"WaitUntilEncryptionEnabled\",\n    \"description\" : \"## WaitUntilEncryptionEnabled\\nWaits until AWS X-Ray encryption configuration 'Status' property changes to \\\"ACTIVE\\\" or times out.\\n\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"xray\",\n      \"Api\" : \"GetEncryptionConfig\",\n      \"PropertySelector\" : \"$.EncryptionConfig.Status\",\n      \"DesiredValues\" : [ \"ACTIVE\" ]\n    }\n  }, {\n    \"name\" : \"GetKMSKeyArn\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetKMSKeyArn\\nGets AWS KMS Key ARN using the given input parameter KeyId.\\n## Outputs\\nKMSKeyArn: The AWS KMS key ARN of the given KeyId parameter.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"kms\",\n      \"Api\" : \"DescribeKey\",\n      \"KeyId\" : \"{{ KeyId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"KMSKeyArn\",\n      \"Selector\" : \"$.KeyMetadata.Arn\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifyEncryptXRayWithKMSKey\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyEncryptXRayWithKMSKey\\nVerifies that encryption configuration for AWS X-Ray data is updated with the provided AWS KMS key using GetEncryptionConfig API.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"xray\",\n      \"Api\" : \"GetEncryptionConfig\",\n      \"PropertySelector\" : \"$.EncryptionConfig.KeyId\",\n      \"DesiredValues\" : [ \"{{ GetKMSKeyArn.KMSKeyArn }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-01-29T16:10:59.565Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-UpdateXRayKMSKey",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "342a588e-ee7e-447d-8826-1fb5963964d1",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4785,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-14T07:30:28.7942728+00:00"
+}

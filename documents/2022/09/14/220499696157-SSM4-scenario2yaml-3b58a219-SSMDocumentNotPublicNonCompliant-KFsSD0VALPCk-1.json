@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Run a script on Linux instances.\",\n  \"parameters\" : {\n    \"commands\" : {\n      \"default\" : \"echo Hello World\",\n      \"description\" : \"The commands to run or the path to an existing script on the instance.\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"60\",\n      \"runCommand\" : [ \"{{ commands }}\" ]\n    },\n    \"name\" : \"runCommands\",\n    \"action\" : \"aws:runShellScript\"\n  } ]\n}",
+  "CreatedDate": "2022-09-13T04:18:33.919Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:220499696157:document/SSM4-scenario2yaml-3b58a219-SSMDocumentNotPublicNonCompliant-KFsSD0VALPCk",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "866eaf51-6869-4d40-9b23-aa6b2d8fbec2",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 801,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-14T07:31:15.1516296+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.0\",\n  \"description\": \"This document holds parameterized settings for starting a session with Session Manager.\",\n  \"sessionType\": \"InteractiveCommands\",\n  \"parameters\": {\n    \"s3BucketName\": {\n      \"type\": \"String\",\n      \"description\": \"S3 bucket for logging\",\n      \"default\": \"\"\n    },\n    \"s3KeyPrefix\": {\n      \"type\": \"String\",\n      \"description\": \"S3 prefix for logging\",\n      \"default\": \"\"\n    },\n    \"s3EncryptionEnabled\": {\n      \"type\": \"String\",\n      \"description\": \"Enable S3 Encryption\",\n      \"allowedValues\": [\n        \"true\",\n        \"false\"\n      ],\n      \"default\": \"false\"\n    },\n    \"cloudWatchLogGroupName\": {\n      \"type\": \"String\",\n      \"description\": \"Cloud watch log group name for logging\",\n      \"default\": \"\"\n    },\n    \"cloudWatchEncryptionEnabled\": {\n      \"type\": \"String\",\n      \"description\": \"Enable Cloudwatch Encryption\",\n      \"allowedValues\": [\n        \"true\",\n        \"false\"\n      ],\n      \"default\": \"false\"\n    },\n    \"kmsKeyId\": {\n      \"type\": \"String\",\n      \"description\": \"KMS key for encryption\",\n      \"default\": \"\"\n    },\n    \"command\": {\n      \"type\": \"String\",\n      \"description\": \"The command to run on the instance\"\n    }\n  },\n  \"inputs\": {\n    \"s3BucketName\": \"{{s3BucketName}}\",\n    \"s3KeyPrefix\": \"{{s3KeyPrefix}}\",\n    \"s3EncryptionEnabled\": \"{{s3EncryptionEnabled}}\",\n    \"cloudWatchLogGroupName\": \"{{cloudWatchLogGroupName}}\",\n    \"cloudWatchEncryptionEnabled\": \"{{cloudWatchEncryptionEnabled}}\",\n    \"kmsKeyId\": \"{{kmsKeyId}}\"\n  },\n  \"properties\": {\n    \"linux\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"windows\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    }\n  }\n}\n",
+  "CreatedDate": "2021-10-20T21:17:33.207Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "2",
+  "Name": "AmazonECS-ExecuteInteractiveCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "856c2a50-b788-448a-930d-5f71b3d69147",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2126,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-20T07:25:27.8001211+00:00"
+}

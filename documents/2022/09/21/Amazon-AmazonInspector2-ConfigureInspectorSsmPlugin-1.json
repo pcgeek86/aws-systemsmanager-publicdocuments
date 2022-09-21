@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\t\t\t\"schemaVersion\": \"2.2\",\n\t\t\t\t\"description\": \"Install or uninstall a Distributor package.\",\n\t\t\t\t\"parameters\": {\n\t\t\t\t\t\"action\": {\n      \t\t\t\t\t\"description\": \"(Required) Specify whether or not to install or uninstall the package.\",\n      \t\t\t\t\t\"type\": \"String\",\n      \t\t\t\t\t\"allowedValues\": [\n        \t\t\t\t\t\"Install\",\n        \t\t\t\t\t\"Uninstall\"\n      \t\t\t\t\t]\n    \t\t\t\t},\n\t\t\t\t\t\"installationType\": {\n      \t\t\t\t\t\"description\": \"(Optional) Specify the type of installation. Uninstall and reinstall: The application is taken offline until the reinstallation process completes. In-place update: The application is available while new or updated files are added to the installation.\",\n\t\t\t\t\t\t\"type\": \"String\",\n\t\t\t\t\t  \t\"allowedValues\": [\n\t\t\t\t\t\t\t\"Uninstall and reinstall\",\n\t\t\t\t\t\t\t\"In-place update\"\n\t\t\t\t\t  \t],\n      \t\t\t\t\t\"default\": \"Uninstall and reinstall\"\n    \t\t\t\t},\n\t\t\t\t\t\"name\": {\n\t\t\t\t\t  \t\"description\": \"(Required) The package to install/uninstall.\",\n\t\t\t\t\t  \t\"type\": \"String\",\n\t\t\t\t\t  \t\"allowedPattern\": \"^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:(package|document)\\\\/[a-zA-Z0-9/:.\\\\-_]{1,128}$|^[a-zA-Z0-9/:.\\\\-_]{1,128}$\"\n\t\t\t\t\t},\n\t\t\t\t\t\"version\": {\n\t\t\t\t\t  \t\"description\": \"(Optional) The version of the package to install or uninstall. If you don't specify a version, the system installs the latest published version by default. The system will only attempt to uninstall the version that is currently installed. If no version of the package is installed, the system returns an error.\",\n\t\t\t\t\t  \t\"type\": \"String\",\n\t\t\t\t\t  \t\"default\": \"\"\n\t\t\t\t\t},\n\t\t\t\t\t\"additionalArguments\": {\n\t\t\t\t\t  \t\"description\": \"(Optional) The additional parameters to provide to your install, uninstall, or update scripts.\",\n\t\t\t\t\t  \t\"type\": \"StringMap\",\n\t\t\t\t\t  \t\"displayType\": \"textarea\",\n\t\t\t\t\t  \t\"default\": {},\n\t\t\t\t\t  \t\"maxChars\": 4096\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"mainSteps\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"action\": \"aws:runPowerShellScript\",\n\t\t\t\t\t\t\"name\": \"createDownloadFolder\",\n\t\t\t\t\t\t\"precondition\":{\n\t\t\t\t\t\t\t\"StringEquals\": [\"platformType\", \"Windows\"]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"inputs\":{\n\t\t\t\t\t\t\t\"runCommand\": [\"try {\",\n\"  $sku = (Get-CimInstance -ClassName Win32_OperatingSystem).OperatingSystemSKU\",\n\"  if ($sku -eq 143 -or $sku -eq 144) {\",\n\"    Write-Host \\\"This document is not supported on Windows 2016 Nano Server.\\\"\",\n\"    exit 40\",\n\"  }\",\n\"  $ssmAgentService = Get-ItemProperty 'HKLM:SYSTEM\\\\\\\\CurrentControlSet\\\\\\\\Services\\\\\\\\AmazonSSMAgent\\\\\\\\'\",\n\"  if ($ssmAgentService -and [System.Version]$ssmAgentService.Version -ge [System.Version]'3.0.1031.0') {\",\n\"     exit 0\",\n\"  }\",\n\"  $DataFolder = \\\"Application Data\\\"\",\n\"  if ( ![string]::IsNullOrEmpty($env:ProgramData) ) {\",\n\"    $DataFolder = $env:ProgramData\",\n\"  } elseif ( ![string]::IsNullOrEmpty($env:AllUsersProfile) ) {\",\n\"    $DataFolder = \\\"$env:AllUsersProfile\\\\\\\\Application Data\\\"\",\n\"  }\",\n\"  $TempFolder = \\\"/\\\"\",\n\"  if ( $env:Temp -ne $null ) {\",\n\"    $TempFolder = $env:Temp\",\n\"  }\",\n\"  $DataFolder = Join-Path $DataFolder 'Amazon\\\\\\\\SSM'\",\n\"  $DownloadFolder = Join-Path $TempFolder 'Amazon\\\\\\\\SSM'\",\n\"  if ( !( Test-Path -LiteralPath $DataFolder )) {\",\n\"    $none = New-Item -ItemType directory -Path $DataFolder\",\n\"  }\",\n\"  $DataACL = Get-Acl $DataFolder\",\n\"  if ( Test-Path -LiteralPath $DownloadFolder ) {\",\n\"    $DownloadACL = Get-Acl $DownloadFolder\",\n\"    $ACLDiff = Compare-Object ($DownloadACL.AccessToString) ($DataACL.AccessToString)\",\n\"    if ( $ACLDiff.count -eq 0 ) {\",\n\"      exit 0\",\n\"    }\",\n\"    Remove-Item $DownloadFolder -Recurse -Force\",\n\"  }\",\n\"  $none = New-Item -ItemType directory -Path $DownloadFolder\",\n\"  Set-Acl $DownloadFolder -aclobject $DataACL\",\n\"  $DownloadACL = Get-Acl $DownloadFolder\",\n\"  $ACLDiff = Compare-Object ($DownloadACL.AccessToString) ($DataACL.AccessToString)\",\n\"  if ( $ACLDiff.count -ne 0 ) {\",\n\"    Write-Error \\\"Failed to create download folder\\\" -ErrorAction Continue\",\n\"    exit 41\",\n\"  }\",\n\"} catch {\",\n\"  Write-Host  \\\"Failed to create download folder\\\"\",\n\"  Write-Error  $Error[0]  -ErrorAction Continue\",\n\"  exit 42\",\n\"}\"]\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t  \t\"action\": \"aws:configurePackage\",\n\t\t\t\t\t  \t\"precondition\": {\n\t\t\t\t\t\t\t\"StringEquals\": [\"platformType\", \"Windows\"]\n\t\t\t\t\t  \t},\n\t\t\t\t\t  \t\"name\": \"configurePackage\",\n\t\t\t\t\t  \t\"inputs\": {\n\t\t\t\t\t\t\t\"name\": \"{{ name }}\",\n\t\t\t\t\t\t\t\"action\": \"{{ action }}\",\n\t\t\t\t\t\t\t\"installationType\": \"{{installationType}}\",\n\t\t\t\t\t\t\t\"version\": \"{{ version }}\",\n\t\t\t\t\t\t\t\"additionalArguments\": \"{{ additionalArguments }}\"\n\t\t\t\t\t  \t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}",
+  "CreatedDate": "2022-08-26T18:37:38.985Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AmazonInspector2-ConfigureInspectorSsmPlugin",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c409a71e-525c-49af-9b38-e0588abc733a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5458,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-21T07:39:54.9121081+00:00"
+}

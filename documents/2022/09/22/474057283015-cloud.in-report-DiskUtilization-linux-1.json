@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "\n\n{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document to Disk Utilization of Linux EC2 instance\",\n  \"parameters\": { } ,\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"GetDiskUtilizationLinux\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"df -h\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2022-08-07T16:21:57.118Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:474057283015:document/cloud.in-report-DiskUtilization-linux",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "74aabbbc-d4a3-441d-b405-ff62c2d3824b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 592,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-22T07:30:49.4154571+00:00"
+}

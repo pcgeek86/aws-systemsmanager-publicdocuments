@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-DeleteRedshiftCluster\\n\\n## What does this document do?\\nThis document deletes the given Amazon Redshift cluster using the [DeleteCluster](https://docs.aws.amazon.com/redshift/latest/APIReference/API_DeleteCluster.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* ClusterIdentifier: (Required) The identifier of the Amazon Redshift Cluster.\\n* SkipFinalClusterSnapshot: (Optional) The 'SkipFinalClusterSnapshot' value that indicates whether the a final snapshot of the cluster is created before Amazon Redshift cluster is deleted.\\n\\n## Output Parameters\\n* DeleteRedshiftClusterWithoutSnapShot.Response: The standard HTTP response from the DeleteCluster API.\\n* DeleteRedshiftClusterWithSnapShot.Response: The standard HTTP response from the DeleteCluster API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"ClusterIdentifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The identifier of the Amazon Redshift Cluster.\",\n      \"allowedPattern\" : \"[a-z]{1}[a-z0-9_.-]{0,62}\"\n    },\n    \"SkipFinalClusterSnapshot\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"(Optional) A value that indicates whether the a final snapshot of the cluster is created before Amazon Redshift cluster is deleted.\",\n      \"default\" : false\n    }\n  },\n  \"outputs\" : [ \"DeleteRedshiftClusterWithoutSnapShot.Response\", \"DeleteRedshiftClusterWithSnapShot.Response\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"RedshiftClusterCreateSnapshotCheck\",\n    \"description\" : \"## RedshiftClusterCreateSnapshotCheck\\nChecks the value of 'SkipFinalClusterSnapshot'.\\n\",\n    \"action\" : \"aws:branch\",\n    \"inputs\" : {\n      \"Choices\" : [ {\n        \"NextStep\" : \"DeleteRedshiftClusterWithoutSnapShot\",\n        \"Variable\" : \"{{ SkipFinalClusterSnapshot }}\",\n        \"BooleanEquals\" : true\n      }, {\n        \"NextStep\" : \"DeleteRedshiftClusterWithSnapShot\",\n        \"Variable\" : \"{{ SkipFinalClusterSnapshot }}\",\n        \"BooleanEquals\" : false\n      } ]\n    },\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"DeleteRedshiftClusterWithoutSnapShot\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DeleteRedshiftClusterWithoutSnapShot\\nMakes DeleteCluster API call using Amazon Redshift Cluster identifier and deletes the cluster without taking any final snapshot.\\n## Outputs\\n* Response: The standard HTTP response from the DeleteCluster API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"nextStep\" : \"VerifyRedshiftClusterDeletion\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DeleteCluster\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"SkipFinalClusterSnapshot\" : \"{{ SkipFinalClusterSnapshot }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"DeleteRedshiftClusterWithSnapShot\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DeleteRedshiftClusterWithSnapShot\\nMakes DeleteCluster API call using Amazon Redshift Cluster identifier and deletes the cluster by taking a final snapshot.\\n## Outputs\\n* Response: The standard HTTP response from the DeleteCluster API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DeleteCluster\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"SkipFinalClusterSnapshot\" : \"{{ SkipFinalClusterSnapshot }}\",\n      \"FinalClusterSnapshotIdentifier\" : \"{{ ClusterIdentifier }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyRedshiftClusterDeletion\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyRedshiftClusterDeletion\\nVerifies the given Amazon Redshift Cluster is deleted.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].ClusterStatus\",\n      \"DesiredValues\" : [ \"final-snapshot\", \"deleting\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-11-13T16:08:13.866Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DeleteRedshiftCluster",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b281b6a6-fe72-43a1-adf9-541736f03a21",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5089,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-23T07:30:31.0433607+00:00"
+}

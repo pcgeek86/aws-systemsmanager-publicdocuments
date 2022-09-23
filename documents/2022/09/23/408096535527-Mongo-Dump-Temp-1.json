@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.2\",\n  \"description\": \"Mongo Dump Command\",\n  \"parameters\": {\n    \"upgradeType\":{\n      \"type\":\"String\",\n      \"default\": \"\",\n      \"description\":\"Print mongo dump command.\"\n    }\n  },\n  \"runtimeConfig\": {\n    \"aws:runShellScript\": {\n      \"properties\": [\n        {\n          \"id\": \"0.aws:runShellScript\",\n          \"runCommand\": [\n            \"#!/bin/bash\",\n            \"echo MongoDumpCommand\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+  "CreatedDate": "2017-11-09T06:57:57.749Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:408096535527:document/Mongo-Dump-Temp",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b94b553d-25b4-4a0a-a430-42c1c267ec9b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 725,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-23T07:31:56.4083211+00:00"
+}

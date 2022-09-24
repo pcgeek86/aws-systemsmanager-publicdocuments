@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Publish SNS Notification\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"TopicArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the SNS topic to publish the notification to.\"\n    },\n    \"Message\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The message to include in the SNS notification.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"PublishSNSNotification\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"sns\",\n      \"Api\" : \"Publish\",\n      \"TopicArn\" : \"{{TopicArn}}\",\n      \"Message\" : \"{{Message}}\"\n    }\n  } ]\n}",
+  "CreatedDate": "2019-02-07T00:52:48.237Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-PublishSNSNotification",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "3412c8ee-abad-424a-bb8c-75ba3bd0f64e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1143,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-24T07:15:49.8498626+00:00"
+}

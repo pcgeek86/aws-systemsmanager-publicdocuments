@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"1.0\",\n  \"description\" : \"Operational Best Practices for API Gateway\",\n  \"templateBody\" : {\n    \"Parameters\" : {\n      \"ApiGwEndpointTypeCheckParamEndpointConfigurationTypes\" : {\n        \"Default\" : \"REGIONAL, PRIVATE, EDGE\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"ApiGwAssociatedWithWaf\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-associated-with-waf\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::Stage\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_ASSOCIATED_WITH_WAF\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ApiGwCacheEnabledAndEncrypted\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-cache-enabled-and-encrypted\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::Stage\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_CACHE_ENABLED_AND_ENCRYPTED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ApiGwEndpointTypeCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-endpoint-type-check\",\n          \"InputParameters\" : {\n            \"endpointConfigurationTypes\" : {\n              \"Fn::If\" : [ \"apiGwEndpointTypeCheckParamEndpointConfigurationTypes\", {\n                \"Ref\" : \"ApiGwEndpointTypeCheckParamEndpointConfigurationTypes\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::RestApi\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_ENDPOINT_TYPE_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ApiGwExecutionLoggingEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-execution-logging-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::Stage\", \"AWS::ApiGatewayV2::Stage\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_EXECUTION_LOGGING_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ApiGwSslEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-ssl-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::Stage\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_SSL_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ApiGwXrayEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-xray-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::Stage\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_XRAY_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    },\n    \"Conditions\" : {\n      \"apiGwEndpointTypeCheckParamEndpointConfigurationTypes\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"ApiGwEndpointTypeCheckParamEndpointConfigurationTypes\"\n          } ]\n        } ]\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:43:15.43Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-OperationalBestPracticesforAPIGateway",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6280c760-be91-4bf8-a1de-797093b0d94d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3975,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-26T07:32:05.9024994+00:00"
+}

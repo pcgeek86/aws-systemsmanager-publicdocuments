@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Br_OnDemandStart_Stop_EC2\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"RegionName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Enter the RegionName\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    },\n    \"TagName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Enter the TagName\"\n    },\n    \"TagValue\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Enter the Tagvalue\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"stop_ec2\",\n    \"action\" : \"aws:executeScript\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"lambda_handler\",\n      \"Script\" : \"import json\\nimport boto3\\n\\ndef lambda_handler(events, context):\\n    ec2 = boto3.client('ec2', region_name=events['RegionName'])\\n    a = ec2.describe_instances(Filters=[{'Name':'tag:' + events['TagName'], 'Values':[events['TagValue']]}])\\n    b = a['Reservations']\\n\\n    for c in b:\\n        inst = c['Instances']\\n\\n        for d in inst:\\n           instid = d['InstanceId']\\n           instrun = d['State']['Name']\\n\\n           if instrun == 'running':\\n              ec2.stop_instances(InstanceIds=[instid])\\n              print(\\\"The instance is stopped:\\\" + instid)\\n           else:\\n              print(\\\"The instance in start state:\\\" + instid) \\n\",\n      \"InputPayload\" : {\n        \"TagName\" : \"{{TagName}}\",\n        \"TagValue\" : \"{{TagValue}}\",\n        \"RegionName\" : \"{{RegionName}}\"\n      }\n    }\n  }, {\n    \"name\" : \"Describe_Instance_stopped\",\n    \"action\" : \"aws:executeScript\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"lambda_handler\",\n      \"Script\" : \"import json\\nimport boto3\\n\\ndef lambda_handler(events, context):\\n    ec2 = boto3.client('ec2', region_name=events['RegionName'])\\n    a = ec2.describe_instances(Filters=[{'Name':'tag:' + events['TagName'], 'Values':[events['TagValue']]}])\\n    b = a['Reservations']\\n\\n    for c in b:\\n        inst = c['Instances']\\n\\n        for d in inst:\\n           instid = d['InstanceId']\\n           instrun = d['State']['Name']\\n           print(instid) \\n           response_one = ec2.describe_instances(Filters=[{'Name': 'instance-state-name','Values': ['stopped','running']}])\\n           print(response_one)\\n\",\n      \"InputPayload\" : {\n        \"TagName\" : \"{{TagName}}\",\n        \"TagValue\" : \"{{TagValue}}\",\n        \"RegionName\" : \"{{RegionName}}\"\n      }\n    }\n  }, {\n    \"name\" : \"sleep\",\n    \"action\" : \"aws:sleep\",\n    \"inputs\" : {\n      \"Duration\" : \"PT02M\"\n    }\n  }, {\n    \"name\" : \"start_ec2\",\n    \"action\" : \"aws:executeScript\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"lambda_handler1\",\n      \"Script\" : \"import json\\nimport boto3\\n\\ndef lambda_handler1(events, context):\\n    ec2 = boto3.client('ec2', region_name=events['RegionName'])\\n    a = ec2.describe_instances(Filters=[{'Name':'tag:' + events['TagName'], 'Values':[events['TagValue']]}])\\n    b = a['Reservations']\\n\\n    for c in b:\\n        inst = c['Instances']\\n\\n        for d in inst:\\n           instid = d['InstanceId']\\n           instrun = d['State']['Name']\\n\\n           if instrun == 'stopped':\\n              ec2.start_instances(InstanceIds=[instid])\\n              print(\\\"The instance is running:\\\" + instid)\\n           else:\\n              print(\\\"The instance in start state:\\\" + instid)                    \\n\",\n      \"InputPayload\" : {\n        \"TagName\" : \"{{TagName}}\",\n        \"TagValue\" : \"{{TagValue}}\",\n        \"RegionName\" : \"{{RegionName}}\"\n      }\n    }\n  }, {\n    \"name\" : \"Describe_Instance_Started\",\n    \"action\" : \"aws:executeScript\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"lambda_handler\",\n      \"Script\" : \"import json\\nimport boto3\\n\\ndef lambda_handler(events, context):\\n    ec2 = boto3.client('ec2', region_name=events['RegionName'])\\n    a = ec2.describe_instances(Filters=[{'Name':'tag:' + events['TagName'], 'Values':[events['TagValue']]}])\\n    b = a['Reservations']\\n\\n    for c in b:\\n        inst = c['Instances']\\n\\n        for d in inst:\\n           instid = d['InstanceId']\\n           instrun = d['State']['Name']\\n           print(instid) \\n           response_one = ec2.describe_instances(Filters=[{'Name': 'instance-state-name','Values': ['stopped','running']}])\\n           print(response_one)\\n\",\n      \"InputPayload\" : {\n        \"TagName\" : \"{{TagName}}\",\n        \"TagValue\" : \"{{TagValue}}\",\n        \"RegionName\" : \"{{RegionName}}\"\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2022-08-08T12:38:48.542Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:996212562637:document/Br_OnDemandStart_Stop_EC2",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9447ba93-1103-466e-9a5f-840c5d453e45",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5254,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-09-28T07:31:42.0929923+00:00"
+}

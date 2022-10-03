@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for EFS\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Resources\" : {\n      \"EfsAccessPointEnforceRootDirectory\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"efs-access-point-enforce-root-directory\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::EFS::AccessPoint\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EFS_ACCESS_POINT_ENFORCE_ROOT_DIRECTORY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"EfsAccessPointEnforceUserIdentity\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"efs-access-point-enforce-user-identity\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::EFS::AccessPoint\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EFS_ACCESS_POINT_ENFORCE_USER_IDENTITY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"EfsEncryptedCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"efs-encrypted-check\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EFS_ENCRYPTED_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"EfsInBackupPlan\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"efs-in-backup-plan\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EFS_IN_BACKUP_PLAN\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:54:11.436Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforEFS",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "3a18801f-a6d0-4feb-9c45-ace8a85ed9b3",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1974,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-03T07:25:33.704256+00:00"
+}

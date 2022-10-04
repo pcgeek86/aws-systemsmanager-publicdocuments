@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for Network Firewall\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Conditions\" : {\n      \"netfwPolicyDefaultActionFragmentPacketsParamStatelessFragmentDefaultActions\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"NetfwPolicyDefaultActionFragmentPacketsParamStatelessFragmentDefaultActions\"\n          } ]\n        } ]\n      },\n      \"netfwPolicyDefaultActionFullPacketsParamStatelessDefaultActions\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"NetfwPolicyDefaultActionFullPacketsParamStatelessDefaultActions\"\n          } ]\n        } ]\n      }\n    },\n    \"Parameters\" : {\n      \"NetfwPolicyDefaultActionFragmentPacketsParamStatelessFragmentDefaultActions\" : {\n        \"Default\" : \"aws:drop,aws:forward_to_sfe\",\n        \"Type\" : \"String\"\n      },\n      \"NetfwPolicyDefaultActionFullPacketsParamStatelessDefaultActions\" : {\n        \"Default\" : \"aws:drop,aws:forward_to_sfe\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"NetfwPolicyDefaultActionFragmentPackets\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"netfw-policy-default-action-fragment-packets\",\n          \"InputParameters\" : {\n            \"statelessFragmentDefaultActions\" : {\n              \"Fn::If\" : [ \"netfwPolicyDefaultActionFragmentPacketsParamStatelessFragmentDefaultActions\", {\n                \"Ref\" : \"NetfwPolicyDefaultActionFragmentPacketsParamStatelessFragmentDefaultActions\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::NetworkFirewall::FirewallPolicy\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"NETFW_POLICY_DEFAULT_ACTION_FRAGMENT_PACKETS\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"NetfwPolicyDefaultActionFullPackets\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"netfw-policy-default-action-full-packets\",\n          \"InputParameters\" : {\n            \"statelessDefaultActions\" : {\n              \"Fn::If\" : [ \"netfwPolicyDefaultActionFullPacketsParamStatelessDefaultActions\", {\n                \"Ref\" : \"NetfwPolicyDefaultActionFullPacketsParamStatelessDefaultActions\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::NetworkFirewall::FirewallPolicy\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"NETFW_POLICY_DEFAULT_ACTION_FULL_PACKETS\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"NetfwPolicyRuleGroupAssociated\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"netfw-policy-rule-group-associated\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::NetworkFirewall::FirewallPolicy\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"NETFW_POLICY_RULE_GROUP_ASSOCIATED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"NetfwStatelessRuleGroupNotEmpty\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"netfw-stateless-rule-group-not-empty\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::NetworkFirewall::RuleGroup\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"NETFW_STATELESS_RULE_GROUP_NOT_EMPTY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:54:35.434Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforNetworkFirewall",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f13273a4-e747-4421-8d19-a2a427376e95",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4198,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-04T07:25:57.090458+00:00"
+}

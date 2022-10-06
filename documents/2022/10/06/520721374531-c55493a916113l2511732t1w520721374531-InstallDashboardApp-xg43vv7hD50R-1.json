@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Install Dashboard App\",\n  \"mainSteps\" : [ {\n    \"inputs\" : {\n      \"runCommand\" : [ \" #!/bin/sh\", \" # Install Apache Web Server and PHP\", \" yum install -y httpd\", \" amazon-linux-extras install -y php7.2\", \" # Turn on web server\", \" systemctl enable httpd.service\", \" systemctl start  httpd.service\", \" # Download and install the AWS SDK for PHP\", \" wget https://github.com/aws/aws-sdk-php/releases/download/3.62.3/aws.zip\", \" unzip aws -d /var/www/html\", \" # Download Application files\", \" #wget https://aws-tc-largeobjects.s3.amazonaws.com/CUR-TF-100-RESTRT-1/169-lab-%5BJAWS%5D-systems-manager/scripts/widget-app.zip\", \" wget https://aws-tc-largeobjects.s3.us-west-2.amazonaws.com/CUR-TF-100-RESTRT-1/169-lab-JAWS-systems-manager/s3/widget-app.zip\", \" unzip widget-app.zip -d /var/www/html/\" ]\n    },\n    \"name\" : \"InstallDashboardApp\",\n    \"action\" : \"aws:runShellScript\"\n  } ]\n}",
+  "CreatedDate": "2022-08-16T08:32:16.298Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:520721374531:document/c55493a916113l2511732t1w520721374531-InstallDashboardApp-xg43vv7hD50R",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "eedc88cb-0917-4734-9812-8e2a3f9dbb7e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1247,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-06T07:23:01.2987341+00:00"
+}

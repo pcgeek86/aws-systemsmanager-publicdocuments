@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for Amazon OpenSearch Service\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Resources\" : {\n      \"OpensearchAccessControlEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-access-control-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_ACCESS_CONTROL_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchAuditLoggingEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-audit-logging-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_AUDIT_LOGGING_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchDataNodeFaultTolerance\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-data-node-fault-tolerance\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_DATA_NODE_FAULT_TOLERANCE\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchEncryptedAtRest\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-encrypted-at-rest\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_ENCRYPTED_AT_REST\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchHttpsRequired\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-https-required\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_HTTPS_REQUIRED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchInVpcOnly\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-in-vpc-only\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_IN_VPC_ONLY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchLogsToCloudwatch\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-logs-to-cloudwatch\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_LOGS_TO_CLOUDWATCH\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"OpensearchNodeToNodeEncryptionCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"opensearch-node-to-node-encryption-check\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::OpenSearch::Domain\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"OPENSEARCH_NODE_TO_NODE_ENCRYPTION_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:53:31.435Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforAmazonOpenSearchService",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "1b17f3c0-aa94-4571-83b8-6b280ef7f29e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4150,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-07T07:22:56.6294066+00:00"
+}

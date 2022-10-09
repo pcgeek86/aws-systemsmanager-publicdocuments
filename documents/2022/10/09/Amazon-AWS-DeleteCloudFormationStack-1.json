@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Delete CloudFormation Stack\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"StackNameOrId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) Name or Unique ID of the CloudFormation stack to be deleted\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"deleteCloudFormationStack\",\n      \"action\":\"aws:deleteStack\",\n      \"maxAttempts\":1,\n      \"onFailure\":\"Abort\",\n      \"inputs\":{\n        \"StackName\":\"{{StackNameOrId}}\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-11-21T06:39:36.256Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-DeleteCloudFormationStack",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "70300a0c-277b-4bf1-aac5-ff6677b9ddc4",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 980,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-09T07:17:58.1999482+00:00"
+}

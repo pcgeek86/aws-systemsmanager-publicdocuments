@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Disable S3-Bucket's public WriteRead access via Block Public Access settings\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"S3BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) S3 Bucket subject to access restriction\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DisableS3BucketPublicReadWrite\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutPublicAccessBlock\",\n      \"Bucket\" : \"{{S3BucketName}}\",\n      \"PublicAccessBlockConfiguration\" : {\n        \"RestrictPublicBuckets\" : true,\n        \"IgnorePublicAcls\" : true\n      }\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2021-05-16T15:33:27.796Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:240079427095:document/Copy-AWS-DisableS3BucketPublicReadWrite",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a4b873e2-b8c6-44c7-ab7f-a316ca7121ff",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1235,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-10T07:35:17.7062243+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for AWS WAF\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Resources\" : {\n      \"AlbWafEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"alb-waf-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ElasticLoadBalancingV2::LoadBalancer\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"ALB_WAF_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ApiGwAssociatedWithWaf\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"api-gw-associated-with-waf\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::ApiGateway::Stage\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"API_GW_ASSOCIATED_WITH_WAF\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"WafRegionalRuleNotEmpty\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"waf-regional-rule-not-empty\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::WAFRegional::Rule\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"WAF_REGIONAL_RULE_NOT_EMPTY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"WafRegionalRulegroupNotEmpty\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"waf-regional-rulegroup-not-empty\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::WAFRegional::RuleGroup\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"WAF_REGIONAL_RULEGROUP_NOT_EMPTY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"WafRegionalWebaclNotEmpty\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"waf-regional-webacl-not-empty\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::WAFRegional::WebACL\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"WAF_REGIONAL_WEBACL_NOT_EMPTY\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:53:23.434Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforAWSWAF",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "1a30cb84-0bfb-42f6-86a5-d3b920eee770",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2656,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-12T07:25:01.3088129+00:00"
+}

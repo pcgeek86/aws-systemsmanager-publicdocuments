@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.0\",\n  \"description\": \"Run Docker actions on containers.\",\n  \"parameters\": {\n    \"action\": {\n      \"type\": \"String\",\n      \"description\": \"The type of action to perform.\",\n      \"allowedValues\": [\n        \"Create\",\n        \"Start\",\n        \"Run\",\n        \"Stop\",\n        \"Rm\",\n        \"Exec\",\n        \"Inspect\",\n        \"Logs\",\n        \"Ps\",\n        \"Stats\",\n        \"Pull\",\n        \"Images\",\n        \"Rmi\"\n      ]\n    },\n    \"container\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The Docker container Id.\",\n      \"allowedPattern\":\"^[a-zA-Z0-9_\\\\-\\\\/]*$\",\n      \"maxChars\":128\n    },\n    \"image\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The Docker image name.\",\n      \"allowedPattern\":\"^[a-zA-Z0-9_\\\\-\\\\/]*$\",\n      \"maxChars\":128\n    },\n    \"cmd\": {\n      \"type\": \"String\",\n      \"default\":\"\",\n      \"description\": \"(Optional) The container command.\",\n      \"allowedPattern\":\"^[^;,&|]*$\",\n      \"maxChars\":128\n    },\n    \"memory\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The container memory limit.\",\n      \"allowedPattern\":\"^[0-9]*[bkmg]?$\",\n      \"maxChars\":10\n    },\n    \"cpuShares\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The container CPU shares (relative weight).\",\n      \"allowedPattern\":\"^/?[a-zA-Z0-9_-]*$\",\n      \"maxChars\":10\n    },\n    \"volume\": {\n      \"type\": \"StringList\",\n      \"default\":[\n      ],\n      \"description\": \"(Optional) The container volume mounts.\",\n      \"displayType\":\"textarea\",\n      \"allowedPattern\":\"^[\\\\w\\\\\\\\\\\\\\/_\\\\:\\\\-\\\\.\\\\\\\"\\\\(\\\\)\\\\^ ]*$\",\n      \"maxChars\":128\n    },\n    \"env\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The container environment variables.\",\n      \"allowedPattern\":\"^[^;,&|]*$\",\n      \"maxChars\":256\n    },\n    \"user\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The container username.\",\n      \"allowedPattern\":\"^[a-zA-Z0-9_-]*$\",\n      \"maxChars\":128\n    },\n    \"publish\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The container published ports.\",\n      \"allowedPattern\":\"^[0-9a-zA-Z:\\\\-\\\\/.]*$\",\n      \"maxChars\":50\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runDockerAction\",\n      \"name\": \"RunDockerAction\",\n      \"inputs\": {\n        \"action\": \"{{ action }}\",\n        \"container\": \"{{ container }}\",\n        \"image\": \"{{ image }}\",\n        \"memory\": \"{{ memory }}\",\n        \"cpuShares\": \"{{ cpuShares }}\",\n        \"volume\": \"{{ volume }}\",\n        \"cmd\": \"{{ cmd }}\",\n        \"env\": \"{{ env }}\",\n        \"user\": \"{{ user }}\",\n        \"publish\": \"{{ publish }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2016-11-15T19:58:16.911Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-RunDockerAction",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "59725c11-9d3c-42fa-b773-b0f0c5bc1f8e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3337,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-13T07:29:52.2345339+00:00"
+}

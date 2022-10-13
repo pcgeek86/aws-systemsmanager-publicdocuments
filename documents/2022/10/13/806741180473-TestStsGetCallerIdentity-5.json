@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"schemaVersion\": \"0.3\",\n\t\"description\": \"Test STS GetCallerIdentity\",\n\t\"parameters\": {\n\t\t\"Placeholder\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"\"\n\t\t},\n\t\t\"AssumeRole\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"\"\n\t\t}\n\t},\n\t\"assumeRole\": \"{{AssumeRole}}\",\n\t\"mainSteps\": [\n\t\t{\n\t\t\t\"name\": \"getCallerIdentity\",\n\t\t\t\"action\": \"aws:executeAwsApi\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"Service\": \"sts\",\n\t\t\t\t\"Api\": \"GetCallerIdentity\"\n\t\t\t},\n\t\t\t\"outputs\": [\n\t\t\t\t{\n\t\t\t\t\t\"Name\": \"Result\",\n\t\t\t\t\t\"Selector\": \"$\",\n\t\t\t\t\t\"Type\": \"StringMap\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}",
+  "CreatedDate": "2020-11-19T00:56:55.479Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "5",
+  "Name": "arn:aws:ssm:us-west-2:806741180473:document/TestStsGetCallerIdentity",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d3fa2e22-b8e6-4289-b711-852af2332419",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 914,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-13T07:31:47.6381621+00:00"
+}

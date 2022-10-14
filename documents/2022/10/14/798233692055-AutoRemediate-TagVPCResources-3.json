@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"## What does this document do?\\nThis Document is tag the AWS Resources\\n\\n##Input Parameters\\n*vpcId: (Required) VPC Id to tag\\n*TaggingAssumeRole: (Required) The ARN of the role that allows to tag the AWS Resource\\n\\n## Output Parameters\\n* TaggingOutput: The standard HTTP Response from Tagging Step\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"parameters\" : {\n    \"vpcId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The Amazon Resource name(ARN) of AWS Cloud Resource\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"TagVPCResource\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"StringMap\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"script_handler\",\n      \"Script\" : \"import boto3\\nclient = boto3.client('resourcegroupstaggingapi')\\n\\ndef script_handler(event, context):\\n  print(event)\\n  client = boto3.client('resourcegroupstaggingapi')\\n  vpc_id=event.get(\\\"vpcId\\\")\\n  #vpc_id=\\\"vpc-06b6d77e225f0c0a1\\\"\\n  account_id = boto3.client(\\\"sts\\\").get_caller_identity()[\\\"Account\\\"]\\n  print(\\\"Account Id is:\\\", account_id)\\n  session = boto3.session.Session()\\n  region = session.region_name\\n  vpc_arn = \\\"arn:aws:ec2:\\\" + region +\\\":\\\"+account_id+\\\":vpc/\\\"+vpc_id\\n  print(\\\"VPC ARN is :\\\", vpc_arn)\\n  print(\\\"Region is:\\\", region)\\n  response = client.tag_resources(\\n      ResourceARNList=[\\n          vpc_arn,\\n      ],\\n      Tags={\\n            'flowlog': 'all'\\n      }\\n  )\\n  return {\\n        'statusCode': 200,\\n        'body': json.dumps(response)\\n  }\",\n      \"InputPayload\" : {\n        \"vpcId\" : \"{{vpcId}}\"\n      }\n    },\n    \"description\" : \"This is to tag VPC Resources\"\n  } ]\n}",
+  "CreatedDate": "2022-05-26T11:29:05.158Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:798233692055:document/AutoRemediate-TagVPCResources",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ecdc5b54-0a80-4c11-b54e-69ea2181b145",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2121,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-14T07:35:15.6989879+00:00"
+}

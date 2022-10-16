@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-EnablePITRForDynamoDbTable\\n\\n## What does this document do?\\nThis document enables `PointInTimeRecovery` on an Amazon DynamoDB table using the [UpdateContinuousBackups](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateContinuousBackups.html) API.\\n\\n## Input Parameters\\n* TableName: (Required) Name of the Amazon DynamoDB table.\\n  * Example: dynamodb-pitr-example\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* EnablePITRForDynamoDbTable.UpdateContinuousBackupsResponse: The standard HTTP response from the UpdateContinuousBackups API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"TableName\" : {\n      \"description\" : \"(Required) Name of the Amazon DynamoDB table.\",\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"[a-zA-Z0-9_.-]{3,255}\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    }\n  },\n  \"outputs\" : [ \"EnablePITRForDynamoDbTable.UpdateContinuousBackupsResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"EnablePITRForDynamoDbTable\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnablePITRForDynamoDbTable\\nMakes UpdateContinuousBackups API call to enable point in time recovery for the specified table.\\n## Outputs\\n* UpdateContinuousBackupsResponse: The standard HTTP response from the UpdateContinuousBackups API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"UpdateContinuousBackups\",\n      \"TableName\" : \"{{ TableName }}\",\n      \"PointInTimeRecoverySpecification\" : {\n        \"PointInTimeRecoveryEnabled\" : true\n      }\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"UpdateContinuousBackupsResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyPITREnabled\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyPITREnabled\\nChecks whether point in time recovery is enabled on the given Amazon DynamoDB table.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"DescribeContinuousBackups\",\n      \"TableName\" : \"{{ TableName }}\",\n      \"PropertySelector\" : \"ContinuousBackupsDescription.PointInTimeRecoveryDescription.PointInTimeRecoveryStatus\",\n      \"DesiredValues\" : [ \"ENABLED\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-10-29T15:10:17.879Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnablePITRForDynamoDbTable",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a959e9c1-3aac-4b3d-a3aa-fa289aa08998",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3076,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-16T07:19:32.6693505+00:00"
+}

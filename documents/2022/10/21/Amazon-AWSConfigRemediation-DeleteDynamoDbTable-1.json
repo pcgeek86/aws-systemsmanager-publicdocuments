@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-DeleteDynamoDbTable\\n\\n## What does this document do?\\nThis document deletes a given Amazon DynamoDB table using the [DeleteTable](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* TableName: (Required) The name of the table to delete.\\n\\n## Output Parameters\\n* DeleteDynamoDbTable.Output: The standard HTTP response from the DeleteTable API.\\n* VerifyDynamoDbTableDeletion.Output: Success message or failure exception.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"TableName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the table to delete.\",\n      \"allowedPattern\" : \"^[\\\\w.-]{3,255}$\"\n    }\n  },\n  \"outputs\" : [ \"DeleteDynamoDbTable.Output\", \"VerifyDynamoDbTableDeletion.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"DeleteDynamoDbTable\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DeleteDynamoDbTable\\nDeletes the given Amazon DynamoDB table.\\n## Outputs\\n* Output: The standard HTTP response from the DeleteTable API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"DeleteTable\",\n      \"TableName\" : \"{{ TableName }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDynamoDbTableDeletion\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"## VerifyDynamoDbTableDeletion\\nVerifies that the Amazon DynamoDB table has been successfully deleted.\\n## Outputs\\n* Output: Success message or failure exception.\\n\",\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"TableName\" : \"{{ TableName }}\"\n      },\n      \"Script\" : \"import boto3\\nimport botocore\\n\\ndef handler(event, context):\\n    dynamodb_client = boto3.client(\\\"dynamodb\\\")\\n    table_name = event[\\\"TableName\\\"]\\n    try:\\n      dynamodb_waiter = dynamodb_client.get_waiter(\\\"table_not_exists\\\")\\n      dynamodb_waiter.wait(TableName=table_name)\\n      dynamodb_client.describe_table(TableName=table_name)\\n    except botocore.exceptions.WaiterError:\\n      error_message = f\\\"VERIFICATION FAILED. DYNAMODB TABLE {table_name} NOT DELETED.\\\"\\n      raise Exception(error_message)\\n    except dynamodb_client.exceptions.ResourceNotFoundException:\\n        return {\\\"output\\\": \\\"Verification of 'DeleteDynamoDbTable' step successful.\\\"}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"String\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-11-13T16:08:05.847Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DeleteDynamoDbTable",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c5434ec0-926e-477c-99b0-9d8097e5c531",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3557,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-21T07:25:57.5294162+00:00"
+}

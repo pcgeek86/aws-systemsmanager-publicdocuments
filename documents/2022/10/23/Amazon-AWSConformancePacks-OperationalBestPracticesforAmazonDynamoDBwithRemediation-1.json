@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"1.0\",\n  \"description\" : \"Operational Best Practices for Amazon DynamoDB with Remediation\",\n  \"templateBody\" : {\n    \"Parameters\" : {\n      \"SnsTopicForPublishNotificationArn\" : {\n        \"Description\" : \"The ARN of the SNS topic to which the notification about the auto-remediation status should be published.\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"DynamoDbAutoscalingEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"DynamoDbAutoscalingEnabled\",\n          \"Description\" : \"This rule checks whether Auto Scaling is enabled on your DynamoDB tables. Optionally you can set the read and write capacity units for the table.\",\n          \"MaximumExecutionFrequency\" : \"Six_Hours\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::DynamoDB::Table\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_AUTOSCALING_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"DynamoDbAutoscalingEnabledManualRemediation\" : {\n        \"DependsOn\" : \"DynamoDbAutoscalingEnabled\",\n        \"Type\" : \"AWS::Config::RemediationConfiguration\",\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"DynamoDbAutoscalingEnabled\",\n          \"ResourceType\" : \"AWS::DynamoDB::Table\",\n          \"TargetId\" : \"AWS-PublishSNSNotification\",\n          \"TargetType\" : \"SSM_DOCUMENT\",\n          \"TargetVersion\" : \"1\",\n          \"Parameters\" : {\n            \"AutomationAssumeRole\" : {\n              \"StaticValue\" : {\n                \"Values\" : [ \"arn:aws:iam::<Account-Id>:role/PublishSnsAutomationExecutionRole\" ]\n              }\n            },\n            \"Message\" : {\n              \"StaticValue\" : {\n                \"Values\" : [ \"A table with no autoscaling configuration found\" ]\n              }\n            },\n            \"TopicArn\" : {\n              \"StaticValue\" : {\n                \"Values\" : [ {\n                  \"Ref\" : \"SnsTopicForPublishNotificationArn\"\n                } ]\n              }\n            }\n          }\n        }\n      },\n      \"DynamoDbThroughputLimitCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"DynamoDbThroughputLimitCheck\",\n          \"Description\" : \"Checks whether provisioned DynamoDB throughput is approaching the maximum limit for your account.\",\n          \"MaximumExecutionFrequency\" : \"Six_Hours\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"DYNAMODB_THROUGHPUT_LIMIT_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:44:19.434Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-OperationalBestPracticesforAmazonDynamoDBwithRemediation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "5526d7e2-d119-4a29-9cf6-0e4f7156093f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3065,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-23T07:21:02.247813+00:00"
+}

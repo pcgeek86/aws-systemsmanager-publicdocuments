@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"custom conformance pack\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Parameters\" : {\n      \"CustomConfigRuleLambdaArn\" : {\n        \"Description\" : \"The ARN of the custom config rule lambda.\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"CloudTrailEnabled\" : {\n        \"Description\" : \"CloudTrail rule\",\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"CloudTrailEnabled\",\n          \"InputParameters\" : {\n            \"s3BucketName\" : \"testBucketName\"\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CLOUD_TRAIL_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"ConfigRuleForVolumeTags\" : {\n        \"Description\" : \"Test CREATE\",\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"ConfigRuleForVolumeTags\",\n          \"InputParameters\" : {\n            \"tag1Key\" : \"CostCenter\"\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::EC2::Volume\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"REQUIRED_TAGS\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CustomRuleForEC2\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"CustomRuleForEC2\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::EC2::Volume\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"CUSTOM_LAMBDA\",\n            \"SourceDetails\" : [ {\n              \"EventSource\" : \"aws.config\",\n              \"MessageType\" : \"ConfigurationItemChangeNotification\"\n            }, {\n              \"EventSource\" : \"aws.config\",\n              \"MessageType\" : \"OversizedConfigurationItemChangeNotification\"\n            } ],\n            \"SourceIdentifier\" : {\n              \"Ref\" : \"CustomConfigRuleLambdaArn\"\n            }\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:55:07.439Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-customconformancepack",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ebf1e20a-d6ca-48ff-9470-171819b45033",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2374,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-24T07:47:10.3244995+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Stop EC2 instances(s)\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) EC2 Instance(s) to stop\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"stopInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"onFailure\": \"Continue\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"stopped\"\n      }\n    },\n    {\n      \"name\": \"forceStopInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"CheckStateOnly\": false,\n        \"DesiredState\": \"stopped\",\n        \"Force\": true\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2018-07-10T17:05:13.476Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StopEC2Instance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0b9d9cce-5cca-4b9f-aa52-20e4ed18121a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1230,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-24T07:46:51.4186584+00:00"
+}

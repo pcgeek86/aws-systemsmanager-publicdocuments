@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for EKS\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Conditions\" : {\n      \"eksClusterOldestSupportedVersionParamOldestVersionSupported\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"EksClusterOldestSupportedVersionParamOldestVersionSupported\"\n          } ]\n        } ]\n      },\n      \"eksClusterSupportedVersionParamOldestVersionSupported\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"EksClusterSupportedVersionParamOldestVersionSupported\"\n          } ]\n        } ]\n      }\n    },\n    \"Parameters\" : {\n      \"EksClusterOldestSupportedVersionParamOldestVersionSupported\" : {\n        \"Default\" : \"1.2\",\n        \"Type\" : \"String\"\n      },\n      \"EksClusterSupportedVersionParamOldestVersionSupported\" : {\n        \"Default\" : \"1.2\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"EksClusterOldestSupportedVersion\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"eks-cluster-oldest-supported-version\",\n          \"InputParameters\" : {\n            \"oldestVersionSupported\" : {\n              \"Fn::If\" : [ \"eksClusterOldestSupportedVersionParamOldestVersionSupported\", {\n                \"Ref\" : \"EksClusterOldestSupportedVersionParamOldestVersionSupported\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::EKS::Cluster\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EKS_CLUSTER_OLDEST_SUPPORTED_VERSION\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"EksClusterSupportedVersion\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"eks-cluster-supported-version\",\n          \"InputParameters\" : {\n            \"oldestVersionSupported\" : {\n              \"Fn::If\" : [ \"eksClusterSupportedVersionParamOldestVersionSupported\", {\n                \"Ref\" : \"EksClusterSupportedVersionParamOldestVersionSupported\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::EKS::Cluster\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EKS_CLUSTER_SUPPORTED_VERSION\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"EksEndpointNoPublicAccess\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"eks-endpoint-no-public-access\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EKS_ENDPOINT_NO_PUBLIC_ACCESS\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"EksSecretsEncrypted\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"eks-secrets-encrypted\",\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"EKS_SECRETS_ENCRYPTED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:54:19.438Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforEKS",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "07a6beac-daf6-4aca-912b-73c45589ccea",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3587,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-26T07:16:28.5343517+00:00"
+}

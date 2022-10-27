@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Uninstall IPP Service\",\n  \"parameters\" : {\n    \"usvctl\" : {\n      \"type\" : \"String\",\n      \"default\" : \"usvctl\"\n    },\n    \"packgeName\" : {\n      \"type\" : \"String\"\n    },\n    \"directoryLinux\" : {\n      \"type\" : \"String\",\n      \"default\" : \"/usr/local/ipp\"\n    },\n    \"directoryWindows\" : {\n      \"type\" : \"String\",\n      \"default\" : \"C:\\\\Program Files\\\\ipp\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"windows_1_uninstall_service\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"If (Test-Path \\\"{{ directoryWindows }}\\\\{{ packgeName }}\\\") {\", \"    & {{ directoryWindows }}\\\\{{ packgeName }}\\\\{{ usvctl }}.exe stop --name {{ packgeName }}\", \"    & {{ directoryWindows }}\\\\{{ packgeName }}\\\\{{ usvctl }}.exe uninstall --name {{ packgeName }}\", \"    & Remove-Item -LiteralPath \\\"{{ directoryWindows }}\\\\{{ packgeName }}\\\" -Force -Recurse\", \"}\" ]\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"linux_1_uninstall_package\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"#!/usr/bin/env bash\", \"set +e\", \"if [ -d {{ directoryLinux }}/{{ packgeName }} ]\", \"then\", \"    {{ directoryLinux }}/{{ packgeName }}/{{ usvctl }} stop --name {{ packgeName }}\", \"    {{ directoryLinux }}/{{ packgeName }}/{{ usvctl }} uninstall --name {{ packgeName }}\", \"    rm -rf {{ directoryLinux }}/{{ packgeName }}\", \"fi\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-05-21T08:33:02.052Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:393019904250:document/IPP-UninstallService-prod",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d837a47a-cb06-475c-aec8-d15e160ba934",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1957,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-27T07:14:51.0974939+00:00"
+}

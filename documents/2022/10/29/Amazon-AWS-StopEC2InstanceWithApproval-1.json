@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Stop EC2 instances(s) with approval\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) EC2 Instance(s) to stop\"\n    },\n    \"Approvers\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) IAM user or user arn of approvers for the automation action\"\n    },\n    \"SNSTopicArn\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The SNS topic ARN used to send pending approval notification for stop instance action. The SNS topic name must start with Automation.\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"approve\",\n      \"action\": \"aws:approve\",\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n        \"NotificationArn\": \"{{ SNSTopicArn }}\",\n        \"Message\": \"Approval required to stop running EC2 instances\",\n        \"MinRequiredApprovals\": 1,\n        \"Approvers\": \"{{ Approvers }}\"\n      }\n    },\n    {\n      \"name\": \"stopInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"stopped\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-11-20T22:33:33.533Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StopEC2InstanceWithApproval",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0b82f12b-3ecd-4904-b9b0-ab72994d53eb",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1687,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-29T07:13:20.5835131+00:00"
+}

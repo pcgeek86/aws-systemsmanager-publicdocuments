@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"palantir\",\n  \"parameters\" : {\n    \"customer\" : {\n      \"description\" : \"The customer short name (lowercase)\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"PalantirLinux\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"mkdir -p /root/palantir\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/palantir/scripts/prod/ec2_audit.py /root/palantir/\", \"python3 /root/palantir/ec2_audit.py capps\", \"aws s3 sync /root/palantir/ s3://ellucian-capps-artifacts/palantir\", \"rm -rf /root/palantir\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"PalantirWindows\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"mkdir c:/Ellucian/palantir\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/palantir/scripts/prod/ec2_audit.ps1 c:/Ellucian/palantir\", \". c:/palantir/ec2_audit.ps1 capps\", \"aws s3 sync c:/Ellucian/palantir s3://ellucian-capps-artifacts/palantir\", \"rm -rf c:/Ellucian/palantir\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-03-14T17:49:03.299Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:376137557039:document/Palantir_test_ssm_doc",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "eeb2b0a3-f2f7-44c7-80fe-b78735396a24",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1577,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-10-30T07:14:09.7745757+00:00"
+}

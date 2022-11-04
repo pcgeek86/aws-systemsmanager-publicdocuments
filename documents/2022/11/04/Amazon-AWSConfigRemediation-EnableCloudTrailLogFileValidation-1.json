@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableCloudTrailLogFileValidation\\n\\n## What does this document do?\\nThis runbook enables log file validation for your AWS CloudTrail trail using the [UpdateTrail](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateTrail.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\\n* TrailName: (Required) The name or Amazon Resource Name (ARN) of the trail you want to enable log file validation for.\\n\\n## Output Parameters\\n* UpdateTrail.Output: The response of the UpdateTrail API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"TrailName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name or Amazon Resource Name (ARN) of the trail you want to enable log file validation for.\",\n      \"allowedPattern\" : \"(^arn:(aws[a-zA-Z-]*)?:cloudtrail:[a-z0-9-]+:\\\\d{12}:trail\\\\/(?![-_.])(?!.*[-_.]{2})(?!.*[-_.]$)(?!^\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}$)[-\\\\w.]{3,128}$)|(^(?![-_.])(?!.*[-_.]{2})(?!.*[-_.]$)(?!^\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}$)[-\\\\w.]{3,128}$)\"\n    }\n  },\n  \"outputs\" : [ \"UpdateTrail.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"UpdateTrail\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## UpdateTrail\\nEnables log file validation for the AWS CloudTrail trail you specify in the TrailName parameter.\\n## Outputs\\n* Output: Response from the UpdateTrail API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"UpdateTrail\",\n      \"Name\" : \"{{ TrailName }}\",\n      \"EnableLogFileValidation\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyTrail\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyTrail\\nVerifies log file validation is enabled for your trail.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"GetTrail\",\n      \"Name\" : \"{{ TrailName }}\",\n      \"PropertySelector\" : \"$.Trail.LogFileValidationEnabled\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-03-31T15:08:10.243Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableCloudTrailLogFileValidation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ee438e21-0121-4df3-80e6-c732eb67d0de",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3182,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-04T07:13:19.8124594+00:00"
+}

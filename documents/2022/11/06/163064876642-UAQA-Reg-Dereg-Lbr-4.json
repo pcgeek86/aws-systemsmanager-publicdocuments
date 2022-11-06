@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"*Replace this default text with instructions or other information about your document.*  \\n\\n---\\n# What is Markdown?\\nMarkdown is a lightweight markup language that converts your content with plain text formatting to structurally valid rich text.\\n## You can add headings\\nYou can add *italics* or make the font **bold**.  \\n1. Create numbered lists \\n* Add bullet points \\n>Indent `code samples` \\n\\nYou can create a [link to another webpage](https://aws.amazon.com/).\",\n  \"schemaVersion\" : \"0.3\",\n  \"parameters\" : {\n    \"LbrGroupName\" : {\n      \"type\" : \"String\",\n      \"allowedValues\" : [ \"none”\", \"UAQA-AGM-DotNet-Services-Instance01A\", \"UAQA-AGM-DotNet-Services-Instance01B\", \"UAQA-EMD-DotNet-Services-Instance01A\", \"UAQA-EMD-DotNet-Services-Instance01B\", \"UAQA-EMD-TibcoBE-DataServices-Instance01A-A\", \"UAQA-EMD-TibcoBE-DataServices-Instance01A-B\", \"UAQA-EMD-TibcoBE-DataServices-Instance01B-A\", \"UAQA-EMD-TibcoBE-DataServices-Instance01B-B\" ]\n    },\n    \"LbrGroupAction\" : {\n      \"type\" : \"String\",\n      \"allowedValues\" : [ \"register\", \"deregister\" ]\n    },\n    \"LbrGroupActionWait\" : {\n      \"type\" : \"String\",\n      \"allowedValues\" : [ \"true\", \"false\" ]\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"MainStep\",\n    \"action\" : \"aws:invokeLambdaFunction\",\n    \"inputs\" : {\n      \"Payload\" : \"{  \\\"LbrGroupName\\\": \\\"{{LbrGroupName}}\\\" ,\\n   \\\"LbrGroupAction\\\": \\\"{{LbrGroupAction}}\\\" ,\\n   \\\"LbrGroupActionWait\\\": {{LbrGroupActionWait}} \\n}\",\n      \"FunctionName\" : \"testlbr\"\n    }\n  } ]\n}",
+  "CreatedDate": "2020-11-02T14:59:07.849Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:163064876642:document/UAQA-Reg-Dereg-Lbr",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "fcb6a254-42b3-4267-9bc4-c1906e8c55e5",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1868,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-06T07:15:18.9100753+00:00"
+}

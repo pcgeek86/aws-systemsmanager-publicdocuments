@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSFIS-Run-Kill-Process\\n\\n## What does this document do?\\nIt kills a particular process by name in an instance, using the `killall` command.\\nThis SSM document supports Amazon Linux and Ubuntu operating systems only.\\n\\n## Input Parameters\\n* ProcessName: (Required) Name of the process to kill.\\n* Signal: The SIGNAL to be sent along with the kill command (default: SIGTERM). The allowed values are:\\n  * SIGTERM: Signal used for gracefully terminate a process. Can be referred as soft kill, because the receiver may choose to ignore it.\\n  * SIGKILL: Signal used for immediate termination of a process. Cannot be caught, ignored or blocked. Child processes are killed as well.\\n\\n## Output Parameters\\nNone.\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"ProcessName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Name of the process to kill, using the `killall` command. \",\n      \"allowedPattern\" : \"^[0-9a-zA-Z.\\\\-=_]{1,128}$\"\n    },\n    \"Signal\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The SIGNAL to be sent along with the kill command (default: SIGTERM).\\nThe allowed values are:\\n* SIGTERM: Signal used for graceful process termination. Can be referred as soft kill, because the receiver may choose to ignore it.\\n* SIGKILL: Signal used for immediate process termination. Cannot be caught, ignored or blocked. Child processes are killed as well.\\n\",\n      \"default\" : \"SIGTERM\",\n      \"allowedValues\" : [ \"SIGTERM\", \"SIGKILL\" ]\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"KillProcess\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"description\" : \"## Parameters: ProcessName\\nThis step will attempt to kill the specified process, using the `killall` command.\\n\",\n    \"inputs\" : {\n      \"maxAttempts\" : 1,\n      \"timeoutSeconds\" : 10,\n      \"runCommand\" : [ \"#!/bin/bash\\n\\nkillall -{{ Signal }} '{{ ProcessName }}' || { echo No process matching '{{ ProcessName }}' found. Exiting... ; exit 1 ;}\\necho Done with command: \\\"killall -{{ Signal }} '{{ ProcessName }}'\\\"\\n\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-10-22T11:28:08.037Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "AWSFIS-Run-Kill-Process",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ad3d84e9-7b9c-4fe3-91b4-9acbf7a6af30",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2447,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-08T07:14:00.7246122+00:00"
+}

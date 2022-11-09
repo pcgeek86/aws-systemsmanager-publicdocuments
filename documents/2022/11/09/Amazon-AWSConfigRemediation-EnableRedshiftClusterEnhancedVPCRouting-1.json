@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableRedshiftClusterEnhancedVPCRouting  \\n\\n## What does this document do?\\nThis document enables enhanced VPC routing on a Amazon Redshift cluster using the [ModifyCluster](https://docs.aws.amazon.com/redshift/latest/APIReference/API_ModifyCluster.html) API.\\n\\n## Input Parameters\\n* ClusterIdentifier: (Required) The unique identifier of the cluster to be modified.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.  \\n\\n## Output Parameters\\nModifyRedshiftCluster.Response - Standard HTTP response metadata of the ModifyCluster API.  \\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"ModifyRedshiftCluster.Response\" ],\n  \"parameters\" : {\n    \"ClusterIdentifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The unique identifier of the cluster to be modified.\",\n      \"allowedPattern\" : \"^(?!-)(?!.*--)([a-z][a-z0-9-]{0,62})(?<!-)$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DescribeRedshiftClusters\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DescribeRedshiftCluster\\nObtains the Amazon Redshift cluster details using the [DescribeClusters](https://docs.aws.amazon.com/redshift/latest/APIReference/API_DescribeClusters.html) API.\\n## Outputs\\n* EnhancedVPCRouting: EnhancedVpcRouting boolean property from DescribeClusters API response.    \\n\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"EnhancedVPCRouting\",\n      \"Selector\" : \"$.Clusters[0].EnhancedVpcRouting\",\n      \"Type\" : \"Boolean\"\n    } ]\n  }, {\n    \"name\" : \"CheckEnhancedVPCRouting\",\n    \"description\" : \"## CheckEnhancedVPCRouting\\nChecks whether EnhancedVpcRouting property is set to true from the output of previous step.\\n\",\n    \"action\" : \"aws:branch\",\n    \"inputs\" : {\n      \"Choices\" : [ {\n        \"NextStep\" : \"ModifyRedshiftCluster\",\n        \"Variable\" : \"{{DescribeRedshiftClusters.EnhancedVPCRouting}}\",\n        \"BooleanEquals\" : false\n      } ]\n    },\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"ModifyRedshiftCluster\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## ModifyRedshiftCluster \\nModifies the EnhancedVpcRouting property to true using the [ModifyCluster] (https://docs.aws.amazon.com/redshift/latest/APIReference/API_ModifyCluster.html) API.\\n## Outputs\\n* Response: Standard HTTP response metadata of the ModifyCluster API.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"ModifyCluster\",\n      \"EnhancedVpcRouting\" : true,\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$.ResponseMetadata\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"WaitUntilEnhancedVPCRoutingEnabled\",\n    \"description\" : \"## WaitUntilEnhancedVPCRoutingEnabled\\nWaits until the EnhancedVpcRouting property is changed to true for the given cluster identifer using DescribeClusters API or timeout after specified number of seconds.\\n\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 300,\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].EnhancedVpcRouting\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  }, {\n    \"name\" : \"AssertEnhancedVPCRouting\",\n    \"description\" : \"## AssertEnhancedVPCRouting\\nChecks whether EnhancedVpcRouting property is true or not for the given cluster identifier using DescribeClusters API.\\n\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].EnhancedVpcRouting\",\n      \"DesiredValues\" : [ \"True\" ]\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2020-12-23T16:06:12.204Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableRedshiftClusterEnhancedVPCRouting",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9a694fc3-1f59-498b-9516-9437edf22719",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4805,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-09T07:15:08.4396604+00:00"
+}

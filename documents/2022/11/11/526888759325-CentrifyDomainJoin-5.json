@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"centrify-domain-join\",\n  \"parameters\" : {\n    \"resourceDomainName\" : {\n      \"description\" : \"The FQDN of the Directory Service.\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"CentrifyLinuxDomainJoin\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root\", \"cd /tmp\", \"Uniqueness='06_22_2022_15_55_03'\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/prod/centrify-linux-join.py .\", \"python3 ./centrify-linux-join.py {{ resourceDomainName }}\", \"rm ./centrify-linux-join.py\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"CentrifyWindowsDomainJoin\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"cd c:/windows/temp\", \"$Uniqueness='06_22_2022_15_55_03'\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/prod/ad-windows-join.ps1 .\", \"aws s3 cp --only-show-errors s3://ellucian-global-artifacts/AWS-MODDATA-GLOBAL/centrify/scripts/prod/centrify-windows-join.ps1 .\", \". c:/windows/temp/ad-windows-join.ps1 {{ resourceDomainName }}\", \". c:/windows/temp/centrify-windows-join.ps1 {{ resourceDomainName }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-06-22T15:55:09.447Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "5",
+  "Name": "arn:aws:ssm:us-west-2:526888759325:document/CentrifyDomainJoin",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b3a9d954-5b00-4a7a-9357-a60b3fea5367",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1728,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-11T07:15:27.944915+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"A shared public document for resource provisioning for AREX.\",\n  \"schemaVersion\" : \"0.3\",\n  \"mainSteps\" : [ {\n    \"name\" : \"WaitForApproval\",\n    \"action\" : \"aws:approve\",\n    \"inputs\" : {\n      \"Approvers\" : [ \"arn:aws:iam::784947558283:role/ResourceProvisioning\" ]\n    },\n    \"description\" : \"Awaits approval by a role owned by the owner of this document.\"\n  } ]\n}",
+  "CreatedDate": "2022-10-07T20:18:24.053Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:784947558283:document/AREX-ResourceProvisioning",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a5a16d95-d1f7-4f9d-a070-a41d8e122862",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 642,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-12T07:14:49.0272926+00:00"
+}

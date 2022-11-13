@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Action\": {\n      \"type\": \"String\",\n      \"description\": \"Operation you want to perform using automation\",\n      \"allowedValues\": [\n        \"create\",\n        \"rerun_from_start\",\n        \"rerun_from_training\",\n        \"data_migrate\",\n        \"delete\"\n      ]\n    },\n    \"TenantName\": {\n      \"type\": \"String\",\n      \"description\": \"Name of tenant for which you want to run CLU training\",\n      \"allowedPattern\": \"^[A-Za-z0-9]+[A-Za-z0-9\\\\s]*[A-Za-z0-9]+$\"\n    },\n    \"TenantID\": {\n      \"type\": \"String\",\n      \"description\": \"ID of tenant for which you want to run CLU training\",\n      \"allowedPattern\": \"^[0-9]+[0-9\\\\s]*[0-9]+$\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"CluAutomation\",\n      \"inputs\": {\n        \"timeoutSeconds\": \"172800\",\n        \"runCommand\": [\n          \"a=0\",\n          \"b=1\",\n          \"cmd=\\\"/home/ec2-user/scripts/clu_automation_training.sh \\\"\",\n          \"cmd=\\\"$cmd {{Action}}\\\"\",\n          \"for i in {{TenantID}}\",\n          \"do\",\n          \"a=$((a+1))\",\n          \"b=1\",\n          \"for j in {{TenantName}}\",\n          \"do\",\n          \"if [ $a = $b ]; then\",\n          \"cmd=\\\"$cmd $j  $i\\\"\",\n          \"fi\",\n          \"b=$((b+1))\",\n          \"done\",\n          \"done\",\n          \"echo \\\"Final command: $cmd \\\"\",\n          \"sh $cmd\"\n        ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2022-07-12T04:37:14.407Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "6",
+  "Name": "arn:aws:ssm:us-west-2:678416542266:document/DS-RunCluAutomation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "39248fd5-8c9c-4635-9fd0-373f73f275b1",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1839,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-13T07:14:30.7584975+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Kill stress process on EC2 instance if running\",\n  \"schemaVersion\" : \"2.2\",\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"KillStressProcess\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"#!/bin/bash\", \"for pid in `pgrep stress-ng`\", \"do\", \"    kill -9 $pid\", \"done\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-11-05T22:26:31.055Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSResilienceHub-KillStressCommand_2020-07-28",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "be0ea1b9-d610-43b2-83a0-47f08a5f5950",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 646,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-13T07:13:56.475696+00:00"
+}

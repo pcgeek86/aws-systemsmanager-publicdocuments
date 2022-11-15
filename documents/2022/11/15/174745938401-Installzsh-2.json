@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Sample YAML template to install ZSH\",\n  \"parameters\" : {\n    \"Message\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Welcome Message\",\n      \"default\" : \"Hello World\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"Installzsh\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo yum update -y\", \"sudo yum install -y zsh\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-06-15T16:03:08.033Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:174745938401:document/Installzsh",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "bace2179-0012-4918-81f3-95d5f818a16e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 676,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-15T07:14:44.6570611+00:00"
+}

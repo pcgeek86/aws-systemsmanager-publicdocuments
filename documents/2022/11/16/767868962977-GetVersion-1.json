@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Test document to replace SSM Run command by SSm document\",\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"sbsv2InstallScript\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"./version.sh\"\n        ],\n        \"workingDirectory\": \"/root/localsource\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-09-01T10:09:39.245Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:767868962977:document/GetVersion",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e84e5a20-89b0-4883-976d-e482c5c99306",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 588,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-16T07:13:43.8516136+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n  \"schemaVersion\": \"2.2\",\r\n  \"description\": \"Scans Filesystem for Log4J Prints to stdout\",\r\n  \"mainSteps\": [\r\n    {\r\n      \"inputs\": {\r\n        \"runCommand\": [\r\n          \"touch log4j_jars\\n find / -iname \\\"*log4j-core*.jar\\\" 2>/dev/null > log4j_jars\\n if [ ! -s log4j_jars ]; then echo \\\"nolog4jcore\\\" > log4j_jars ; fi \\n which aws > /dev/null 2>&1 || echo \\\"noawscli\\\" >> log4j_jars\\n TOKEN=`curl -s -X PUT \\\"http://169.254.169.254/latest/api/token\\\" -H \\\"X-aws-ec2-metadata-token-ttl-seconds: 21600\\\" 2>/dev/null`\\n AccId=`curl -s -H \\\"X-aws-ec2-metadata-token: $TOKEN\\\" -v http://169.254.169.254/latest/meta-data/identity-credentials/ec2/info/ 2>/dev/null | grep -i \\\"AccountId\\\" | awk '{print $3}' | tr -d \\\\\\\" | tr -d , | head -n 1`\\n InstId=`curl -s -H \\\"X-aws-ec2-metadata-token: $TOKEN\\\" -v http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null`\\n Hostnme=`uname -n`\\n Region=`curl -s -H \\\"X-aws-ec2-metadata-token: $TOKEN\\\" -v http://169.254.169.254/latest/meta-data/placement/availability-zone 2>/dev/null`\\n RunDate=`date -u +%Y-%m-%dT%H:%M+00:00`\\n awk -v iHostnme=\\\"$Hostnme\\\" -v iRunDate=\\\"$RunDate\\\" -v iAccId=\\\"$AccId\\\" -v iInstId=\\\"$InstId\\\" -v iRegion=\\\"$Region\\\" '{print iRunDate \\\"\\t\\\" iAccId \\\"\\t\\\" iRegion \\\"\\t\\\" iInstId \\\"\\t\\\" iHostnme \\\"\\t\\\" $1} ' log4j_jars\\n which aws > /dev/null 2>&1 && while read line; do aws s3 sync /`echo \\\"$line\\\" | sed 's/\\\\/*.log4j-core.*.jar$//'` s3://cerner-ssm-log4jscan/account=$AccId/instance-id=$InstId`echo \\\"$line\\\" | sed 's/\\\\/*.log4j-core.*.jar$/\\\\//'` --exact-timestamps --exclude \\\"*\\\" --include `echo \\\"$line\\\" | grep -o 'log4j-core.*.jar$' -` --exclude \\\"*log4j-core[-.]2.1[789]*\\\"> /dev/null 2>&1; done < log4j_jars \\n rm log4j_jars\"\r\n        ]\r\n      },\r\n      \"name\": \"log4jFileSystemQuery\",\r\n      \"action\": \"aws:runShellScript\",\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Linux\"\r\n        ]\r\n      }\r\n    }\r\n  ]\r\n}",
+  "CreatedDate": "2022-01-27T18:48:47.85Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:488481995235:document/LinuxLog4JFileScanV2",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "74a673be-82ef-48b8-b146-9fec698d5791",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2349,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-24T07:14:28.0281216+00:00"
+}

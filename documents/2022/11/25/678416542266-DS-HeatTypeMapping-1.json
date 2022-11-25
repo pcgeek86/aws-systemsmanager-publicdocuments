@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document for Heat type mapping automation\",\n  \"parameters\": {\n    \"TenantID\": {\n      \"type\": \"String\",\n      \"description\": \"ID of tenant for which you want to run heat type mapping\",\n      \"allowedPattern\": \"^[0-9]+[0-9\\\\s]*[0-9]+$\"\n    },\n    \"SourceFilePath\": {\n      \"type\": \"String\",\n      \"description\": \"Source file name with exact path.\",\n      \"allowedPattern\": \"^[A-Za-z0-9\\\\/\\\\-_]+[A-Za-z0-9\\\\/\\\\s\\\\-_]*[A-Za-z\\\\.]+$\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"CluAutomation\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"sh /home/ec2-user/heat_type_automation/heat_type_automation.sh {{TenantID}} {{SourceFilePath}}\"\n        ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-12-23T11:06:46.885Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:678416542266:document/DS-HeatTypeMapping",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "06bb1521-12cb-4724-bc7c-021b492cbd93",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1065,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-25T07:12:35.7902065+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Assists in migrating from the SSM CloudWatch Plugin to the Amazon CloudWatch Agent\",\n  \"mainSteps\": [\n    {\n      \"name\": \"checkSsmAgentVersion\",\n      \"action\":\"aws:runPowerShellScript\",\n      \"precondition\": {\n          \"StringEquals\": [\n              \"platformType\", \"Windows\"\n          ]\n      },\n      \"inputs\" : {\n        \"runCommand\": [\n          \"$ssmAgentVersion = (Get-ItemProperty HKLM:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\* | select DisplayName, DisplayVersion | Where DisplayName -eq 'Amazon SSM Agent').'DisplayVersion'\",\n          \"if ([System.Version]$ssmAgentVersion -ge [System.Version]'2.2.93.0') {\",\n            \"echo 'You have a valid SSM agent version for migration'\",\n          \"} else {\",\n            \"Throw 'The current SSM agent version ' + $ssmAgentVersion + ' does not support the new CloudWatch agent. Please consider updating your SSM agent to version 2.2.93.0 or newer.'\",\n          \"}\"\n        ]\n      }\n    },\n    {\n      \"name\": \"disableOldCloudWatchAgent\",\n      \"action\": \"aws:cloudWatch\",\n      \"precondition\": {\n          \"StringEquals\": [\n              \"platformType\", \"Windows\"\n          ]\n      },\n      \"settings\":{\n        \"startType\":\"Disabled\"\n      }\n    },\n    {\n      \"name\": \"installNewCloudWatchAgent\",\n      \"action\":\"aws:runDocument\",\n      \"precondition\": {\n          \"StringEquals\": [\n              \"platformType\", \"Windows\"\n          ]\n      },\n      \"inputs\":{\n        \"documentType\":\"SSMDocument\",\n        \"documentPath\":\"AWS-ConfigureAWSPackage\",\n        \"documentParameters\":\"action: Install\\nname: AmazonCloudWatchAgent\\nversion: latest\"\n      }\n    },\n    {\n      \"name\": \"migrateOldConfiguration\",\n      \"action\":\"aws:runPowerShellScript\",\n      \"precondition\": {\n           \"StringEquals\": [\n               \"platformType\", \"Windows\"\n           ]\n       },\n      \"inputs\" : {\n        \"runCommand\": [\n          \"Set-Location -Path \\\"${Env:ProgramFiles}\\\\Amazon\\\\AmazonCloudWatchAgent\\\" -PassThru\",\n          \"if (Test-Path \\\"${Env:ProgramFiles}\\\\Amazon\\\\SSM\\\\Plugins\\\\awsCloudWatch\\\\AWS.EC2.Windows.CloudWatch.json\\\") {\",\n            \"$stdOut = .\\\\amazon-cloudwatch-agent-config-wizard.exe --isNonInteractiveWindowsMigration 2>($tmpFile = [System.IO.Path]::GetTempFileName())\",\n            \"$stdErr = Get-Content $tmpFile; Remove-Item $tmpFile\",\n            \"if ( $LastExitCode -ne 0 ) {\",\n              \"Throw 'Failed to migrate the old config. Please check that you have a valid SSM agent version and a valid old agent Config file. \\\\n stdout = ' + $stdOut + ', stderr = ' + $stdErr\",\n            \"}\",\n          \"} else {\",\n            \"Throw 'No SSM CloudWatch Plugin configuration file found. Please, follow the Amazon CloudWatch Agent configuration instructions instead.'\",\n          \"}\"\n        ]\n      }\n    },\n    {\n      \"name\": \"reconfigureNewAgent\",\n      \"action\":\"aws:runPowerShellScript\",\n      \"precondition\": {\n           \"StringEquals\": [\n               \"platformType\", \"Windows\"\n           ]\n       },\n      \"inputs\" : {\n        \"runCommand\": [\n          \"Set-Location -Path \\\"${Env:ProgramFiles}\\\\Amazon\\\\AmazonCloudWatchAgent\\\" -PassThru\",\n          \".\\\\amazon-cloudwatch-agent-ctl.ps1 -a fetch-config -m ec2 -c file:config.json -s\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2018-01-02T17:08:51.583Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "AmazonCloudWatch-MigrateCloudWatchAgent",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "52be0c74-5c8d-457d-9a74-44592f84081d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3792,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-25T07:12:31.9122324+00:00"
+}

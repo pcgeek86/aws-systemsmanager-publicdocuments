@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\":\"1.0\",\n  \"description\":\"Session Document Example JSON Template\",\n  \"sessionType\":\"Standard_Stream\",\n  \"parameters\": {\n    \"runShellExampleStringParam\": {\n      \"type\": \"String\",\n      \"description\": \"This is an example STRING parameter\"\n    },\n    \"runShellExampleStringListParam\": {\n      \"type\": \"StringList\",\n      \"description\": \"This is an example STRINGLIST parameter\"\n    }\n  },\n  \"inputs\":{\n    \"s3BucketName\":\"\",\n    \"s3KeyPrefix\":\"\",\n    \"s3EncryptionEnabled\":true,\n    \"cloudWatchLogGroupName\":\"\",\n    \"cloudWatchEncryptionEnabled\":true,\n    \"kmsKeyId\":\"\"\n  }\n}\n",
+  "CreatedDate": "2022-11-28T20:30:03.37Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:882129497625:document/session-test-public",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "657dd44f-8d37-484f-9d8b-91c10b5dabdf",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 878,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-11-30T07:13:35.8361431+00:00"
+}

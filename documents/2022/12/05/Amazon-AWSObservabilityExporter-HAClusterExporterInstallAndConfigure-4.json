@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "a02c379b284c55a32a5e539b571cb61beed5a8fcc2c28350a71ea76e4590b0a1",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "haClusterExporterPackage_AMAZON.zip",
+      "Size": 7507294,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/ada/157200606466/AWSObservabilityExporter-HAClusterExporterInstallAndConfigure%213c664a31-77b9-441d-808c-67b4d70c240b/4/haClusterExporterPackage_AMAZON.zip?x-attachment-size=7507294&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEM7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIEiXbod22mTTPPJ0eRbFHb3kUajmLI%2Bk18d7n7tNM3%2FCAiEA5MQwEgVeZGAG4ktKbZR34PWfBidAvTSFiFzBSJNtfq8q1QQI5%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgwyNDk5MjQ1Mjc0MTAiDKMM8qIH76VWi6I8uiqpBBxbmV%2BfwdZG8JDBfSHlcdxGMlov1ZhqQ1dp3JT9T8BinVk8TkoyJ%2B%2BlXHKmlZfLvyW4kkugLzHVyQy7JyuaEX6pLPvs0uPfE5nlXaoBL8%2FBKuvlpphOZH3y1DGywAfK28Oyn84ymS6wlpbDDYGIwpXofETqlBeqvllg5NRw%2BCdgW9Es4kgTmpQJ44RfbwJBWH4K0H%2FC%2Fsukg8lFfjw7kkBBJnvQ35%2BHIogUObcf4SQALvg6ak2EltveZuStWBDilHe8N6MYVWHBxOhqHXmizHzZ78QliQQVHckRomNzZPX2YUqvSQqYqVl1PWysQPkc4MyvYX%2BzF4lmIS2WQE8W5GXu68RRT9Bbi6MgANHzcUam9KZ%2FBwxVrOSPGur1puU2C30tpk6z4LiAh17XsecD7FDf%2FxwR5Jth3T44Wvy%2F06xkji2TtOusTanBNn%2BkeXr94i9%2Fdy%2FPLCh%2FI6Bw6vv6bIXmau6gxvgHQYytAd1Ai3XURQ6hzZRxRD3m5nSR4q5S9Y1H5ujFa7Ni%2BPVEBefcO1Hz5vRn3LR1p8flzY8f4r0wQgcrhr0%2F1DvDgGwthWa6IMXHrnKEtLY9ey%2Bx2TngvzATQzpwpCbXKov0AbBZd3eusH6YPdKfD0rM4WN9N%2ByraonvWmL1CsHxNc83DW00yFuqGkiKQS5m6ur5z82dva6HbgQxRPEAOdGncED4%2Bwvck9Oq4hvlJXXEPA2hg7GO4BI%2BtlLesDuoOLgwno22nAY6qQGKXLqFe4zjNpfLjk8ISGnrxBvvd48E3V2atUsqyUw76d42%2FP1%2F7FZbzPl%2FPzUQ8HtoAR9jqA4R9V1qC1ko6apnMuCGtiSDJNmL1Hste6wj7BEODhze%2Fw5ZoKrOdQhd4wUb%2FoHv24iMKmPU%2FK7HS6183h9CDmErY7aMcRAj0uUp0K%2BzXrHbdKrq%2FM7WUML4m3xNrYOi%2F8j6k03lYtmpNf1ASkpgvwIkfBWy&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20221205T071306Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIATUMFJUUZFK6JHQEU%2F20221205%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=a3c14e92311d8db2e56871d64c2f5afc628309f0f40acecc5e9bf2c9ee732ecf"
+    }
+  ],
+  "Content": "{\n  \"schemaVersion\": \"2.0\",\n  \"version\": \"1.2.7\",\n  \"packages\": {\n    \"redhat\": {\n      \"_any\": {\n        \"x86_64\": {\n          \"file\": \"haClusterExporterPackage_AMAZON.zip\"\n        }\n      }\n    },\n    \"suse\": {\n      \"_any\": {\n        \"x86_64\": {\n          \"file\": \"haClusterExporterPackage_AMAZON.zip\"\n        }\n      }\n    }\n  },\n  \"files\": {\n    \"haClusterExporterPackage_AMAZON.zip\": {\n      \"checksums\": {\n        \"sha256\": \"a02c379b284c55a32a5e539b571cb61beed5a8fcc2c28350a71ea76e4590b0a1\"\n      }\n    }\n  }\n}\n",
+  "CreatedDate": "2022-11-14T17:01:29.178Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Package"
+  },
+  "DocumentVersion": "4",
+  "Name": "AWSObservabilityExporter-HAClusterExporterInstallAndConfigure",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "1.2.7",
+  "ResponseMetadata": {
+    "RequestId": "38d555f8-f572-4748-b195-866f573b9cca",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2866,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-05T07:13:06.9326909+00:00"
+}

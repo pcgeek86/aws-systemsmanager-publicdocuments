@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"update tf configs in services\",\n  \"parameters\" : {\n    \"workDir\" : {\n      \"type\" : \"String\",\n      \"description\" : \"work dir\",\n      \"default\" : \"/home/ssm-user\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"updatetfcfg\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"./complete_dr_tasks.sh\" ],\n      \"workingDirectory\" : \"{{ workDir }}/utils\"\n    }\n  } ]\n}",
+  "CreatedDate": "2022-07-21T13:30:04.994Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:186678121278:document/completeDR",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d958d59b-8182-4afb-8fb9-abf12a3b2ab6",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 697,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-06T07:12:50.0284861+00:00"
+}

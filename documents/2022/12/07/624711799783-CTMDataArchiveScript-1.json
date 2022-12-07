@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.2\",\n  \"description\": \"document for archive script\",\n  \"parameters\": {},\n  \"runtimeConfig\": {\n    \"aws:runShellScript\": {\n      \"properties\": [\n        {\n          \"id\": \"0.aws:runShellScript\",\n          \"runCommand\": [\n            \"/etc/aws/scripts/archive_scripts/run_archive_scripts.py >> /var/log/run_archive_scripts.log\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+  "CreatedDate": "2021-07-26T06:13:04.925Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:624711799783:document/CTMDataArchiveScript",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f38f7ab5-2119-4165-b0d1-90d8bc05a68b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 638,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-07T07:13:24.5008916+00:00"
+}

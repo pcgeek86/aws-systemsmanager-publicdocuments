@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWS-ConfigureCloudWatchOnEC2Instance\\n\\n## What does this document do?\\nThe AWS-ConfigureCloudWatchOnEC2Instance Automation document enables or disables CloudWatch monitoring on an EC2 instance.\\n\\n## Input Parameters\\n* InstanceId: (Required) The ID of the EC2 instance on which you want to enable CloudWatch monitoring.\\n* status: (Optional) Specifies whether to enable or disable CloudWatch.\\n  * Allowed Values: Enabled | Disabled\\n  * Default: Enabled\\n* properties: (Optional) This parameter is not supported. It is listed here for backwards compatibility.\\n* AutomationAssumeRole: (Optional) The Amazon Resource Name (ARN) of the role that allows SSM Automation to perform the actions on your behalf.\\n\\n## Output parameters\\nNone\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ID of the EC2 instance on which you want to enable CloudWatch monitoring.\"\n    },\n    \"status\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Specifies whether to enable or disable CloudWatch. Valid values: \\\"Enabled\\\" | \\\"Disabled\\\"\",\n      \"allowedValues\" : [ \"Enabled\", \"Disabled\" ],\n      \"default\" : \"Enabled\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"default\" : \"\",\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The Amazon Resource Name (ARN) of the role that allows SSM Automation to perform the actions on your behalf.\"\n    },\n    \"properties\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) This parameter is not supported. It is listed here for backwards compatibility.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"configureCloudWatch\",\n    \"action\" : \"aws:executeScript\",\n    \"isEnd\" : true,\n    \"description\" : \"## configureCloudWatch\\nConfigures Cloudwatch on the EC2 instance with the given status.\\n## Inputs\\n* InstanceId: The ID of the EC2 instance on which you want to enable CloudWatch monitoring.\\n* status: Specifies whether to enable or disable CloudWatch.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"configurecloudwatch_handler\",\n      \"InputPayload\" : {\n        \"InstanceId\" : \"{{InstanceId}}\",\n        \"status\" : \"{{status}}\"\n      },\n      \"Script\" : \"import boto3\\n\\ndef configurecloudwatch_handler(event, context):\\n  ec2_client = boto3.client('ec2')\\n  instance_id = event[\\\"InstanceId\\\"]\\n  new_state = event[\\\"status\\\"]\\n\\n  if new_state == \\\"Enabled\\\":\\n    ec2_client.monitor_instances(InstanceIds=[instance_id])\\n  elif new_state == \\\"Disabled\\\":\\n    ec2_client.unmonitor_instances(InstanceIds=[instance_id])\"\n    }\n  } ]\n}",
+  "CreatedDate": "2022-06-21T21:18:19.915Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureCloudWatchOnEC2Instance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "082890d7-acd0-4c33-86f2-9af023f226a9",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3105,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-09T07:11:13.7340218+00:00"
+}

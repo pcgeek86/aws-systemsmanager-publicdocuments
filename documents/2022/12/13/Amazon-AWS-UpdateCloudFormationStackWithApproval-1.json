@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"CloudFormation Template Update - Manage updating CloudFormation Template from a S3 bucket.\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{AutomationAssumeRole}}\",\n  \"parameters\": {\n    \"StackNameOrId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) Name or Unique ID of the CloudFormation stack to be updated\"\n    },\n    \"TemplateUrl\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) S3 bucket location of updated CloudFormation Template (e.g. https://s3.amazonaws.com/example/updated.template)\"\n    },\n    \"LambdaAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The ARN of the role assumed by lambda\"\n    },\n    \"Approvers\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) IAM user or user arn of approvers for the automation action\"\n    },\n    \"SNSTopicArn\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The SNS topic ARN used to send pending approval notification for updating CloudFormation Template. The SNS topic name must start with Automation.\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf. \",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"approve\",\n      \"action\": \"aws:approve\",\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n        \"NotificationArn\": \"{{SNSTopicArn}}\",\n        \"Message\": \"Approval required to update CloudFormation stack: {{StackNameOrId}}\",\n        \"MinRequiredApprovals\": 1,\n        \"Approvers\": \"{{Approvers}}\"\n      }\n    },\n    {\n      \"name\": \"createDocumentStack\",\n      \"action\": \"aws:createStack\",\n      \"inputs\": {\n        \"Capabilities\": [\n          \"CAPABILITY_IAM\"\n        ],\n        \"StackName\": \"UpdateCFTemplateStack{{automation:EXECUTION_ID}}\",\n        \"Parameters\": [\n          {\n            \"ParameterKey\": \"LambdaRoleArn\",\n            \"ParameterValue\": \"{{LambdaAssumeRole}}\"\n          },\n          {\n            \"ParameterKey\": \"LambdaName\",\n            \"ParameterValue\": \"UpdateCFTemplate-{{automation:EXECUTION_ID}}\"\n          }\n        ],\n        \"TemplateBody\": \"AWSTemplateFormatVersion: '2010-09-09'\\nParameters:\\n  LambdaName:\\n    Description: The lambda function name\\n    Type: String\\n  LambdaRoleArn:\\n    Default: ''\\n    Description: The ARN of the role that allows Lambda created by Automation to perform\\n      the action on your behalf\\n    Type: String\\nResources:\\n  UpdateCFLambda:\\n    Properties:\\n      Code:\\n        ZipFile: \\\"#\\\\n# Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights\\\\\\n          \\\\ Reserved.\\\\n#\\\\n# Permission is hereby granted, free of charge, to any person\\\\\\n          \\\\ obtaining a copy of this\\\\n# software and associated documentation files\\\\\\n          \\\\ (the \\\\\\\"Software\\\\\\\"), to deal in the Software\\\\n# without restriction, including\\\\\\n          \\\\ without limitation the rights to use, copy, modify,\\\\n# merge, publish,\\\\\\n          \\\\ distribute, sublicense, and/or sell copies of the Software, and to\\\\n#\\\\\\n          \\\\ permit persons to whom the Software is furnished to do so.\\\\n#\\\\n# THE SOFTWARE\\\\\\n          \\\\ IS PROVIDED \\\\\\\"AS IS\\\\\\\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,\\\\n\\\\\\n          # INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\\\\\\n          \\\\ FOR A\\\\n# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\\\\\\n          \\\\ AUTHORS OR COPYRIGHT\\\\n# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\\\\\\n          \\\\ LIABILITY, WHETHER IN AN ACTION\\\\n# OF CONTRACT, TORT OR OTHERWISE, ARISING\\\\\\n          \\\\ FROM, OUT OF OR IN CONNECTION WITH THE\\\\n# SOFTWARE OR THE USE OR OTHER\\\\\\n          \\\\ DEALINGS IN THE SOFTWARE.\\\\n#\\\\nimport boto3\\\\n\\\\n\\\\ndef handler(event, context):\\\\n\\\\\\n          \\\\tcf = boto3.client(\\\\\\\"cloudformation\\\\\\\")\\\\n\\\\n\\\\tcf.update_stack(\\\\n\\\\t\\\\tStackName=event[\\\\\\\"\\\\\\n          StackName\\\\\\\"],\\\\n\\\\t\\\\tTemplateURL=event[\\\\\\\"TemplateUrl\\\\\\\"],\\\\n\\\\t\\\\tCapabilities=[\\\\\\\"\\\\\\n          CAPABILITY_IAM\\\\\\\"]\\\\n\\\\t)\\\"\\n      FunctionName:\\n        Ref: LambdaName\\n      Handler: index.handler\\n      MemorySize: 128\\n      Role:\\n        Ref: LambdaRoleArn\\n      Runtime: python3.7\\n      Timeout: 60\\n    Type: AWS::Lambda::Function\\n\"\n      }\n    },\n    {\n      \"name\": \"updateCloudFormationTemplate\",\n      \"action\": \"aws:invokeLambdaFunction\",\n      \"inputs\": {\n        \"FunctionName\": \"UpdateCFTemplate-{{automation:EXECUTION_ID}}\",\n        \"Payload\": \"{\\\"StackName\\\": \\\"{{StackNameOrId}}\\\", \\\"TemplateUrl\\\": \\\"{{TemplateUrl}}\\\"}\"\n      }\n    },\n    {\n      \"name\": \"deleteCloudFormationTemplate\",\n      \"action\": \"aws:deleteStack\",\n      \"inputs\": {\n        \"StackName\": \"UpdateCFTemplateStack{{automation:EXECUTION_ID}}\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2022-06-21T22:58:30.045Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-UpdateCloudFormationStackWithApproval",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "35cb11f1-62d5-46ec-ab40-fd3f41a1c876",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5487,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-13T07:11:37.2257722+00:00"
+}

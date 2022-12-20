@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "90aa0f4f4bca8fc2c60573a9068a156447f75406aa88fd3194812e717b3268b2",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "aws-ExportOpsDataToS3.zip",
+      "Size": 12673501,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/b5c/123784938132/Automation/AWS-ExportOpsDataToS3%2127246bde-73a3-42e7-961e-d70141d8dbd5/4/aws-ExportOpsDataToS3.zip?x-attachment-size=12673501&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDYaCXVzLXdlc3QtMiJGMEQCIBNMNc68y9Ps2i%2BOmXc3Jcw8nlTl2eE2tuPgmegiPRalAiAcPpY32wtCUKwoTzelwlRNy5hd4AmBAZhbvLIdh%2BsJ9CrMBAhvEAMaDDI0OTkyNDUyNzQxMCIM4qMALwRSAeZIo3jJKqkEFS%2BXGe9bcvMIq26BUDEAybW3omypR2y8KYl94Aw7%2Bu1KkdnH7jB7%2BaLBRKA3Ys%2F%2Fzf05xIzD6P463w48gsvT1B4WJYHPMsepK6HRuqop6EQja8pUK64%2FSvfjVPwxok2AJ%2B%2BkUn2mtKL5VRRqegiKclN7vYaDmzyzv%2BksWi7vyT4a5jiwbSI0oCjXPXQKtgDkfOHgaJRd%2BSrxjZW7B%2BY41vYMGfrDZtugcEMsmA1YjfHE3C3emIxtKXmekqPWAhblLLGKWBDC7ZtJTwkl6wYZurzxhvyt%2BloQLE4V8RNDnfdqSaKcNxXPFxkdcdQkg6v5ONCKpPZ%2FP0f2ppguPP1MWHCkDrczsgmgsGkGQAx9tT%2BreMH0qNToOF0pDoCNUyC5UQR3zcEO9yQzEYr1TnfxLmiAYnpi2MG4bJQxO9g6ofiUhLBp%2BNuzHNvED5OYMicl1A8uCnH85KAgupCJN17zYqvsg7kDC1ExP2lzAye4ulhxbAnYNym%2BsnesNIxNlT1Hq%2FQmGTgjWE9ilW7PfkZvQjpKsSYx69U%2FgPtnFwtqP1%2BY9x3KKmoqaAyTfon8E0zf5mC6BXqmjFiX8Y2k6YD92aFwfhQqr1sV2QssYT%2FQ4PqQTFiIcdSHMmSLs4CavPH9f51pehY%2BvQY0689ecDK6K1DHH5cuzcrOK%2F%2FntY7Y8vwtOCYNfdqcehoiIMBKNomhEVNPLMIxeX9%2Ble8wAcW97hYichoWfRZVmjC9oIWdBjqqAZxxyoA%2BQyvcCDYyls%2Fxg7tiKMw1XtASchK9%2BRjRjGALk8yRcU9oGzh81mPqrBS3pDCzHL%2FMlgxARPJsNOKqnyVf6cPGYQMPZ06ZfVf0SldFqoqNemPvui6%2FdV1%2FUy8NcDYCD0uD0JvgjqxXHIgN27ZbzncnePMTasIg0Uh1U7OmS2D9GX9SYbC6re3xGRaKsmcPz6MyCuO%2FWWZrEI2Ejz%2Bt7kOYO2%2BRGVwK&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20221220T071057Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=ASIATUMFJUUZA3MY5PMJ%2F20221220%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=f060cdf78af70e158a5fddbac94d0543add5473b043bd3d3934a083477b24f5d"
+    }
+  ],
+  "Content": "{\n  \"description\" : \"### Document name - AWS-ExportOpsDataToS3\\n\\n## What does this document do?\\nThis document retrieves a list of OpsData summaries in AWS Systems Manager Explorer and exports them to an object in a specified Amazon S3 bucket.\\n\\n## Input Parameters\\n* assumeRole: The ARN of the role that allows Automation to perform the actions on your behalf.\\n* filters: Filters for the getOpsSummary request. By default, filters are empty if not provided.\\n* syncName: The name of the resource data sync. By default, syncName is empty if not provided.\\n* resultAttribute: The result attribute for getOpsSummary request.\\n    * [AWS:OpsItem]: (Default) By default, the result attribute is \\\"AWS:OpsItem\\\" if this field is not provided.\\n    * [AWS:EC2InstanceInformation]: If you want to check EC2 data, \\\"AWS:EC2InstanceInformation\\\" is needed.\\n    * [AWS:ComplianceSummary]: If you want to check compliant/non-compliant instances, \\\"AWS:ComplianceSummary\\\" is needed.\\n* columnFields: Column fields to write to the output file.\\n* s3BucketName: Amazon S3 bucket where you want to download the output file.\\n* snsTopicArn: Amazon Simple Notification Service (SNS) topic ARN to notify when the download completes.\\n* snsSuccessMessage: Message to send when document finishes. By default, the snsSuccessMessage is empty if not provided.\\n* columnFieldsWithType: Fully qualified column fields to write to the output file. For example, \\\"AWS:EC2InstanceInformation.InstanceId\\\".\\n* resultAttributeList: The multiple result attributes for getOpsSummary request.\\n\\n## Output parameters\\n* OpsData object: If the document is executed successfully, you will find the exported OpsData object in your target S3 bucket.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{assumeRole}}\",\n  \"parameters\" : {\n    \"assumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The role ARN to assume during automation execution.\"\n    },\n    \"filters\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Filters for the getOpsSummary request.\",\n      \"default\" : \"\"\n    },\n    \"syncName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The name of the resource data sync.\",\n      \"default\" : \"\"\n    },\n    \"resultAttribute\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The result attribute for getOpsSummary request.\",\n      \"default\" : \"\"\n    },\n    \"columnFields\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Optional) Column fields to write to the output file.\",\n      \"default\" : [ \"\" ]\n    },\n    \"s3BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Amazon S3 bucket where you want to download the output file.\"\n    },\n    \"snsTopicArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Amazon Simple Notification Service (SNS) topic ARN to notify when the download completes.\"\n    },\n    \"snsSuccessMessage\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Message to send when document finishes.\",\n      \"default\" : \"\"\n    },\n    \"columnFieldsWithType\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Optional) Fully qualified column fields to write to the output file.\",\n      \"default\" : [ \"\" ]\n    },\n    \"resultAttributeList\" : {\n      \"type\" : \"StringList\",\n      \"description\" : \"(Optional) The multiple result attributes for getOpsSummary request.\",\n      \"default\" : [ \"\" ]\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"getOpsSummaryStep\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"### What does the step do?\\nThis step retrieves up to 5,000 ops summaries to export in a CSV file now.\\n\\n### What is the output of the step?\\nThe list of ops summaries is stored as an object in an Amazon S3 bucket. Publish an SNS message and inform success or failure.\\nThe output file name along with the s3 bucket name will be included in the message when script finishes successfully.\\n\",\n    \"timeoutSeconds\" : 300,\n    \"outputs\" : [ {\n      \"Name\" : \"Succeeded\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"Boolean\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"script.start_export_to_csv\",\n      \"Attachment\" : \"aws-ExportOpsDataToS3.zip\",\n      \"InputPayload\" : {\n        \"Filters\" : \"{{filters}}\",\n        \"ResultAttribute\" : \"{{resultAttribute}}\",\n        \"ColumnFields\" : \"{{columnFields}}\",\n        \"S3BucketName\" : \"{{s3BucketName}}\",\n        \"SyncName\" : \"{{syncName}}\",\n        \"SnsTopicArn\" : \"{{snsTopicArn}}\",\n        \"SnsSuccessMessage\" : \"{{snsSuccessMessage}}\",\n        \"ColumnFieldsWithType\" : \"{{columnFieldsWithType}}\",\n        \"ResultAttributeList\" : \"{{resultAttributeList}}\"\n      }\n    }\n  } ],\n  \"files\" : {\n    \"aws-ExportOpsDataToS3.zip\" : {\n      \"checksums\" : {\n        \"SHA256\" : \"90aa0f4f4bca8fc2c60573a9068a156447f75406aa88fd3194812e717b3268b2\"\n      },\n      \"size\" : 12673501\n    }\n  }\n}",
+  "CreatedDate": "2022-06-21T21:20:27.484Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ExportOpsDataToS3",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0180e0bd-3ea6-479f-aace-6fa203923265",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 7375,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-20T07:10:57.8368487+00:00"
+}

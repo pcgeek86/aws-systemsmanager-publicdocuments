@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name: AWS-HelloWorld\\n## What does this document do?\\nThis document is a sample HelloWorld runbook to use with the AWS-HelloWorldChangeTemplate document when trying out Change Manager. The document prints a simple message when it runs.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Optional) The Amazon Resource Name (ARN) of the role that allows AWS Systems Manager Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\nThis document has no outputs\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The Amazon Resource Name (ARN) of the role that allows AWS Systems Manager Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"HelloWorldScriptExecution\",\n    \"action\" : \"aws:executeScript\",\n    \"timeoutSeconds\" : 100,\n    \"description\" : \"## HelloWorldScriptExecution\\nPrints a \\\"hello world\\\" message.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"script_handler\",\n      \"Script\" : \"def script_handler(events, context):\\n  print (\\\"Hello World. Welcome to Change Manager\\\")\\n\"\n    }\n  } ]\n}",
+  "CreatedDate": "2022-06-21T21:20:47.908Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-HelloWorld",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d392fa1c-b05c-4a8f-9ffd-0c99349e52af",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1540,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-21T07:10:48.8150224+00:00"
+}

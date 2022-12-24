@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnforceHTTPSOnOpenSearchDomain\\n\\n## What does this document do?\\nThis runbook enables `EnforceHTTPS` on a given Amazon OpenSearch Service domain using the [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-actions-updatedomainconfig) API.\\n\\n## Input Parameters\\n* DomainName: (Required) The name of the Amazon OpenSearch Service domain for which you want to enforce HTTPS.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* UpdateOpenSearchDomainConfigAndVerify.Output: Success message or failure exception.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"DomainName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the Amazon OpenSearch Service domain for which you want to enforce HTTPS.\",\n      \"allowedPattern\" : \"(\\\\d{12}/)?[a-z]{1}[a-z0-9-]{2,28}\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(?:aws|aws-us-gov|aws-cn):iam::\\\\d{12}:role\\\\/[\\\\w+=,.@/-]+$\"\n    }\n  },\n  \"outputs\" : [ \"UpdateOpenSearchDomainConfigAndVerify.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"UpdateOpenSearchDomainConfigAndVerify\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"## UpdateOpenSearchDomainConfigAndVerify\\nMakes UpdateDomainConfig API call using domain name to enable `EnforceHTTPS` on Amazon OpenSearch service domain and verifies its state.\\n## Outputs\\n* Output: Success message or failure exception.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"DomainName\" : \"{{ DomainName }}\"\n      },\n      \"Script\" : \"import boto3\\nimport re\\nfrom botocore.config import Config\\n\\nconfig = Config(\\n    retries={\\n        \\\"max_attempts\\\": 10,\\n        \\\"mode\\\": \\\"standard\\\"\\n    }\\n)\\n\\nopensearch_client = boto3.client(\\\"opensearch\\\", config=config)\\n\\ndef update_enforce_https(domain_name):\\n    return opensearch_client.update_domain_config(\\n        DomainName=domain_name, DomainEndpointOptions={\\\"EnforceHTTPS\\\": True}\\n    )\\n\\ndef verify_open_search_domain_enforce_https_status(domain_name):\\n    describe_domain_response = opensearch_client.describe_domain(\\n        DomainName=domain_name\\n    )\\n    if describe_domain_response[\\\"DomainStatus\\\"][\\\"DomainEndpointOptions\\\"][\\\"EnforceHTTPS\\\"]:\\n        return True\\n    return False\\n\\ndef handler(event, context):\\n    domain_name = event[\\\"DomainName\\\"]\\n    domain_pattern = r\\\"(\\\\d{12}/)?[a-z]{1}[a-z0-9-]{2,28}\\\"\\n    if re.match(domain_pattern, domain_name):\\n        domain_name = domain_name.split(\\\"/\\\")[-1]\\n    update_domain_response = update_enforce_https(domain_name)['ResponseMetadata']\\n    enforce_https_status = verify_open_search_domain_enforce_https_status(domain_name)\\n    if enforce_https_status:\\n        return {\\n            \\\"output\\\": {\\n                \\\"message\\\": \\\"Verification of EnforceHTTPS on Amazon OpenSearch service domain is successful.\\\",\\n                \\\"HTTPResponse\\\": update_domain_response,\\n            }\\n        }\\n    raise Exception(\\n        \\\"VERIFICATION OF ENFORCEHTTPS ON AMAZON OPENSEARCH SERVICE DOMAIN FAILED.\\\"\\n    )\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"StringMap\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2022-05-23T15:12:18.37Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnforceHTTPSOnOpenSearchDomain",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c7f99f27-0ab6-4d29-8a9e-334bcb645fe0",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4114,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-24T07:10:25.2609377+00:00"
+}

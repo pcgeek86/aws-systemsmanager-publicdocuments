@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableCopyTagsToSnapshotOnRDSCluster\\n\\n## What does this document do?\\nThe document enables CopyTagsToSnapshot on an Amazon RDS cluster using the [ModifyDBCluster API](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_ModifyDBCluster.html).  Please note, AWS Config is required to be enabled in this region for this document to work as it requires the Resource ID recorded by the AWS Config service.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* DbClusterResourceId: (Required) Resource ID of the Amazon RDS Cluster for which CopyTagsToSnapshot needs to be enabled.\\n* ApplyImmediately: (Optional) A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the PreferredMaintenanceWindow setting for the DB instance. By default, this parameter is disabled.\\n  * Default: false\\n\\n## Output Parameters\\n* ModifyDBClusterResponse.Output: The response of the ModifyDBCluster API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"DbClusterResourceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Resource ID of the Amazon RDS Cluster for which CopyTagsToSnapshot needs to be enabled.\",\n      \"allowedPattern\" : \"^cluster-[A-Z0-9]+$\"\n    },\n    \"ApplyImmediately\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"(Optional) A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the PreferredMaintenanceWindow setting for the DB instance.  By default, this parameter is disabled.\",\n      \"default\" : false\n    }\n  },\n  \"outputs\" : [ \"EnableCopyTagsToSnapshot.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"GetDBClusterIdentifier\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetDBClusterIdentifier\\nAccepts the Resource ID as input and returns the DB cluster identifier.\\n## Outputs\\n* DBClusterIdentifier: The ID of the DB cluster.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"config\",\n      \"Api\" : \"GetResourceConfigHistory\",\n      \"resourceId\" : \"{{ DbClusterResourceId }}\",\n      \"resourceType\" : \"AWS::RDS::DBCluster\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DBClusterIdentifier\",\n      \"Selector\" : \"$.configurationItems[0].resourceName\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifyStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyStatus\\nVerifies if `Status` is available before proeeding to the next step.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusters\",\n      \"DBClusterIdentifier\" : \"{{ GetDBClusterIdentifier.DBClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusters[0].Status\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"EnableCopyTagsToSnapshot\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableCopyTagsToSnapshot\\nAccepts the cluster name as input and modifies it to set true for `CopyTagsToSnapshot`.\\n## Outputs\\n* Output: Response from the ModifyDBCluster API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"ModifyDBCluster\",\n      \"DBClusterIdentifier\" : \"{{ GetDBClusterIdentifier.DBClusterIdentifier }}\",\n      \"ApplyImmediately\" : \"{{ ApplyImmediately }}\",\n      \"CopyTagsToSnapshot\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBClusterCopyTagsToSnapshotEnabled\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyDBClusterCopyTagsToSnapshotEnabled\\nVerifies that `CopyTagsToSnapshot` has been enabled on the target resource.\\n## Outputs\\n* Output: A success message or failure exception.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBClusters\",\n      \"DBClusterIdentifier\" : \"{{ GetDBClusterIdentifier.DBClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.DBClusters[0].CopyTagsToSnapshot\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-29T16:07:00.594Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableCopyTagsToSnapshotOnRDSCluster",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a51906c1-6cb4-4e6a-bb04-5855bf32ee67",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5242,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-26T07:10:53.733791+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.0\",\n  \"description\" : \"Import public keys from GitHub (https://github.com/nak2k/aws-ssm-document)\",\n  \"parameters\" : {\n    \"OSAccount\" : {\n      \"description\" : \"OS account to add authorized_keys\",\n      \"type\" : \"String\",\n      \"default\" : \"ec2-user\"\n    },\n    \"GitHubAccount\" : {\n      \"description\" : \"GitHub user account to obtain public keys\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"curl -sSL -o - 'https://github.com/{{ GitHubAccount }}.keys' >> '/home/{{ OSAccount }}/.ssh/authorized_keys'\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2019-03-19T22:33:14.028Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "5",
+  "Name": "arn:aws:ssm:us-west-2:185030254733:document/nak2k-ImportPubkeys",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "45d5a20a-2330-4777-9a85-cce6b55f0b35",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 942,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-26T07:11:39.3324369+00:00"
+}

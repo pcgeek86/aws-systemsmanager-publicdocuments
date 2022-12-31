@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\":\"2.0\",\n  \"description\":\"Refresh (force apply) the association on demand. This action will change the system state based on what is defined in the selected association or all associations bound to the targets.\",\n  \"parameters\":{\n    \"associationIds\":{\n      \"type\":\"StringList\",\n      \"description\":\"(Optional) List of association ids. If empty, all associations bound to the specified target are applied.\",\n      \"displayType\":\"textarea\",\n      \"default\": []\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\":\"aws:refreshAssociation\",\n      \"name\":\"refreshAssociation\",\n      \"inputs\": {\n        \"associationIds\": \"{{ associationIds }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2016-11-15T19:00:49.176Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-RefreshAssociation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "cc3e8ef7-d8fb-4f17-a99e-18f2ba56e25c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 903,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2022-12-31T07:09:55.1539668+00:00"
+}

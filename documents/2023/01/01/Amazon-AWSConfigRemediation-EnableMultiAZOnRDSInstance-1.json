@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableMultiAZOnRDSInstance\\n\\n## What does this document do?\\nThis document enables MultiAZ on an RDS instance.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* DbiResourceId: (Required) Resource ID of the RDS instance to be modified.\\n* ApplyImmediately: (Optional) The MultiAZ on an RDS instance change is applied during the next maintenance window unless the ApplyImmediately parameter is enabled (true) for this request. By default, this parameter is disabled (false).\\n\\n## Output Parameters\\n* EnableMultiAZ.DBInstance: The standard HTTP response from the ModifyDBInstance API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"DbiResourceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Resource ID of the RDS instance for which MultiAZ needs to be enabled.\",\n      \"allowedPattern\" : \"^db-[A-Z0-9]{26}$\"\n    },\n    \"ApplyImmediately\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"(Optional) MultiAZ on an RDS instance change is applied during the next maintenance window unless the ApplyImmediately parameter is enabled (true) for this request. By default, this parameter is disabled (false).\",\n      \"default\" : false,\n      \"allowedValues\" : [ true, false ]\n    }\n  },\n  \"outputs\" : [ \"EnableMultiAZ.DBInstance\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"DescribeDBInstances\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DescribeDBInstances\\nMakes DescribeDBInstances API call using RDS DB instance resource identifiers to get DBInstanceIdentifier.\\n## Outputs\\n* DBInstanceIdentifier: DBInstance identifier of the RDS instance.\\n* MultiAZ: MultiAZ state of the RDS instance.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"Filters\" : [ {\n        \"Name\" : \"dbi-resource-id\",\n        \"Values\" : [ \"{{ DbiResourceId }}\" ]\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DBInstanceIdentifier\",\n      \"Selector\" : \"$.DBInstances[0].DBInstanceIdentifier\",\n      \"Type\" : \"String\"\n    }, {\n      \"Name\" : \"MultiAZ\",\n      \"Selector\" : \"$.DBInstances[0].MultiAZ\",\n      \"Type\" : \"Boolean\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBInstanceStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"description\" : \"## VerifyDBInstanceStatus\\nVerifies if DB instance status is available before enabling MultiAZ.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ DescribeDBInstances.DBInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"EndIfMultiAZAlreadyEnabled\",\n    \"action\" : \"aws:branch\",\n    \"description\" : \"## EndIfMultiAZAlreadyEnabled\\nChecks if MultiAZ is not enabled on the DB instance. If not enabled, proceed with EnableMultiAZ step. Otherwise, end the flow.\\n\",\n    \"inputs\" : {\n      \"Choices\" : [ {\n        \"NextStep\" : \"EnableMultiAZ\",\n        \"Variable\" : \"{{ DescribeDBInstances.MultiAZ }}\",\n        \"BooleanEquals\" : false\n      } ]\n    },\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"EnableMultiAZ\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableMultiAZ\\nMakes ModifyDBInstance API call to enable MultiAZ on the RDS instance using the DBInstanceIdentifier from the previous step and MultiAZ as true.\\n## Outputs\\n* DBInstance: The standard HTTP response from the ModifyDBInstance API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"ModifyDBInstance\",\n      \"DBInstanceIdentifier\" : \"{{ DescribeDBInstances.DBInstanceIdentifier }}\",\n      \"MultiAZ\" : true,\n      \"ApplyImmediately\" : \"{{ ApplyImmediately }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DBInstance\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyMultiAZEnabled\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyMultiAZEnabled\\nVerifies that the RDS Instance's `PendingModifiedValues.MultiAZ` value is `True`.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ DescribeDBInstances.DBInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].PendingModifiedValues.MultiAZ\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-10-06T15:07:31.504Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableMultiAZOnRDSInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "79531037-79b6-4d3f-a575-f404c07d899f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5506,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-01T07:10:28.5672962+00:00"
+}

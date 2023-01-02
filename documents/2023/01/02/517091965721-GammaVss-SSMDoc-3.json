@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Test document to get familiar with making ssm doc for VSS SSM deployment pipeline project\",\n  \"parameters\" : {\n    \"Message\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Simple test message\",\n      \"default\" : \"3rd gamma version of create SSM Doc functionality (Testing marking doc public/default)\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"example\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"Write-Output {{Message}}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-12-31T00:25:16.354Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:517091965721:document/GammaVss-SSMDoc",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "8b510788-f239-4e6e-b21f-4909c663128c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 793,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-02T07:12:31.786004+00:00"
+}

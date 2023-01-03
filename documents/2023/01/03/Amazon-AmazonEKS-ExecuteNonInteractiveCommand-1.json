@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\": \"1.0\",\n    \"description\": \"Document to run single non-interactive command on an instance with control of logging\",\n    \"sessionType\": \"NonInteractiveCommands\",\n    \"parameters\": {\n        \"s3BucketName\": {\n            \"type\": \"String\",\n            \"description\": \"S3 bucket for logging\",\n            \"default\": \"\"\n        },\n        \"s3KeyPrefix\": {\n            \"type\": \"String\",\n            \"description\": \"S3 prefix for logging\",\n            \"default\": \"\"\n        },\n        \"s3EncryptionEnabled\": {\n            \"type\": \"String\",\n            \"description\": \"Enable S3 Encryption\",\n            \"allowedValues\": [\n                \"true\",\n                \"false\"\n            ],\n            \"default\": \"false\"\n        },\n        \"cloudWatchLogGroupName\": {\n            \"type\": \"String\",\n            \"description\": \"Cloud watch log group name for logging\",\n            \"default\": \"\"\n        },\n        \"cloudWatchEncryptionEnabled\": {\n            \"type\": \"String\",\n            \"description\": \"Enable Cloudwatch Encryption\",\n            \"allowedValues\": [\n                \"true\",\n                \"false\"\n            ],\n            \"default\": \"false\"\n        },\n        \"kmsKeyId\": {\n            \"type\": \"String\",\n            \"description\": \"KMS key for encryption\",\n            \"default\": \"\"\n        },\n        \"command\": {\n            \"type\": \"String\",\n            \"description\": \"The command to run on the instance\"\n        }\n    },\n    \"inputs\": {\n        \"s3BucketName\": \"{{s3BucketName}}\",\n        \"s3KeyPrefix\": \"{{s3KeyPrefix}}\",\n        \"s3EncryptionEnabled\": \"{{s3EncryptionEnabled}}\",\n        \"cloudWatchLogGroupName\": \"{{cloudWatchLogGroupName}}\",\n        \"cloudWatchEncryptionEnabled\": \"{{cloudWatchEncryptionEnabled}}\",\n        \"kmsKeyId\": \"{{kmsKeyId}}\"\n    },\n    \"properties\": {\n        \"windows\": {\n            \"commands\": \"{{command}}\",\n            \"runAsElevated\": false\n        },\n        \"linux\": {\n            \"commands\": \"{{command}}\",\n            \"runAsElevated\": false\n        }\n    }\n}",
+  "CreatedDate": "2021-08-04T21:58:07.335Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "AmazonEKS-ExecuteNonInteractiveCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0723c378-efd1-42a0-b666-612c75609ff8",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2442,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-03T07:12:32.7958453+00:00"
+}

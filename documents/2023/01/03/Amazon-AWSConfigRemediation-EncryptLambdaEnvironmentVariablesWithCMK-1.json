@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EncryptLambdaEnvironmentVariablesWithCMK\\n\\n## What does this document do?\\nThis document encrypts a given AWS Lambda function's environment variables at rest with provided AWS Key Management Service (AWS KMS) key using [UpdateFunctionConfiguration](https://docs.aws.amazon.com/lambda/latest/dg/API_UpdateFunctionConfiguration.html) API.\\nThis document must only be used as a baseline to ensure that your AWS Lambda function's environment variables are encrypted with the minimum security best practice of using an AWS KMS customer managed CMK.\\nBased on your data policy, AWS Lambda function's environment variables should be encrypted with different customer managed CMKs as documented [here](https://docs.aws.amazon.com/kms/latest/developerguide/best-practices.html).\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* KMSKeyArn: (Required) The ARN of the AWS KMS key that is used to encrypt your AWS Lambda function's environment variables.\\n* FunctionName: (Required) AWS Lambda Function name or ARN for which environment variables will be encrypted.\\n\\n## Output Parameters\\n* EncryptFunctionEnvironmentVariablesAtRest.Output: The standard HTTP response from the UpdateFunctionConfiguration API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"KMSKeyArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the AWS KMS key that is used to encrypt your function's environment variables.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:kms:.*:\\\\d{12}:key/[\\\\w+=,.@-]+\"\n    },\n    \"FunctionName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) AWS Lambda Function name or ARN for which environment variables will be encrypted.\",\n      \"allowedPattern\" : \"(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}(-gov)?-[a-z]+-\\\\d{1}:)?(\\\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:(\\\\$LATEST|[a-zA-Z0-9-_]+))?\"\n    }\n  },\n  \"outputs\" : [ \"EncryptFunctionEnvironmentVariablesAtRest.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"WaitUntilLambdaFunctionIsActive\",\n    \"description\" : \"## WaitUntilLambdaFunctionIsActive\\nWaits until AWS Lambda function 'LastUpdateStatus' property changes to \\\"Successful\\\" or times out.\\n\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"GetFunctionConfiguration\",\n      \"FunctionName\" : \"{{ FunctionName }}\",\n      \"PropertySelector\" : \"$.LastUpdateStatus\",\n      \"DesiredValues\" : [ \"Successful\" ]\n    }\n  }, {\n    \"name\" : \"EncryptFunctionEnvironmentVariablesAtRest\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EncryptFunctionEnvironmentVariablesAtRest\\nEncrypts a given AWS Lambda function's environment variables at rest with AWS KMS  using UpdateFunctionConfiguration API.\\n## Outputs\\n* Output: The standard HTTP response from the UpdateFunctionConfiguration API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"UpdateFunctionConfiguration\",\n      \"FunctionName\" : \"{{ FunctionName }}\",\n      \"KMSKeyArn\" : \"{{ KMSKeyArn }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyEncryptFunctionEnvironmentVariablesAtRest\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyEncryptFunctionEnvironmentVariablesAtRest\\nVerifies that the given AWS Lambda function's environment variables at rest are encrypted with the given AWS KMS key using GetFunctionConfiguration API.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"lambda\",\n      \"Api\" : \"GetFunctionConfiguration\",\n      \"FunctionName\" : \"{{ FunctionName }}\",\n      \"PropertySelector\" : \"$.KMSKeyArn\",\n      \"DesiredValues\" : [ \"{{ KMSKeyArn }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:09:37.131Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EncryptLambdaEnvironmentVariablesWithCMK",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "96737b29-9a22-49d1-abc3-ebadfb1e5526",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4787,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-03T07:11:22.924486+00:00"
+}

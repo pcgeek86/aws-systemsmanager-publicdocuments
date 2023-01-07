@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Cleanup automated test resources\",\n  \"parameters\" : {\n    \"BuildNumber\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Build Number\",\n      \"default\" : \"Build Number\"\n    },\n    \"RepoId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Repo Id\",\n      \"default\" : \"Repo Id\"\n    },\n    \"BuildHash\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Build Hash\",\n      \"default\" : \"Build Hash\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"RunCleanup\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"$username = \\\"jack_hegman\\\"\\n$password = \\\"LTWyqpYTmPKkSsM5CKAe\\\"\\n$pair = \\\"${username}:${password}\\\"\\n$bytes = [System.Text.Encoding]::ASCII.GetBytes($pair)\\n$base64 = [System.Convert]::ToBase64String($bytes)\\n$headers = @{ Authorization = \\\"Basic $base64\\\" }\\n$api_repo_prefix = \\\"https://api.bitbucket.org/2.0/repositories/biofiredx/{{ RepoId }}\\\"\\n\\n$body = @\\\"\\n{\\n  \\\"target\\\":{\\n    \\\"commit\\\":{\\n      \\\"type\\\":\\\"commit\\\",\\n      \\\"hash\\\":\\\"{{ BuildHash }}\\\"\\n    },\\n    \\\"selector\\\":{\\n      \\\"type\\\":\\\"custom\\\",\\n      \\\"pattern\\\":\\\"automated-test-cleanup\\\"\\n    },\\n    \\\"type\\\": \\\"pipeline_commit_target\\\" \\n  },\\n  \\\"variables\\\": [  \\n    {\\\"key\\\": \\\"buildNumber\\\",\\\"value\\\":\\\"{{ BuildNumber }}\\\"}\\n  ]\\n}\\n\\\"@\\n\\nInvoke-RestMethod -v \\\"$api_repo_prefix/pipelines/\\\" -Method Post -Body $body -ContentType 'application/json' -Headers $headers\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-04-08T21:11:31.55Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:244019795062:document/CleanupAutomatedTestResources",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9c3b1b7e-5e58-43f0-b366-da8611e395ba",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1901,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-07T07:12:23.3671838+00:00"
+}

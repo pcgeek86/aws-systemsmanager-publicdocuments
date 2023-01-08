@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Stop RDS instance\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) RDS Instance Id to stop\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"AssertNotStopped\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"isCritical\" : false,\n    \"onFailure\" : \"step:StopInstance\",\n    \"nextStep\" : \"CheckStop\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{InstanceId}}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"stopped\", \"stopping\" ]\n    }\n  }, {\n    \"name\" : \"StopInstance\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"StopDBInstance\",\n      \"DBInstanceIdentifier\" : \"{{InstanceId}}\"\n    }\n  }, {\n    \"name\" : \"CheckStop\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"onFailure\" : \"Abort\",\n    \"maxAttempts\" : 10,\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{InstanceId}}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"stopped\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2018-08-24T23:41:29.432Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StopRdsInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "64a3a492-14a2-45c5-ab32-00c149446268",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1858,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-08T07:10:28.7293329+00:00"
+}

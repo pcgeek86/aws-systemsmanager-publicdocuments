@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.0\",\n  \"description\": \"Document to run single interactive command on an instance\",\n  \"sessionType\": \"InteractiveCommands\",\n  \"parameters\": {\n    \"command\": {\n      \"type\": \"String\",\n      \"description\": \"The command to run on the instance\"\n    }\n  },\n  \"properties\": {\n    \"windows\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"linux\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"macos\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    }\n  }\n}",
+  "CreatedDate": "2020-12-01T08:10:31.993Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StartInteractiveCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "32b35ca4-acb7-416e-9116-ed774e5a9b2f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 795,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-08T07:10:27.4573712+00:00"
+}

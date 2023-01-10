@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"IPAddress\": {\n      \"type\": \"String\",\n      \"description\": \"IP Address of the App server\",\n      \"default\": \"\"\n    },\n    \"CustomerName\": {\n      \"type\": \"String\",\n      \"description\": \"QA or developer name\",\n      \"default\": \"\"\n    },\n    \"ScID\": {\n      \"type\": \"String\",\n      \"description\": \"Service cluster ID of the deployment. Donot use.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"timeoutSeconds\": \"600\",\n        \"runCommand\": [\n          \"try {\",\n          \"Set-Location C:\\\\SATools\\\\automation\\\\R20Scripts\\\\scripts\",\n          \"$apigateway_name = \\\"DONOT-DELETE-DEV-API3\\\"\",\n          \"$nlb_name = \\\"DONOT-DELETE-DEV-INT-NLB1\\\"\",\n          \"$ip_addresses = \\\"{{IPAddress}}\\\"\",\n          \"$sc_id = \\\"{{ScID}}\\\"\",\n          \"$customer = \\\"{{CustomerName}}\\\"\",\n          \"if ([String]::IsNullOrWhiteSpace($ip_addresses) -AND [String]::IsNullOrWhiteSpace($customer)) {\",\n          \"Write-Error \\\"Mandatory parameters are missing\\\"\",\n          \"exit 1\",\n          \"}\",\n          \"$deployment_command = \\\"python.exe ./dev_v3.py\\\"\",\n          \"$deployment_command += ' \\\"$customer\\\"'\",\n          \"$deployment_command += \\\" '$ip_addresses'\\\"\",\n          \"$deployment_command += \\\" '$apigateway_name'\\\"\",\n          \"$deployment_command += \\\" '$nlb_name'\\\"\",\n          \"if (![String]::IsNullOrWhiteSpace($sc_id)) {\",\n          \"$deployment_command += \\\" '$sc_id'\\\"\",\n          \"}\",\n          \"Invoke-Expression $deployment_command\",\n          \"$deployment_exit_code = $LastExitCode\",\n          \"if ($deployment_exit_code -eq 0) {\",\n          \"Write-Output -Message \\\"Create deployment finished with exit code $deployment_exit_code\\\"\",\n          \"exit 0\",\n          \"}\",\n          \"else {\",\n          \"Write-Error \\\"Chef-client run failed. Exit code: $deployment_exit_code\\\"\",\n          \"exit 1\",\n          \"}\",\n          \"}\",\n          \"catch {\",\n          \"Write-Error $_.Exception.Message\",\n          \"exit 1\",\n          \"}\"\n        ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2022-07-12T23:37:10.726Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "6",
+  "Name": "arn:aws:ssm:us-west-2:958123553953:document/CreateDevDeployment",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "1517bc3f-97da-466e-afef-5385af5b0d07",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2647,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-10T07:12:10.0113737+00:00"
+}

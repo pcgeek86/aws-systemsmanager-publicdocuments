@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "ea97a5dc1940e3d88b3fbc52908071c6d4723e094ff21ee16e59dd0daca6e73e",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "attachment.zip",
+      "Size": 22523,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/708/190294270367/Automation/AWSSupport-TroubleshootECSContainerInstance%213d97b95f-c993-4218-9d53-5a35311308a0/3/attachment.zip?x-attachment-size=22523&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEI7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQC0Zd2KdKUfKMKvGE%2FLLUwU2GVwD2MxzzXltxA%2BJQObpwIgcforqn8v4mj85%2F%2BB%2FEtVMYsYtRJ46e%2FN7l763dQRhjwq1QQI5%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgwyNDk5MjQ1Mjc0MTAiDCIj8sx3ZyB32tYp9CqpBD6IpM782%2BvfRf6WM3GJoJJcWkE%2F60yAvQV90qafPXqos8DrY2KPrYx3PKmW5hLH6r6ASIXaw96I9eDhRQXbh5csZt%2BnT%2BMrjPQ9UIvg%2BcBAC8LWS9Hk%2FUVP5uvEGQCqoc6Wkdt1gVaXDOlCT2Sn7S03G%2B6gkDXXw7fE6c0Sw2dH%2Bg%2FDvkq%2FUV%2F8udCa9ah%2B8N5yLSbHtkttTjb7sokOgEcVlI%2BX4x7agyC6MAxZmvGtM95TqnN9sy4q1tJf5X1bOysxYBD%2F9TrUjys%2F2whbVihIgPOmK5e5UEAkeloByILYb1igDGP7c2lDkqoHDFx9k7%2BnyqkQUtpsJLdGYfndMl6CKpzmryeKiUvp8KCSDgPmCOI4O5%2B6jPCZwIYczGQZ5A3N5wJEAtIpTgXYxWP0lA7%2F2L4tgL7nbOt5S9OTn3cRbcrt3a9nzUYpt%2BXAYU6e2cJjdceVYoVNzE8smqmLzV4aKcz%2FOAVZPpv%2FF922hTnS7rHztwy6szBCH59SMf8tIBKVgfNuH%2FATB6PKjLnO6ZC8oEdp%2FDMKQcgYhr8FQTgd%2Fizx%2F3n%2F3MnuSHL6mYWPqIccWe7y4ddizkFgETlXpqP2KI%2B9uaEW8q%2BIwlDvTXnscuyePrOUHviocWgopEOpacivvJrIdJmGXUR60Rxt%2FuEP9FFvu0lBbslXiUwU%2BkzPWj9UrBKgiTkNaEf6Sh1sEMsZCK9A7p8VdxfkJdzYVlE7t7aon88n1wcw6YKJngY6qQG4d95rmo2lvH7RIOR1FOcM21toNvZO7mWhiynrZMTHEfTy2dQmG3QpQGIXrmr9ygJZwwq9SFUY2kgNPyQB%2FoCwySHyJ9nGtdfx2oDQnaIYudJZC8FVapMGHuc72%2FckpvyJeGQu0meV4BmkGkQ93X3q%2FZiY9nMoufDcecndFA1Idk0mH%2F1avuG8VvJvDv95QbNXyxCBfqI%2FTX2eMm9gPcdhBIFFzGbyrXnJ&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230114T071134Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=ASIATUMFJUUZGNQLJT2A%2F20230114%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=fc44d49cd946faad91b3b005c41855de1bb6ba18c77d2d241fda6e6f80c9459a"
+    }
+  ],
+  "Content": "{\n  \"schemaVersion\": \"0.3\",\n  \"description\": \"The **AWSSupport-TroubleshootECSContainerInstance** runbook helps you troubleshoot an Amazon Elastic Compute Cloud (Amazon EC2) instance that fails to register with an Amazon Elastic Container Service (Amazon ECS) cluster. This automation reviews whether the user data for the instance contains the correct cluster information, whether the instance profile contains the required permissions, and network configuration issues.\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"AutomationAssumeRole\": {\n      \"default\": \"\",\n      \"type\": \"String\",\n      \"description\": \"(Optional) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf. If no role is specified, Systems Manager Automation uses the permissions of the user that starts this runbook.\",\n      \"allowedPattern\": \"^$|^arn:(aws|aws-cn|aws-us-gov):iam::\\\\d{12}:role\\\\/[\\\\w+=/,.@-]+$\"\n    },\n    \"ClusterName\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The name of the Amazon ECS cluster that the instance failed to register with.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^[a-zA-Z0-9_-]{1,255}$\"\n    },\n    \"InstanceId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The ID of the Amazon EC2 instance you want to troubleshoot.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^i-[a-z0-9]{8,17}$\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"executeChecker\",\n      \"action\": \"aws:executeScript\",\n      \"description\": \"Reviews whether the Amazon EC2 instance meets the prerequisites needed to register with an Amazon ECS cluster.\",\n      \"isCritical\": true,\n      \"timeoutSeconds\": 540,\n      \"inputs\": {\n        \"Runtime\": \"python3.8\",\n        \"InputPayload\": {\n          \"InstanceId\": \"{{InstanceId}}\",\n          \"ClusterName\": \"{{ClusterName}}\"\n        },\n        \"Handler\": \"lambda_handler\",\n        \"Script\": \"import boto3\\n\\nfrom saw_ecs.ec2 import EC2Instance\\nfrom saw_ecs.cluster import ECSCluster\\nfrom saw_ecs import __main__\\n\\n\\ndef lambda_handler(events, context):\\n    ec2_client = boto3.client(\\\"ec2\\\")\\n    instance = EC2Instance(id=events[\\\"InstanceId\\\"], ec2_client=ec2_client)\\n    cluster = ECSCluster(name=events[\\\"ClusterName\\\"])\\n\\n    stdout, info_codes = __main__.generate_stdout(instance, cluster)\\n\\n    # return {\\\"statusCode\\\": 200, \\\"body\\\": stdout}\\n    return {\\\"stdout\\\": stdout, \\\"info_codes\\\": info_codes}\\n\",\n        \"Attachment\": \"attachment.zip\"\n      },\n      \"outputs\": [\n        {\n          \"Name\": \"stdout\",\n          \"Selector\": \"$.Payload.stdout\",\n          \"Type\": \"String\"\n        },\n        {\n          \"Name\": \"info_codes\",\n          \"Selector\": \"$.Payload.info_codes\",\n          \"Type\": \"StringList\"\n        }\n      ]\n    }\n  ],\n  \"files\": {\n    \"attachment.zip\": {\n      \"checksums\": {\n        \"sha256\": \"ea97a5dc1940e3d88b3fbc52908071c6d4723e094ff21ee16e59dd0daca6e73e\"\n      }\n    }\n  },\n  \"outputs\": [\n    \"executeChecker.stdout\"\n  ]\n}",
+  "CreatedDate": "2022-11-09T10:59:26.088Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "AWSSupport-TroubleshootECSContainerInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9e3d1b95-7a08-4345-b12d-d92b781a4f56",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5534,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-14T07:11:34.4010919+00:00"
+}

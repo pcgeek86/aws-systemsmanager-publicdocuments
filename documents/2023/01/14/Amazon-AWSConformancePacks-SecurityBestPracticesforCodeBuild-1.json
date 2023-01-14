@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for CodeBuild\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Resources\" : {\n      \"CodebuildProjectArtifactEncryption\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"codebuild-project-artifact-encryption\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::CodeBuild::Project\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CODEBUILD_PROJECT_ARTIFACT_ENCRYPTION\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CodebuildProjectEnvironmentPrivilegedCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"codebuild-project-environment-privileged-check\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::CodeBuild::Project\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CODEBUILD_PROJECT_ENVIRONMENT_PRIVILEGED_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CodebuildProjectEnvvarAwscredCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"codebuild-project-envvar-awscred-check\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::CodeBuild::Project\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CODEBUILD_PROJECT_ENVVAR_AWSCRED_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CodebuildProjectLoggingEnabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"codebuild-project-logging-enabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::CodeBuild::Project\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CODEBUILD_PROJECT_LOGGING_ENABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CodebuildProjectS3LogsEncrypted\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"codebuild-project-s3-logs-encrypted\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::CodeBuild::Project\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CODEBUILD_PROJECT_S3_LOGS_ENCRYPTED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"CodebuildProjectSourceRepoUrlCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"codebuild-project-source-repo-url-check\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::CodeBuild::Project\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"CODEBUILD_PROJECT_SOURCE_REPO_URL_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:53:55.443Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforCodeBuild",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "241e959a-e7be-45f9-8d3b-c75bd1f4b03f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3312,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-14T07:10:46.6679256+00:00"
+}

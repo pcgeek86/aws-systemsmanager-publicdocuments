@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\": \"2.2\",\n    \"description\": \"cae-delete-ansible-user\",\n    \"parameters\": {\n      \"ssmuser\": {\n        \"description\": \"User to create.\",\n        \"type\": \"String\"\n      }\n    },\n    \"mainSteps\": [\n      {\n        \"action\": \"aws:runPowerShellScript\",\n        \"name\": \"DeleteWindowsAnsibleUser\",\n        \"precondition\": {\n          \"StringEquals\": [\n            \"platformType\",\n            \"Windows\"\n          ]\n        },\n        \"inputs\": {\n          \"runCommand\": [\n            \"net user /delete {{ ssmuser }}\",\n            \"$PROFILEPATH = [regex]::Escape('C:\\\\Users\\\\{{ ssmuser }}%')\",\n            \"Get-WmiObject -Query \\\"SELECT * FROM Win32_UserProfile WHERE localpath LIKE '$PROFILEPATH'\\\" -ComputerName localhost |ForEach-Object { Remove-WmiObject -InputObject $_ }\"\n          ]\n        }\n      },\n      {\n        \"action\": \"aws:runShellScript\",\n        \"name\": \"DeleteLinuxAnsibleUser\",\n        \"precondition\": {\n          \"StringEquals\": [\n            \"platformType\",\n            \"Linux\"\n          ]\n        },\n        \"inputs\": {\n          \"runCommand\": [\n            \"sudo su - root;\",\n            \"pkill -U {{ ssmuser }};\",\n            \"userdel -rf {{ ssmuser }};\",\n            \"sed -i '/{{ ssmuser }}/d' /etc/sudoers.d/ell-cae-ansible-user;\",\n            \"if [[ $(/usr/sbin/visudo -cf /etc/sudoers > /dev/null;echo $?) -eq 0 ]]; then echo 'The /etc/sudoers syntax is valid.'; else echo 'sudoers file is corrupt, fixing it...' && /usr/local/bin/sudoers_auto_heal.sh; fi;exit\"\n          ]\n        }\n      }\n    ]\n  }",
+  "CreatedDate": "2022-12-20T13:13:17.669Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "12",
+  "Name": "arn:aws:ssm:us-west-2:519187184759:document/cae-delete-ansible-user-us-west-2",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f87e4b40-3673-4ef8-bf53-0a05e548f99f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1913,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-18T07:12:19.0477122+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableCopyTagsToSnapshotOnRDSDBInstance\\n\\n## What does this document do?\\nThe document enables CopyTagsToSnapshot on a given Amazon RDS database instance using the [ModifyDBInstance API](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_ModifyDBInstance.html).\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* DbiResourceId: (Required) Resource ID of the Amazon RDS DB Instance for which `CopyTagsToSnapshot` needs to be enabled.\\n* ApplyImmediately: (Optional) A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the PreferredMaintenanceWindow setting for the DB instance. By default, this parameter is disabled.\\n  * Default: false\\n\\n## Output Parameters\\n* ModifyDBInstanceResponse.Output: The response of the ModifyDBInstance API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"DbiResourceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Resource ID of the Amazon RDS DB Instance for which `CopyTagsToSnapshot` needs to be enabled.\",\n      \"allowedPattern\" : \"^db-[A-Z0-9]+$\"\n    },\n    \"ApplyImmediately\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"(Optional) A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the PreferredMaintenanceWindow setting for the DB instance. By default, this parameter is disabled.\",\n      \"default\" : false\n    }\n  },\n  \"outputs\" : [ \"EnableCopyTagsToSnapshot.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"GetDBInstanceIdentifier\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetDBInstanceIdentifier\\nAccepts the Resource ID as input and returns the database instance name.\\n## Outputs\\n* DBInstanceIdentifier: The name of the database instance.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"Filters\" : [ {\n        \"Name\" : \"dbi-resource-id\",\n        \"Values\" : [ \"{{ DbiResourceId }}\" ]\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DBInstanceIdentifier\",\n      \"Selector\" : \"$.DBInstances[0].DBInstanceIdentifier\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBInstanceStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyDBInstanceStatus\\nVerifies if `DBInstanceStatus` is available before proceeding to the next step.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ GetDBInstanceIdentifier.DBInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].DBInstanceStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"EnableCopyTagsToSnapshot\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableCopyTagsToSnapshot\\nAccepts the database instance name as input and modifies it to set true for CopyTagsToSnapshot.\\n## Outputs\\n* Output: Response from the ModifyDBInstance API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"ModifyDBInstance\",\n      \"DBInstanceIdentifier\" : \"{{ GetDBInstanceIdentifier.DBInstanceIdentifier }}\",\n      \"ApplyImmediately\" : \"{{ ApplyImmediately }}\",\n      \"CopyTagsToSnapshot\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDBInstanceCopyTagsToSnapshotEnabled\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyDBInstanceCopyTagsToSnapshotEnabled\\nVerifies that `CopyTagsToSnapshot` has been enabled on the target resource.\\n## Outputs\\n* Output: A success message or failure exception.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"inputs\" : {\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\",\n      \"DBInstanceIdentifier\" : \"{{ GetDBInstanceIdentifier.DBInstanceIdentifier }}\",\n      \"PropertySelector\" : \"$.DBInstances[0].CopyTagsToSnapshot\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:08:48.149Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableCopyTagsToSnapshotOnRDSDBInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "45d1768f-7037-45bf-acd9-5ddaebd6b7c2",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5197,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-20T07:11:14.4699065+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"This runbook is used inconjunction with incident manager to restart the iis service on a remote host when it reports 500 errors over the threshold set in Cloudwatch. \",\n  \"schemaVersion\" : \"0.3\",\n  \"parameters\" : {\n    \"InstanceID\" : {\n      \"type\" : \"String\",\n      \"default\" : \"i-0b8f9c3ceafaa8c9b\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"RestartIIS\",\n    \"action\" : \"aws:runCommand\",\n    \"inputs\" : {\n      \"DocumentName\" : \"RestartIIsCommand\",\n      \"InstanceIds\" : [ \"i-0b8f9c3ceafaa8c9b\" ]\n    },\n    \"description\" : \"Execute command to restart iis on EC2 instance. \"\n  } ]\n}",
+  "CreatedDate": "2022-10-14T17:33:30.856Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "4",
+  "Name": "arn:aws:ssm:us-west-2:178701944667:document/RestartIIs",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "87883619-26a1-4939-8d3f-9788a83e5588",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 870,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-27T07:12:50.8337743+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Installs PowerShell Core Edition on Ubuntu Linux, using the package from Microsoft. The AWS-RunPowerShellScript document isn't compatible with the Snap package for PowerShell, as it resides under a different filesystem path (/snap/bin/pwsh) instead of /usr/bin/pwsh. Developed by Trevor Sullivan at CBT Nuggets.\",\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"InstallPowerShellCore\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"apt-get update\", \"apt-get install -y wget apt-transport-https software-properties-common\", \"wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb\", \"dpkg -i packages-microsoft-prod.deb\", \"apt-get update\", \"add-apt-repository universe\", \"apt-get install -y powershell\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-03-11T02:06:07.386Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:665453315198:document/CBTNuggets-InstallPowerShellCoreUbuntu",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f9c30532-e7e6-45ca-ae70-21ac4d397322",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1086,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-01-29T07:11:21.922844+00:00"
+}

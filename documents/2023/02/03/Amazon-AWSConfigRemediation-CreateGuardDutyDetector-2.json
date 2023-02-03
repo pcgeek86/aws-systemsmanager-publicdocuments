@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-CreateGuardDutyDetector\\n\\n## What does this document do?\\n   This automation document enables Amazon GuardDuty by creating detector in the region in which the document is executed.\\n\\n## Input parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output parameters\\n* CreateDetector.DetectorId: ID of the created detector.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"CreateDetector.DetectorId\" ],\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:aws[a-z0-9-]*:iam::\\\\d{12}:role\\\\/[\\\\w-\\\\/.@+=,]{1,1017}$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"CreateDetector\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## CreateDetector\\nMakes CreateDetector API call to create detector in the current region.\\n## Outputs\\n * DetectorId: The unique ID of the created detector. \\n\",\n    \"inputs\" : {\n      \"Service\" : \"guardduty\",\n      \"Api\" : \"CreateDetector\",\n      \"Enable\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"DetectorId\",\n      \"Selector\" : \"$.DetectorId\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDetectorStatus\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"description\" : \"## VerifyDetectorStatus \\nMakes GetDetector API call and asserts the \\\"Status\\\" property for \\\"Enabled\\\" state on the detector.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"guardduty\",\n      \"Api\" : \"GetDetector\",\n      \"DetectorId\" : \"{{CreateDetector.DetectorId}}\",\n      \"PropertySelector\" : \"$.Status\",\n      \"DesiredValues\" : [ \"ENABLED\" ]\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2023-01-30T16:02:52.209Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSConfigRemediation-CreateGuardDutyDetector",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f88a09f1-201e-46be-8231-d948deeac7d3",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2238,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-03T07:11:29.2475441+00:00"
+}

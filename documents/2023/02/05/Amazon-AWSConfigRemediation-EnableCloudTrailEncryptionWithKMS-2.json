@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-EnableCloudTrailEncryptionWithKMS\\n\\n## What does this document do?\\nThis runbook encrypts an AWS CloudTrail (CloudTrail) trail using the AWS Key Management Service (AWS KMS) customer master key (CMK) you specify. This runbook should only be used as a baseline to ensure that your CloudTrail trails are encrypted according to minimum recommended security best practices. We recommend encrypting multiple trails with different CMKs. CloudTrail digest files are not encrypted. If you have previously set the EnableLogFileValidation parameter to true for the trail, see the \\\"Use server-side encryption with AWS KMS managed keys\\\" section of the [CloudTrail Preventative Security Best Practices](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html#best-practices-security-preventative) topic in the AWS CloudTrail User Guide for more information.\\n\\n## Input Parameters\\n* TrailName: (Required) The ARN or name of the trail you want to update to be encrypted.\\n* KmsKeyId: (Required) The ARN, key ID, or the key alias of the of the CMK you want to use to encrypt the trail you specify in the TrailName parameter.\\n* AutomationAssumeRole: (Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* UpdateTrail.UpdateTrailResponse: JSON formatted response from the UpdateTrail API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"TrailName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN or name of the trail you want to update to be encrypted.\",\n      \"allowedPattern\" : \"(^arn:(aws[a-zA-Z-]*)?:cloudtrail:[a-z0-9-]+:\\\\d{12}:trail\\\\/(?![-_.])(?!.*[-_.]{2})(?!.*[-_.]$)(?!^\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}$)[-\\\\w.]{3,128}$)|(^(?![-_.])(?!.*[-_.]{2})(?!.*[-_.]$)(?!^\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}$)[-\\\\w.]{3,128}$)\"\n    },\n    \"KmsKeyId\" : {\n      \"description\" : \"(Required) The ARN, key ID, or the key alias of the of the CMK you want to use to encrypt the trail you specify in the TrailName parameter.\",\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"(^arn:(aws[a-z-]*)?:kms:.*:\\\\d{12}:alias/[a-zA-Z0-9/_-]{1,256}$)|(^alias/[a-zA-Z0-9/_-]{1,256}$)|(^arn:(aws[a-z-]*)?:kms:.*:\\\\d{12}:key/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$)|(^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$)\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"description\" : \"(Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\",\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"^arn:aws[a-z0-9-]*:iam::\\\\d{12}:role\\\\/[\\\\w-\\\\/.@+=,]{1,1017}$\"\n    }\n  },\n  \"outputs\" : [ \"UpdateTrail.UpdateTrailResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"UpdateTrail\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"isCritical\" : true,\n    \"onFailure\" : \"Abort\",\n    \"maxAttempts\" : 2,\n    \"timeoutSeconds\" : 600,\n    \"description\" : \"## UpdateTrail\\nEnables encryption on the trail you specify in the TrailName parameter.\\n## Outputs\\n* UpdateTrailResponse: Response from the UpdateTrail API call.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"UpdateTrail\",\n      \"Name\" : \"{{ TrailName }}\",\n      \"KmsKeyId\" : \"{{ KmsKeyId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"UpdateTrailResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ],\n    \"nextStep\" : \"GetKMSKeyArn\"\n  }, {\n    \"name\" : \"GetKMSKeyArn\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetKMSKeyArn\\nGathers the ARN for the CMK you specify in the KMSKeyId parameter.\\n## Outputs\\nKMSKeyArn: The AWS KMS key ARN of the given KeyId parameter.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"kms\",\n      \"Api\" : \"DescribeKey\",\n      \"KeyId\" : \"{{ KmsKeyId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"KMSKeyArn\",\n      \"Selector\" : \"$.KeyMetadata.Arn\",\n      \"Type\" : \"String\"\n    } ],\n    \"nextStep\" : \"VerifyTrail\"\n  }, {\n    \"name\" : \"VerifyTrail\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isCritical\" : true,\n    \"onFailure\" : \"Abort\",\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyTrail\\nVerifies that encryption has been enabled on the CloudTrail trail.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"GetTrail\",\n      \"Name\" : \"{{ TrailName }}\",\n      \"PropertySelector\" : \"$.Trail.KmsKeyId\",\n      \"DesiredValues\" : [ \"{{ GetKMSKeyArn.KMSKeyArn }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-01-30T16:04:58.195Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSConfigRemediation-EnableCloudTrailEncryptionWithKMS",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "4e294b55-7932-41a1-9797-196ea898ff60",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5304,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-05T07:10:26.6424316+00:00"
+}

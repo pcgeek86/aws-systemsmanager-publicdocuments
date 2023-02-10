@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\": \"2.0\",\n    \"description\": \"Instance Diagnostics\",\n    \"parameters\": { },\n    \"mainSteps\": [\n        {\n            \"action\": \"aws:runShellScript\",\n            \"name\": \"collectInformation\",\n            \"inputs\": {\n                \"runCommand\": [ \"sudo service loom restart\" ]\n            }\n        }\n    ]\n}",
+  "CreatedDate": "2019-03-14T10:47:43.692Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:263864197645:document/AWSG12MEDLOOMSTART",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "507e9fe6-0657-45d0-ac3a-1d2b05c83c07",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 573,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-10T07:12:16.354925+00:00"
+}

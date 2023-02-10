@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "\n\n{\n   \"schemaVersion\": \"2.2\",\n   \"description\": \"Command Document to get Disk Utilization of Windows EC2 instance\",\n   \"parameters\": { },\n   \"mainSteps\": [\n      {\n         \"action\": \"aws:runPowerShellScript\",\n         \"name\": \"GetDiskUtilizationWindows\",\n         \"inputs\": {\n            \"runCommand\": [\n               \"gdr\"\n            ]\n         }\n      }\n   ]\n}\n",
+  "CreatedDate": "2022-08-07T16:27:29.99Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:474057283015:document/cloud.in-report-DiskUtilization-windows",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0cf8fed1-31a9-4e5d-97e3-6c5b26b2cac5",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 637,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-10T07:12:39.4988129+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\t\t\t\"schemaVersion\": \"2.2\",\n\t\t\t\t\"description\": \"Invokes Inspector OVAL Evaluator on OVAL Definitions instance\",\n\t\t\t\t\"parameters\": {\n\t\t\t\t\t\"Bucket\": {\n\t\t\t\t\t\t\"type\": \"String\",\n\t\t\t\t\t\t\"description\": \"Name of a S3 bucket with test OVAL documents\",\n\t\t\t\t\t\t\"default\": \"inspector2-oval-prod-us-west-2\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"mainSteps\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"action\": \"aws:runPowerShellScript\",\n\t\t\t\t\t\t\"name\": \"invokeOVALEvaluatorWindows\",\n\t\t\t\t\t\t\"precondition\":{\n\t\t\t\t\t\t\t\"StringEquals\": [\"platformType\", \"Windows\"]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"inputs\":{\n\t\t\t\t\t\t\t\"runCommand\": [\"function error($msg) {Write-Host \\\"$(Get-Date -Format o): [ERROR] $msg\\\" -ForegroundColor Red}\",\n\"function warn($msg) {Write-Host \\\"$(Get-Date -Format o): [WARN] $msg\\\" -ForegroundColor DarkYellow}\",\n\"function info($msg) {Write-Host \\\"$(Get-Date -Format o): [INFO] $msg\\\"}\",\n\"info \\\"Evaluate OVAL files on windows platform\\\"\",\n\"\",\n\"$INSPECTOR_SSM_PLUGIN_EXE = 'C:\\\\Program Files\\\\Amazon\\\\Inspector\\\\inspectorssmplugin.exe'\",\n\"$OVAL_FILES = 'C:\\\\ProgramData\\\\Amazon\\\\Inspector\\\\Input'\",\n\"$INSPECTOR_SSM_PLUGIN_OUTPUT = 'C:\\\\ProgramData\\\\Amazon\\\\Inspector\\\\Output'\",\n\"$OUTPUT_FILE_NAME = \\\"results.json\\\"\",\n\"\",\n\"function Retry-Command {\",\n\"    [CmdletBinding()]\",\n\"    Param(\",\n\"        [Parameter(Position=0, Mandatory=$true)]\",\n\"        [scriptblock]$ScriptBlock,\",\n\"\",\n\"        [Parameter(Position=1, Mandatory=$true)]\",\n\"        [string]$ErrorMessage,\",\n\"\",\n\"        [Parameter(Position=2, Mandatory=$false)]\",\n\"        [int]$Maximum = 3,\",\n\"\",\n\"        [Parameter(Position=3, Mandatory=$false)]\",\n\"        [int]$Delay = 1\",\n\"    )\",\n\"\",\n\"    Begin {\",\n\"        $count = 0\",\n\"    }\",\n\"\",\n\"    Process {\",\n\"        do {\",\n\"            $count++\",\n\"            try {\",\n\"                Invoke-Command -Command $ScriptBlock\",\n\"                return\",\n\"            } catch {\",\n\"                error $_.Exception.InnerException.Message -ErrorAction Continue\",\n\"                info \\\"Waiting for $Delay second(s) before retrying...\\\"\",\n\"                Start-Sleep -Seconds $Delay\",\n\"            }\",\n\"        } while ($count -lt $Maximum)\",\n\"\",\n\"        error \\\"$ErrorMessage\\\"\",\n\"        Exit 1\",\n\"    }\",\n\"}\",\n\"\",\n\"try {\",\n\"    Retry-Command -ScriptBlock {\",\n\"        info \\\"Checking for installed binary...\\\"\",\n\"        if (-not(Test-Path -Path $INSPECTOR_SSM_PLUGIN_EXE -PathType Leaf)) {\",\n\"            throw \\\"$INSPECTOR_SSM_PLUGIN_EXE does not exist\\\"\",\n\"        }\",\n\"    } -Delay 60 -Maximum 5 -ErrorMessage \\\"Inspector ssm plugin binary is not installed, exiting...\\\"\",\n\"\",\n\"    $bucket = \\\"{{Bucket}}\\\"\",\n\"    info \\\"Provided bucket: $bucket\\\"\",\n\"    $region = \\\"us-west-2\\\"\",\n\"    info \\\"Provided region: $region\\\"\",\n\"    if (Test-Path -Path $OVAL_FILES) {\",\n\"        info \\\"Oval files directory already exists: $OVAL_FILES\\\"\",\n\"    } else {\",\n\"        info \\\"Creating directory for oval files: $OVAL_FILES\\\"\",\n\"        New-Item $OVAL_FILES -itemType Directory\",\n\"    }\",\n\"    $ovalFilesS3Url = \\\"https://$bucket.s3.$region.amazonaws.com\\\"\",\n\"    $outputfile = \\\"$INSPECTOR_SSM_PLUGIN_OUTPUT\\\\$OUTPUT_FILE_NAME\\\"\",\n\"    info \\\"Starting evaluation of oval files...\\\"\",\n\"    $proc = Start-Process -FilePath $INSPECTOR_SSM_PLUGIN_EXE -PassThru -Wait -ArgumentList \\\"-server-url-oval-definitions \\\"\\\"$ovalFilesS3Url\\\"\\\" -path-eval-results \\\"\\\"$outputfile\\\"\\\" -report-ssm-inventory -concurrency 1\\\"\",\n\"    if ($proc.ExitCode -ne 0) {\",\n\"        warn \\\"inspectorssmplugin.exe exited with status code $($proc.ExitCode) while evaluating $($f.FullName)\\\"\",\n\"        Exit 1\",\n\"    } else {\",\n\"        info \\\"Completed processing of OVAL definitions document\\\"\",\n\"        Get-Content \\\"$outputfile\\\"\",\n\"        Exit 0\",\n\"    }\",\n\"} catch {\",\n\"    error $_\",\n\"    error \\\"Unknown error\\\"\",\n\"    Exit 1\",\n\"}\"]\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}",
+  "CreatedDate": "2022-09-05T15:55:29.859Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "AmazonInspector2-InvokeInspectorSsmPlugin",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "8b7551cf-c91a-431b-aee4-461ebe3f01ef",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4529,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-10T07:12:12.0133225+00:00"
+}

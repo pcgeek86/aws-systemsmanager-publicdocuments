@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-CreateCloudTrailMultiRegionTrail\\n\\n## What does this document do?\\nThis runbook creates an AWS CloudTrail (CloudTrail) trail that delivers log files from multiple regions to the Amazon Simple Storage Service (Amazon S3) bucket of your choice using the [CreateTrail](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateTrail.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\\n* TrailName: (Required) The name of the CloudTrail trail to be created.\\n* BucketName: (Required) The name of the Amazon S3 bucket you want to upload logs to. Bucket must have following policy cofigured [BucketPolicy](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html).\\n* KeyPrefix: (Optional) The Amazon S3 key prefix that comes after the name of the bucket you designated for log file delivery.\\n\\n## Output Parameters\\n* CreateTrail.CreateTrailResponse: The standard HTTP response from CreateTrail API.\\n* StartLogging.StartLoggingResponse: The standard HTTP response from StartLogging API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"TrailName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the CloudTrail trail to be created.\",\n      \"allowedPattern\" : \"(?=^.{3,128}$)(?!.*[\\\\.\\\\.]{2})(?!.*[_.]{2})(?!.*[-.]{2})(?!.*[-_]{2})(?!^(?:(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\\\\.(?!$)|$)){4}$)(^(([a-zA-Z0-9]|[a-zA-Z0-9][\\\\w.-]*[a-zA-Z0-9])\\\\.)*([a-zA-Z0-9]|[a-zA-Z0-9][\\\\w.-]*[a-zA-Z0-9])$)\"\n    },\n    \"BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the Amazon S3 bucket you want to upload logs to. Bucket must have following policy cofigured [BucketPolicy](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html).\",\n      \"allowedPattern\" : \"(?=^.{3,63}$)(?!.*[.-]{2})(?!.*[--]{2})(?!^(?:(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\\\\.(?!$)|$)){4}$)(^(([a-z0-9]|[a-z0-9][a-z0-9\\\\-]*[a-z0-9])\\\\.)*([a-z0-9]|[a-z0-9][a-z0-9\\\\-]*[a-z0-9])$)\"\n    },\n    \"KeyPrefix\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The Amazon S3 key prefix that comes after the name of the bucket you designated for log file delivery.\",\n      \"allowedPattern\" : \"(.*){1,200}\",\n      \"default\" : \"\"\n    }\n  },\n  \"outputs\" : [ \"CreateTrail.CreateTrailResponse\", \"StartLogging.StartLoggingResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"CreateTrail\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## CreateTrail\\nAccepts the trail name and the Amazon S3 bucket name as input and creates a CloudTrail trail.\\n## Outputs\\n* CreateTrailResponse: The standard HTTP response from CreateTrail API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"CreateTrail\",\n      \"Name\" : \"{{ TrailName }}\",\n      \"S3BucketName\" : \"{{ BucketName }}\",\n      \"S3KeyPrefix\" : \"{{ KeyPrefix }}\",\n      \"IsMultiRegionTrail\" : true,\n      \"IncludeGlobalServiceEvents\" : true,\n      \"EnableLogFileValidation\" : true\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"CreateTrailResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    }, {\n      \"Name\" : \"TrailARN\",\n      \"Selector\" : \"$.TrailARN\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"StartLogging\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## StartLogging\\nEnables logging on the created trail and starts log delivery to the Amazon S3 bucket you specified.\\n## Outputs\\n* StartLoggingResponse: The standard HTTP response from StartLogging API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"StartLogging\",\n      \"Name\" : \"{{ CreateTrail.TrailARN }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"StartLoggingResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"GetTrail\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## GetTrail\\nVerifies that the CloudTrail trail has been created.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"cloudtrail\",\n      \"Api\" : \"GetTrail\",\n      \"Name\" : \"{{ TrailName }}\",\n      \"PropertySelector\" : \"$.Trail.IsMultiRegionTrail\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-03-02T16:11:00.559Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSConfigRemediation-CreateCloudTrailMultiRegionTrail",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c8f0c035-a493-47d2-93ef-dd5c70b2bce5",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5490,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-12T07:10:43.6739041+00:00"
+}

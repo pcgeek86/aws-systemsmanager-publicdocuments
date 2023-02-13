@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"schemaVersion\": \"1.2\",\n\t\"description\": \"Backup logs to S3\",\n\t\"parameters\": {},\n\t\"runtimeConfig\": {\n\t\t\"aws:runShellScript\": {\n\t\t\t\"properties\": [{\n\t\t\t\t\"id\": \"0.aws:runShellScript\",\n\t\t\t\t\"runCommand\": [\n\t\t\t\t\t\"\",\n\t\t\t\t\t\"ASGNAME='Lambda_test'\",\n\t\t\t\t\t\"LIFECYCLEHOOKNAME='LifecycleHook'\",\n\t\t\t\t\t\"SNSTARGET='arn:aws:sns:us-west-2:490416305747:AutoScaling'\",\n\t\t\t\t\t\"INSTANCEID=$(curl http://169.254.169.254/latest/meta-data/instance-id)\",\n\t\t\t\t\t\"REGION=$(curl http://169.254.169.254/latest/meta-data/placement/availability-zone)\",\n\t\t\t\t\t\"REGION=${REGION::-1}\",\n\t\t\t\t\t\"HOOKRESULT='CONTINUE'\",\n\t\t\t\t\t\"MESSAGE=''\",\n\t\t\t\t\t\"#!/bin/bash\",\n\n\t\t\t\t\t\"nagios_client_cleanup() {mv $CURR_DIR/new_client* /tmp/.;mv $CURR_DIR/decom_client* /tmp/.;rm -rf /etc/nagios;sed -i s/nrpe/#nrpe/g /etc/services; userdel nagios}\",\n\t\t\t\t\t\"nagios_client_uninstall() {\",\n\t\t\t\t\t\"service nrpe stop\",\n\t\t\t\t\t\"rpm -q nagios-plugins\",\n\t\t\t\t\t\"if [[ $? -ne 0 ]]; then\",\n\t\t\t\t\t\"echo 'Nagios Client/Plugins is not installed' >> $LOG\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"rpm -e nrpe\",\n\t\t\t\t\t\"rpm -e nagios-plugins\",\n\t\t\t\t\t\"if [[ $? -ne 0 ]]\",\n\t\t\t\t\t\"then\",\n\t\t\t\t\t\"echo 'Nagios package removal failed' >> $LOG\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"echo 'Nagios package removed' >> $LOG\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"fi}\",\n\n\t\t\t\t\t\"nagios_client_capture() {\",\n\t\t\t\t\t\"echo 'Starting Nagios Client Configuration'\",\n\t\t\t\t\t\"echo 'Capturing Nagios client information in file'\",\n\t\t\t\t\t\"nagios_node=`hostname -f`\",\n\t\t\t\t\t\"nagios_node_ip=`hostname -i`\",\n\t\t\t\t\t\"nagios_node_os=`uname -s`\",\n\t\t\t\t\t\"if [ $nagios_node_os='Linux' ]\",\n\t\t\t\t\t\"then\",\n\t\t\t\t\t\"nagios_node_os1=`echo linux`\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"echo 'Not Linux OS Exiting RC 2'\",\n\t\t\t\t\t\"exit 2\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"P_IP_FILE_PATH=`echo /tmp/nagios/decom_client$nagios_node$CURR_DATE.txt`\",\n\t\t\t\t\t\"echo 'CUSTOMERCODE:$CUSTOMERCODE' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'SUBACCOUNT:$SUBACCOUNT' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'OWNER_CONTACT:$owner_contact' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'OWNER_EMAIL:$owner_email' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'nagios_template:$nagios_template' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'customername:$P_ACCOUNT_NAME' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'NagiosNode:$nagios_node' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"echo 'NagiosNode:$nagios_node_os1' >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"cat /tmp/server_role.txt >> $P_IP_FILE_PATH\",\n\t\t\t\t\t\"if [ -e $P_IP_FILE_PATH ]\",\n\t\t\t\t\t\"then\",\n\t\t\t\t\t\"echo 'Nagios Client information file capture success'\",\n\t\t\t\t\t\"curl -v -F 'file=@$P_IP_FILE_PATH' -F'filename=$P_IP_FILE_PATH' -X POST http://192.0.0.3/php/upload.php\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"echo 'Nagios Client information file capture failed'\",\n\t\t\t\t\t\"echo 'Exiting rc 2'\",\n\t\t\t\t\t\" exit 2;\",\n\t\t\t\t\t\"fi}\",\n\t\t\t\t\t\"if [ $(id -u) -ne 0 ]; then\",\n\t\t\t\t\t\"echo 'Not a root user, Please run as root user'\",\n\t\t\t\t\t\"exit 1\",\n\t\t\t\t\t\"fi\",\n\n\t\t\t\t\t\"if [[ $# -ne 5 ]]; then\",\n\t\t\t\t\t\"echo 'Wrong Number of Variables passed exiting'\",\n\t\t\t\t\t\"exit 1\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"CURR_DIR='/tmp/nagios'\",\n\t\t\t\t\t\"CURR_DATE=`date +%Y%m%d`\",\n\t\t\t\t\t\"CUSTOMERCODE=$1\",\n\t\t\t\t\t\"SUBACCOUNT=$2\",\n\t\t\t\t\t\"owner_contact=$3\",\n\t\t\t\t\t\"owner_email=$4\",\n\t\t\t\t\t\"myhost=`hostname`\",\n\t\t\t\t\t\"P_ACCOUNT_NAME=$5\",\n\t\t\t\t\t\"nagios_template='IMI'\",\n\t\t\t\t\t\"mkdir -p /tmp/nagios\",\n\t\t\t\t\t\"LOG=/tmp/nagios/unregister-`date +%Y_%m_%d_%H_%M_%S`.log\",\n\t\t\t\t\t\"touch $LOG\",\n\n\t\t\t\t\t\"nagios_client_capture\",\n\t\t\t\t\t\"nagios_client_uninstall\",\n\t\t\t\t\t\"nagios_client_cleanup\",\n\n\n\t\t\t\t\t\"aws sns publish --subject 'ASG Backup' --message \\\"$MESSAGE\\\"  --target-arn ${SNSTARGET} --region ${REGION}\",\n\t\t\t\t\t\"aws autoscaling complete-lifecycle-action --lifecycle-hook-name ${LIFECYCLEHOOKNAME} --auto-scaling-group-name ${ASGNAME} --lifecycle-action-result ${HOOKRESULT} --instance-id ${INSTANCEID}  --region ${REGION}\"\n\t\t\t\t]\n\t\t\t}]\n\t\t}\n\t}\n}",
+  "CreatedDate": "2017-03-22T11:30:42.113Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:490416305747:document/LifecycleHookTest",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "d41f98d8-b6a8-4536-8d71-ac280cc5d4af",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4584,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-13T07:13:40.6873692+00:00"
+}

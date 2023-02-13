@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for Lambda\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Conditions\" : {\n      \"lambdaFunctionSettingsCheckParamRuntime\" : {\n        \"Fn::Not\" : [ {\n          \"Fn::Equals\" : [ \"\", {\n            \"Ref\" : \"LambdaFunctionSettingsCheckParamRuntime\"\n          } ]\n        } ]\n      }\n    },\n    \"Parameters\" : {\n      \"LambdaFunctionSettingsCheckParamRuntime\" : {\n        \"Default\" : \"nodejs16.x, nodejs14.x, nodejs12.x, python3.9, python3.8, python3.7, python3.6, ruby2.7, java11, java8, java8.al2, go1.x, dotnetcore3.1, dotnet6\",\n        \"Type\" : \"String\"\n      }\n    },\n    \"Resources\" : {\n      \"LambdaDlqCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"lambda-dlq-check\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::Lambda::Function\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"LAMBDA_DLQ_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"LambdaFunctionSettingsCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"lambda-function-settings-check\",\n          \"InputParameters\" : {\n            \"runtime\" : {\n              \"Fn::If\" : [ \"lambdaFunctionSettingsCheckParamRuntime\", {\n                \"Ref\" : \"LambdaFunctionSettingsCheckParamRuntime\"\n              }, {\n                \"Ref\" : \"AWS::NoValue\"\n              } ]\n            }\n          },\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::Lambda::Function\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"LAMBDA_FUNCTION_SETTINGS_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"LambdaInsideVpc\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"lambda-inside-vpc\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::Lambda::Function\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"LAMBDA_INSIDE_VPC\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"LambdaVpcMultiAzCheck\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"lambda-vpc-multi-az-check\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::Lambda::Function\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"LAMBDA_VPC_MULTI_AZ_CHECK\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:54:27.441Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforLambda",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "245092ae-412a-4421-a0ef-132a754299e2",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3010,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-13T07:12:36.2331512+00:00"
+}

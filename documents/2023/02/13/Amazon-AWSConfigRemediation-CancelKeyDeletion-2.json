@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-CancelKeyDeletion\\n\\n## What does this document do?\\nThis document cancels the deletion of specified AWS customer master key (CMK) using [CancelKeyDeletion](https://docs.aws.amazon.com/kms/latest/APIReference/API_CancelKeyDeletion.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\\n* KeyId: (Required) The ID of the CMK you want to cancel deletion for.\\n\\n## Output Parameters\\n* CancelKeyDeletion.CancelKeyDeletionResponse: The standard HTTP response from the CancelKeyDeletion API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"KeyId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ID of the CMK you want to cancel deletion for.\",\n      \"allowedPattern\" : \"^([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}|arn:(aws[a-zA-Z-]*)?:kms:[a-z0-9-]+:[0-9]{12}:key/)?[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$\"\n    }\n  },\n  \"outputs\" : [ \"CancelKeyDeletion.CancelKeyDeletionResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"CancelKeyDeletion\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## CancelKeyDeletion\\nCancels deletion for the CMK you specify in the KeyId parameter.\\n## Outputs\\n* CancelKeyDeletionResponse: The standard HTTP response from the CancelKeyDeletion API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"kms\",\n      \"Api\" : \"CancelKeyDeletion\",\n      \"KeyId\" : \"{{ KeyId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"CancelKeyDeletionResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyKeyDeletion\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"maxAttempts\" : 3,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyKeyDeletion\\nConfirms key deletion is disabled on your CMK.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"kms\",\n      \"Api\" : \"DescribeKey\",\n      \"KeyId\" : \"{{ KeyId }}\",\n      \"PropertySelector\" : \"$..KeyState\",\n      \"DesiredValues\" : [ \"Disabled\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-03-03T16:10:37.761Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSConfigRemediation-CancelKeyDeletion",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "8c9073d4-50df-46fc-90a7-675256b75448",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3001,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-13T07:11:58.6264087+00:00"
+}

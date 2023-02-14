@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "b40410d997c2268526becd994cea38ae49292ca65b5596fc86daffe78469e19f",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "AWSNVMe-1.4.1.zip",
+      "Size": 638205,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/354/316874961013/AWSNVMe%21fc029956-f595-4b85-b8c9-ea51c382a3d2/5/AWSNVMe-1.4.1.zip?x-attachment-size=638205&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEHcaCXVzLXdlc3QtMiJGMEQCIEfIfmIj5BzAX3UBKKWN2ud%2BmYMDqjTDB%2BUZGzV4kutIAiA%2B%2BF1VLMMjQZ6XyHVMUpZ4%2F4%2BiDmFszzZmJy5D5Q4NuSrVBAj%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAMaDDI0OTkyNDUyNzQxMCIMgJuR636WuiAuRJG%2BKqkEO5qHOBWH1UODzvDJEbyRsZXPVch7GiasjeM76CC%2BDpmY46xChE%2F99DJOi9sx3bMEJYjovG%2FQzFIiBKohCHi%2BYLZpSkTcPTBqITbhRKfLvoEjCrk5DINB4HtU%2F2fmpsJ5PsXJUVKwoWbzgUK%2BFkfGq0NIfxfrT7zItzTmlp6riUPPtAl2zYb3SdbtP7o86%2FWcXJSID6Tc3l9GVraS9XscR%2BksKcctVDRbg6Xt5yqvR3hjzPEDfLpF2z1n%2FZnJ4STJiNRBq41yJU69UKY5qsuYk8FTTR0BikOTRZxaaJqetg0%2F8M6zrriu3XQ%2FC2Y2rJByLU5AUDDF9new7rKMcZJbkhUCENaLmvWamChSqY04e5Kn99YBpe0qz7I0IPVwiSoscnq84b%2BtJw3iGvzRqB4%2F2KfQK5vkEfagZPdN2EuHhI2i1NW8KqDAbDyB5SS%2FTfjy290chBu%2FZitgVUMTigUTl5pHx2wRQ90daWTIywrRWaJCcQmjd14c72Q5Y9%2Fjak63ia00kQ8Qp%2BKiZFsS0%2BhPXQRLvMZNojGVYQCZvjyoUCHxtuBE02S0kYBtDZzhWbc4%2BXGmXv5LQLHDEsbgcQP06mLO56c99Rcy5L6caxM0ZdZuImO4EdpzqCyyOubhpkW1epIw%2FxWDGYWGh64Gcoh8MO2bml5dh%2BGMiIFM4vyTUtfFlVlZhuGyzvwZATPKRDdtjmn4dDU2q03C%2FuztMAHUU0QnKaFfrWvxyzDUz6yfBjqqAWn%2BJHgiUUKI621O5eMSeqdlXPZR5AdBv0ApTGKNDrQ9IKLL5pc%2BY%2Fqk3JC3RXqCvgyeGOQUt%2FqOfZi7TxMjIAm6EAT%2F4sjrNbQJXdPrYCpLd1pYfvryS%2Fgt0MRJvO20omdSDr1TLT4WYuT7tghLsM5y5rOqTGLGb686a3zOTuW8wUEJNfa%2BQI%2Fxvt79iJ6fptLnneRT8dP5lC%2B9O2JCG2b092MKFIBscJE%2B&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230214T071230Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIATUMFJUUZCTS6NJUD%2F20230214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=cd10acfd1ac014b1757048656dff5d3c1ca85860b4a52247bba5a0dad8759704"
+    }
+  ],
+  "Content": "{\n    \"schemaVersion\": \"2.0\",\n    \"name\": \"AWSNVMe\",\n    \"version\": \"1.4.1\",\n    \"packageArn\": \"arn:aws:ssm:::package/AWSNVMe\",\n    \"publisher\": \"Amazon AWS\",\n    \"url\": \"https://amazonaws.com\",\n    \"packages\": {\n        \"windows\": {\n            \"_any\": {\n                \"x86_64\": {\n                    \"file\": \"AWSNVMe-1.4.1.zip\"\n                }\n            }\n        }\n    },\n    \"files\": {\n        \"AWSNVMe-1.4.1.zip\": {\n            \"checksums\": {\n                \"sha256\": \"b40410d997c2268526becd994cea38ae49292ca65b5596fc86daffe78469e19f\"\n            },\n            \"downloadLocation\": \"https://us-west-2-birdwatcher-prod.s3.us-west-2.amazonaws.com/316874961013/AWSNVMe-1.4.1.zip\"\n        }\n    }\n}",
+  "CreatedDate": "2022-05-23T19:05:55.284Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Package"
+  },
+  "DocumentVersion": "5",
+  "Name": "AWSNVMe",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "1.4.1",
+  "ResponseMetadata": {
+    "RequestId": "25a61cf1-6090-4689-a7b9-7f2558fed5c0",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2895,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-14T07:12:30.3374259+00:00"
+}

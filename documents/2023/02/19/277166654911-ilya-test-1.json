@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"String\",\n      \"description\": \"Example\",\n      \"default\": \"Hello World\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": [ \"Write-Output {{Message}}\" ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2019-09-19T02:11:52.792Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:277166654911:document/ilya-test",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "62cc3c2a-41d9-4d1e-8edf-daf8707a4927",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 657,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-19T07:13:00.9031775+00:00"
+}

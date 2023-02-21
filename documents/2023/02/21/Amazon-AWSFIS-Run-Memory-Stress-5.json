@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSFIS-Run-Memory-Stress\\n\\n## What does this document do?\\nIt runs memory stress on an instance via stress-ng tool. If stress-ng is not already installed on the instance, this SSM document will install it, unless InstallDependencies parameter is set to False.\\nThis SSM document supports Amazon Linux and Ubuntu operating systems only.\\n\\n## Dependencies installed by this SSM Document\\n* stress-ng\\nNote: This SSM document does not uninstall dependencies once installed. If you don't want this SSM document to install any dependencies, set InstallDependencies to False and bake the dependencies into your EC2 instance. For example, by using image-builder (https://aws.amazon.com/image-builder/).\\n\\n## Input Parameters\\n* DurationSeconds: (Required) The duration - in seconds - of the memory stress.\\n* Workers: The number of virtual memory stressors (default: 1).\\n* Percent: The percentage of virtual memory to use (required).\\n* InstallDependencies: If set to True, Systems Manager installs the required dependencies on the target instances. (default: True).\\n\\n## Output Parameters\\nNone.\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"DurationSeconds\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The duration - in seconds - of the memory stress.\",\n      \"allowedPattern\" : \"^[0-9]+$\"\n    },\n    \"Workers\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The number of virtual memory stressors (default: 1).\",\n      \"default\" : \"1\",\n      \"allowedPattern\" : \"^[0-9]+$\"\n    },\n    \"Percent\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The percentage of virtual memory to use (default: 80).\",\n      \"default\" : \"80\",\n      \"allowedPattern\" : \"^([1-9][0-9]?|100)$\"\n    },\n    \"InstallDependencies\" : {\n      \"type\" : \"String\",\n      \"description\" : \"If set to True, Systems Manager installs the required dependencies on the target instances. (default: True).\",\n      \"default\" : \"True\",\n      \"allowedValues\" : [ \"True\", \"False\" ]\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"InstallDependencies\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"description\" : \"## Parameter: InstallDependencies\\nIf set to True, this step installs the required dependecy via operating system's repository. It supports both\\nDebian (apt) and CentOS (yum) based package managers.\\n\",\n    \"inputs\" : {\n      \"onFailure\" : \"exit\",\n      \"runCommand\" : [ \"#!/bin/bash\\n\\nif [[ \\\"$( command -v stress-ng 2>/dev/null )\\\" ]] ; then echo Dependency is already installed. ; exit ; fi\\nif  [[ \\\"{{ InstallDependencies }}\\\" == True ]] ; then\\n  echo \\\"Installing required dependencies\\\"\\n  if [ -f  \\\"/etc/system-release\\\" ] ; then\\n    if cat /etc/system-release | grep -i 'Amazon Linux' ; then\\n      # Use amazon-linux-extras if available (Amazon Linux 2). Don't need it otherwise (Amazon Linux 1)\\n      command -v amazon-linux-extras 2>/dev/null 1>&2 && amazon-linux-extras install testing\\n      yum -y install stress-ng\\n    else\\n      echo \\\"Exiting - This SSM document supports Amazon Linux and Ubuntu operating systems only.\\\"\\n      exit 1\\n    fi\\n  elif cat /etc/issue | grep -i Ubuntu ; then\\n    apt-get update -y\\n    DEBIAN_FRONTEND=noninteractive apt-get install -y stress-ng\\n  else\\n    echo \\\"Exiting - This SSM document supports Amazon Linux and Ubuntu operating systems only.\\\"\\n    exit 1\\n  fi\\nelse\\n  echo \\\"Dependencies are not installed - Please set InstallDependencies to True.\\\"\\n  exit 1\\nfi\\n\" ]\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"ExecuteStressNg\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"description\" : \"## Parameters: DurationSeconds, Workers and Percent\\nThis step will run a memory stress test on the instance for the specified DurationSeconds time.\\nIt will start `Workers` number of workers, using `Percent` of the total available memory.\\n\",\n    \"inputs\" : {\n      \"maxAttempts\" : 1,\n      \"runCommand\" : [ \"#!/bin/bash\\n\\n########################\\n# Fault-specific logic #\\n########################\\n\\nif [ {{ DurationSeconds }} -lt 1 ] || [ {{ DurationSeconds }} -gt 43200 ] ; then echo DurationSeconds parameter value must be between 1 and 43200 && exit 1; fi\\nif [ {{ Percent }} -lt 1 ] || [ {{ Percent }} -gt 100 ] ; then echo Percent parameter value must be between 1 and 100 && exit 1; fi\\npgrep stress-ng && echo Another stress-ng command is running, exiting... && exit 1\\necho Initiating memory stress for {{ DurationSeconds }} seconds, {{ Workers }} workers, using {{ Percent }} percent of total available memory...\\nstress-ng --vm {{ Workers }} --vm-bytes {{ Percent }}% -t {{ DurationSeconds }}s\\necho Finished memory stress.\\n\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-02-01T21:43:02.88Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "5",
+  "Name": "AWSFIS-Run-Memory-Stress",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "4421c0f3-55db-4cda-bcb0-e999d2c31410",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5245,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-21T07:12:35.8577125+00:00"
+}

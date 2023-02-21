@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"String\",\n      \"description\": \"Example\",\n      \"default\": \"Hello World\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": [ \"runuser -l ec2-user -c 'cd ~/.ssh && rm authorized_keys.jenkins && echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8LJFlYQ0wLv0COZzw0oOD9+e3PEm6zlXSVzL/0kBU3oHoUVT/yYa969V+y8qNqSY4jswzJNxAevr5dFxRU/Au2z/sT815+fKlnAMAs4BooeTe6tVUe0JCDcyyG73iPpTRaas1J9SGqfFJxGpx2IkA6WwMI+UVmfKcJ9C1wgOSDGOtg/UiOpX2piB2JHaeW0LryeyankJSBCBdaYNn2/3j6HCsORw8WIZFAeF2XMmSE0OZMx2/8/WkXHDIZufT/3RYpvh6AzvLA85Nv9Z/3/dTyrxJLN1n/gDszVCNKHWl44H2DMdG1t+j7j6NyZ4+CtwG8r00/XrPRSFh9+SWemfh jenkins@edidvljenm03.broadridge.net' >> authorized_keys.jenkins && cat authorized_keys.jenkins'\" ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2023-02-09T11:03:10.2Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:874827327224:document/ChangeSSHKeys",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b1f8a4f4-24e2-4a80-aed5-85be3ed2eeb7",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1184,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-21T07:13:31.4377625+00:00"
+}

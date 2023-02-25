@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\"description\":\"Automate NR Infra EC2 agent installation\",\"schemaVersion\":\"0.3\", \"assumeRole\": \"arn:aws:iam::544704259768:role/AWS-SystemsManager-AutomationAdministrationRole\", \"parameters\":{\"NRLicenseKey\":{\"default\":\"{{ssm:NRLicenseKey}}\",\"description\":\"(Required) Your New Relic License Key\",\"type\":\"String\"},\"InstanceId\":{\"description\":\"(Required) The ID of the EC2 instance to install NR Infra agent on\",\"type\":\"String\"},\"FilterByTag\":{\"allowedValues\":[\"True\",\"False\"],\"default\":\"True\",\"description\":\"Filter by EC2 instance tag\",\"type\":\"String\"}},\"mainSteps\":[{\"outputs\":[{\"Type\":\"String\",\"Name\":\"State\",\"Selector\":\"$.InstanceStatuses[0].InstanceState.Name\"}],\"maxAttempts\":10,\"inputs\":{\"Service\":\"ec2\",\"Api\":\"DescribeInstanceStatus\",\"InstanceIds\":[\"{{InstanceId}}\"]},\"name\":\"GetEC2InstanceState\",\"action\":\"aws:executeAwsApi\",\"timeoutSeconds\":10},{\"outputs\":[{\"Type\":\"String\",\"Name\":\"TagValue\",\"Selector\":\"$.Tags[0].Value\"}],\"maxAttempts\":10,\"inputs\":{\"Filters\":[{\"Values\":[\"instance\"],\"Name\":\"resource-type\"},{\"Values\":[\"{{InstanceId}}\"],\"Name\":\"resource-id\"},{\"Values\":[\"Install\"],\"Name\":\"tag:NR-Infrastructure\"}],\"Service\":\"ec2\",\"Api\":\"DescribeTags\"},\"name\":\"GetEC2InstanceTag\",\"action\":\"aws:executeAwsApi\",\"timeoutSeconds\":10},{\"inputs\":{\"Choices\":[{\"Not\":{\"StringEquals\":\"running\",\"Variable\":\"{{GetEC2InstanceState.State}}\"},\"NextStep\":\"End\"},{\"StringEquals\":\"False\",\"Variable\":\"{{FilterByTag}}\",\"NextStep\":\"InstallNewRelicInfraAgent\"},{\"StringEquals\":\"Install\",\"Variable\":\"{{GetEC2InstanceTag.TagValue}}\",\"NextStep\":\"InstallNewRelicInfraAgent\"}]},\"name\":\"Branch\",\"action\":\"aws:branch\",\"isEnd\":true},{\"inputs\":{\"Parameters\":{\"licenseKey\":[\"{{NRLicenseKey}}\"]},\"InstanceIds\":[\"{{InstanceId}}\"],\"DocumentName\":\"NRQSTest-NRInstallInfraAgentSSMDocument-KWRNGGKOESRI\"},\"name\":\"InstallNewRelicInfraAgent\",\"action\":\"aws:runCommand\",\"isEnd\":true},{\"inputs\":{\"Duration\":\"PT1S\"},\"name\":\"End\",\"action\":\"aws:sleep\"}]}",
+  "CreatedDate": "2020-08-27T00:11:43.933Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "6",
+  "Name": "arn:aws:ssm:us-west-2:544704259768:document/NRQSTest-NRInstallInfraAgentSSMAutomationDoc-1A1UBW099JVII",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "5b41e2ed-5cd1-41a8-9478-e1e0248dbcad",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2417,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-25T07:11:55.8713495+00:00"
+}

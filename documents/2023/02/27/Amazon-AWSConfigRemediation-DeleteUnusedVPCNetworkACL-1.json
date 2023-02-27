@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-DeleteUnusedVPCNetworkACL.\\n\\n## What does this document do?\\nThis document deletes an unused Amazon VPC Network ACL i.e., a Network ACL that is not associated with a subnet.\\n\\n## Input Parameters\\n* NetworkAclId: (Required) Network ACL ID which needs to be deleted.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* DeleteUnusedVPCNetworkACL.HttpResponse: The standard HTTP response from the DeleteNetworkAcl API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@-]+\"\n    },\n    \"NetworkAclId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Network ACL ID which needs to be deleted.\",\n      \"allowedPattern\" : \"^acl-[A-Za-z0-9]{17}$\"\n    }\n  },\n  \"outputs\" : [ \"DeleteUnusedVPCNetworkACL.HttpResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"DeleteUnusedVPCNetworkACL\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DeleteUnusedVPCNetworkACL\\nDelete an unused Amazon VPC Network ACL.\\n## Outputs\\n* DeleteUnusedVPCNetworkACL.ResponseMetadata: The standard HTTP response from the DeleteNetworkAcl API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"DeleteNetworkAcl\",\n      \"NetworkAclId\" : \"{{ NetworkAclId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"HttpResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyVPCNetworkACLDeleted\",\n    \"action\" : \"aws:executeScript\",\n    \"description\" : \"## VerifyVPCNetworkACLDeleted\\n  Checks that the VPC Network ACL deleted in the previous step exists.\\n## Outputs\\n  * Output: Success message or failure Exception.\\n\",\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"NetworkAclId\" : \"{{ NetworkAclId }}\"\n      },\n      \"Script\" : \"import boto3\\n\\ndef handler(event, context):\\n    ec2 = boto3.client('ec2')\\n    network_acl_id = event['NetworkAclId']\\n\\n    try:\\n      ec2.describe_network_acls(NetworkAclIds = [network_acl_id])\\n      error_message = \\\"VERIFICATION FAILED. THE NETWORKACL {} DELETION UNSUCCESSFUL.\\\".format(network_acl_id)\\n      raise Exception(error_message)\\n    except ec2.exceptions.ClientError as error:\\n      if error.response['Error']['Code'] == 'InvalidNetworkAclID.NotFound':\\n        return {\\n          \\\"output\\\": \\\"Verification of delete VPC Network ACL is successful.\\\"\\n        }\\n      else:\\n        raise error\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"String\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2020-10-20T15:04:46.042Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DeleteUnusedVPCNetworkACL",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a3cc7cc3-c401-4076-b4aa-721c2d638e84",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3472,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-02-27T07:12:16.7292677+00:00"
+}

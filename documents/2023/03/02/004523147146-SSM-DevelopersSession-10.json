@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\"schemaVersion\":\"1.0\",\"description\":\"Document to hold regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"inputs\":{\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\",\"s3EncryptionEnabled\":true,\"cloudWatchLogGroupName\":\"\",\"cloudWatchEncryptionEnabled\":true,\"idleSessionTimeout\":\"30\",\"maxSessionDuration\":\"\",\"cloudWatchStreamingEnabled\":true,\"kmsKeyId\":\"arn:aws:kms:us-west-2:004523147146:key/495d8d7d-f3ae-4388-9414-e23f53ef539b\",\"runAsEnabled\":true,\"runAsDefaultUser\":\"svc-aws-bastion-dev\",\"shellProfile\":{\"windows\":\"\",\"linux\":\"user=$(whoami)\\ncd /home/$user\\necho \\\"Welcome $user\\\"'!'\\n\"}}}",
+  "CreatedDate": "2023-03-02T00:11:43.461Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "10",
+  "Name": "arn:aws:ssm:us-west-2:004523147146:document/SSM-DevelopersSession",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e781d588-90c1-4102-ae09-a8025d769a82",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 873,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-02T07:13:19.2211508+00:00"
+}

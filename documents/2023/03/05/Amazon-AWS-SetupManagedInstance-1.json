@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"description\": \"Manage EC2 instance\",\n\t\"schemaVersion\": \"0.3\",\n\t\"assumeRole\": \"{{AutomationAssumeRole}}\",\n\t\"parameters\": {\n\t\t\"InstanceId\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"description\": \"(Required) EC2 InstanceId to manage\"\n\t\t},\n\t\t\"RoleName\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"description\": \"(Optional) The name of the IAM Role for the EC2 Instance. If this Role does not exist, it will be created. When specifying this value, the caller should ensure the Role contains the AWS Managed Policy \\\"AmazonSSMManagedInstanceCore\\\".\",\n\t\t\t\"default\": \"SSMRoleForManagedInstance\"\n\t\t},\n\t\t\"AutomationAssumeRole\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n\t\t\t\"default\": \"\"\n\t\t},\n\t\t\"LambdaAssumeRole\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"description\": \"(Optional) The ARN of the role that allows Lambda created by Automation to perform the actions on your behalf. If not specified a transient role will be created to execute the Lambda function.\",\n\t\t\t\"default\": \"\"\n\t\t}\n\t},\n\t\"mainSteps\": [\n\t\t{\n\t\t\t\"name\": \"setupManagedRole\",\n\t\t\t\"action\": \"aws:executeAutomation\",\n\t\t\t\"onFailure\": \"Abort\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"DocumentName\": \"AWS-SetupManagedRoleOnEc2Instance\",\n\t\t\t\t\"RuntimeParameters\": {\n\t\t\t\t\t\"InstanceId\": [\"{{InstanceId}}\"],\n\t\t\t\t\t\"RoleName\": [\"{{RoleName}}\"],\n\t\t\t\t\t\"LambdaAssumeRole\": [\"{{LambdaAssumeRole}}\"],\n\t\t\t\t\t\"AutomationAssumeRole\":[\"{{AutomationAssumeRole}}\"]\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"updateSsmAgent\",\n\t\t\t\"action\": \"aws:runCommand\",\n\t\t\t\"maxAttempts\": 1,\n\t\t\t\"onFailure\": \"Abort\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"DocumentName\": \"AWS-UpdateSSMAgent\",\n\t\t\t\t\"InstanceIds\": [\"{{InstanceId}}\"]\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"configureCloudWatch\",\n\t\t\t\"action\": \"aws:executeAutomation\",\n\t\t\t\"onFailure\": \"Abort\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"DocumentName\": \"AWS-ConfigureCloudWatchOnEC2Instance\",\n\t\t\t\t\"RuntimeParameters\": {\n\t\t\t\t\t\"InstanceId\": [\"{{InstanceId}}\"],\n\t\t\t\t\t\"LambdaAssumeRole\": [\"{{LambdaAssumeRole}}\"],\n\t\t\t\t\t\"AutomationAssumeRole\":[\"{{AutomationAssumeRole}}\"]\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}",
+  "CreatedDate": "2020-05-12T17:35:15.981Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-SetupManagedInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6b77601f-9fba-4aec-990d-8311491d7d2d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2612,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-05T07:10:50.5786419+00:00"
+}

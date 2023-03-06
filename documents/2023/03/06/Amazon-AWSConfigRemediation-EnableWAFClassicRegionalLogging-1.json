@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableWAFClassicRegionalLogging\\n\\n## What does this document do?\\nThis document enables logging for an AWS WAF Regional WebACL with the specified Amazon Kinesis Firehose delivery stream using the [PutLoggingConfiguration](https://docs.aws.amazon.com/waf/latest/APIReference/API_wafRegional_PutLoggingConfiguration.html#API_wafRegional_PutLoggingConfiguration_ResponseSyntax) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* WebACLId: (Required) The GUID of the web ACL.\\n* LogDestinationConfigs: (Required) The Amazon Kinesis Data Firehose Amazon Resource Name (ARN) that you want to associate with the web ACL. AWS WAF Classic Regional Web ACLs will be updated to log to the destination specified by this parameter.\\n\\n## Output Parameters\\n* EnableLogging.LogConfiguration: Response from the PutLoggingConfiguration API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"WebACLId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The GUID of the web ACL.\",\n      \"allowedPattern\" : \"^[a-zA-Z0-9-]{1,128}$\"\n    },\n    \"LogDestinationConfigs\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Amazon Kinesis Data Firehose Amazon Resource Name (ARN) that you want to associate with the web ACL. AWS WAF Classic Regional Web ACLs will be updated to log to the destination specified by this parameter.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:firehose:[a-z-1-9]*:\\\\d{12}:deliverystream/aws-waf-logs-[\\\\w-.]{1,51}$\"\n    }\n  },\n  \"outputs\" : [ \"EnableLogging.LogConfiguration\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"GetWebAclArn\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetWebAclArn\\nThis step accepts the WebACLId as input and returns the AWS WAF regional ACL ARN.\\n## Outputs\\n* WebACLArn: ARN of the AWS WAF Regional Web Acl.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"waf-regional\",\n      \"Api\" : \"GetWebACL\",\n      \"WebACLId\" : \"{{ WebACLId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"WebACLArn\",\n      \"Selector\" : \"$.WebACL.WebACLArn\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"EnableLogging\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableLogging\\nEnables the specified LoggingConfiguration, to start logging from a AWS WAF regional web ACL.\\n## Outputs\\n* LogConfiguration: Response from the PutLoggingConfiguration API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"waf-regional\",\n      \"Api\" : \"PutLoggingConfiguration\",\n      \"LoggingConfiguration\" : {\n        \"ResourceArn\" : \"{{ GetWebAclArn.WebACLArn }}\",\n        \"LogDestinationConfigs\" : [ \"{{ LogDestinationConfigs }}\" ]\n      }\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"LogConfiguration\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyLogging\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyLogging\\nEnsure logging configuration has been successfully enabled for the web ACL.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"waf-regional\",\n      \"Api\" : \"GetLoggingConfiguration\",\n      \"ResourceArn\" : \"{{ GetWebAclArn.WebACLArn }}\",\n      \"PropertySelector\" : \"$.LoggingConfiguration.LogDestinationConfigs[0]\",\n      \"DesiredValues\" : [ \"{{ LogDestinationConfigs }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-07T22:09:30.159Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableWAFClassicRegionalLogging",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "fb4d530c-6401-40d3-9fb9-beac75ca101d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4324,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-06T07:12:11.4825516+00:00"
+}

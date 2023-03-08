@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Update the Amazon SSM Agent to the latest version or specified version.\",\n  \"parameters\": {\n    \"version\": {\n      \"default\": \"\",\n      \"description\": \"(Optional) A specific version of the Amazon SSM Agent to install. If not specified, the agent will be updated to the latest version.\",\n      \"type\": \"String\"\n    },\n    \"allowDowngrade\": {\n      \"default\": \"false\",\n      \"description\": \"(Optional) Allow the Amazon SSM Agent service to be downgraded to an earlier version. If set to false, the service can be upgraded to newer versions only (default). If set to true, specify the earlier version.\",\n      \"type\": \"String\",\n      \"allowedValues\": [\n        \"true\",\n        \"false\"\n      ]\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"createUpdateFolder\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"try {\",\n          \"  $sku = (Get-CimInstance -ClassName Win32_OperatingSystem).OperatingSystemSKU\",\n          \"  if ($sku -eq 143 -or $sku -eq 144) {\",\n          \"    Write-Host \\\"This document is not supported on Windows 2016 Nano Server.\\\"\",\n          \"    exit 40\",\n          \"  }\",\n\n          \"  $ssmAgentService = Get-ItemProperty 'HKLM:SYSTEM\\\\\\\\CurrentControlSet\\\\\\\\Services\\\\\\\\AmazonSSMAgent\\\\\\\\'\",\n          \"  if ($ssmAgentService -and [System.Version]$ssmAgentService.Version -ge [System.Version]'3.0.1031.0') {\",\n          \"     exit 0\",\n          \"  }\",\n\n          \"  $DataFolder = \\\"Application Data\\\"\",\n          \"  if ( ![string]::IsNullOrEmpty($env:ProgramData) ) {\",\n          \"    $DataFolder = $env:ProgramData\",\n          \"  } elseif ( ![string]::IsNullOrEmpty($env:AllUsersProfile) ) {\",\n          \"    $DataFolder = \\\"$env:AllUsersProfile\\\\Application Data\\\"\",\n          \"  }\",\n\n          \"  $TempFolder = \\\"/\\\"\",\n          \"  if ( $env:Temp -ne $null ) {\",\n          \"    $TempFolder = $env:Temp\",\n          \"  }\",\n\n          \"  $DataFolder = Join-Path $DataFolder 'Amazon\\\\SSM'\",\n          \"  $UpdateFolder = Join-Path $TempFolder 'Amazon\\\\SSM'\",\n\n          \"  if ( !( Test-Path -LiteralPath $DataFolder )) {\",\n          \"    $none = New-Item -ItemType directory -Path $DataFolder\",\n          \"  }\",\n\n          \"  $DataACL = Get-Acl $DataFolder\",\n          \"  if ( Test-Path -LiteralPath $UpdateFolder ) {\",\n          \"    $UpdateACL = Get-Acl $UpdateFolder\",\n          \"    $ACLDiff = Compare-Object ($UpdateACL.AccessToString) ($DataACL.AccessToString)\",\n          \"    if ( $ACLDiff.count -eq 0 ) {\",\n          \"      exit 0\",\n          \"    }\",\n\n          \"    Remove-Item $UpdateFolder -Recurse -Force\",\n          \"  }\",\n          \"  $none = New-Item -ItemType directory -Path $UpdateFolder\",\n          \"  Set-Acl $UpdateFolder -aclobject $DataACL\",\n\n          \"  $UpdateACL = Get-Acl $UpdateFolder\",\n          \"  $ACLDiff = Compare-Object ($UpdateACL.AccessToString) ($DataACL.AccessToString)\",\n          \"  if ( $ACLDiff.count -ne 0 ) {\",\n          \"    Write-Error \\\"Failed to create update folder\\\" -ErrorAction Continue\",\n          \"    exit 41\",\n          \"  }\",\n\n          \"} catch {\",\n          \"  Write-Host  \\\"Failed to create update folder\\\"\",\n          \"  Write-Error  $Error[0]  -ErrorAction Continue\",\n          \"  exit 42\",\n          \"}\"\n        ]\n      }\n    },\n    {\n      \"action\": \"aws:updateSsmAgent\",\n      \"name\": \"awsupdateSsmAgent\",\n      \"inputs\": {\n        \"agentName\": \"amazon-ssm-agent\",\n        \"source\": \"https://s3.{Region}.amazonaws.com/amazon-ssm-{Region}/ssm-agent-manifest.json\",\n        \"allowDowngrade\": \"{{ allowDowngrade }}\",\n        \"targetVersion\": \"{{ version }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-06-01T17:19:10.979Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-UpdateSSMAgent",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "50662f69-cde4-42fa-b6ce-1c770433c54b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4267,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-08T07:11:52.9557391+00:00"
+}

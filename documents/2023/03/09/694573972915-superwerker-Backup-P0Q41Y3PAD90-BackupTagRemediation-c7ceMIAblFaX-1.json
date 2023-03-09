@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"default\" : \"\",\n      \"type\" : \"String\"\n    },\n    \"ResourceValue\" : {\n      \"type\" : \"String\"\n    },\n    \"ResourceType\" : {\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"inputs\" : {\n      \"Choices\" : [ {\n        \"StringEquals\" : \"AWS::DynamoDB::Table\",\n        \"Variable\" : \"{{ ResourceType }}\",\n        \"NextStep\" : \"tagDynamoDbTable\"\n      }, {\n        \"StringEquals\" : \"AWS::EC2::Volume\",\n        \"Variable\" : \"{{ ResourceType }}\",\n        \"NextStep\" : \"tagEbsVolume\"\n      }, {\n        \"StringEquals\" : \"AWS::RDS::DBInstance\",\n        \"Variable\" : \"{{ ResourceType }}\",\n        \"NextStep\" : \"getRdsDBInstanceArnByDbInstanceResourceIdentifier\"\n      } ]\n    },\n    \"name\" : \"synthArn\",\n    \"action\" : \"aws:branch\"\n  }, {\n    \"inputs\" : {\n      \"ResourceArn\" : \"arn:aws:dynamodb:{{ global:REGION }}:{{ global:ACCOUNT_ID }}:table/{{ ResourceValue }}\",\n      \"Service\" : \"dynamodb\",\n      \"Api\" : \"TagResource\",\n      \"Tags\" : [ {\n        \"Value\" : \"daily\",\n        \"Key\" : \"superwerker:backup\"\n      } ]\n    },\n    \"name\" : \"tagDynamoDbTable\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"isEnd\" : true\n  }, {\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"CreateTags\",\n      \"Resources\" : [ \"{{ ResourceValue }}\" ],\n      \"Tags\" : [ {\n        \"Value\" : \"daily\",\n        \"Key\" : \"superwerker:backup\"\n      } ]\n    },\n    \"name\" : \"tagEbsVolume\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"isEnd\" : true\n  }, {\n    \"outputs\" : [ {\n      \"Name\" : \"DBInstanceArn\",\n      \"Selector\" : \"$.DBInstances[0].DBInstanceArn\"\n    } ],\n    \"inputs\" : {\n      \"Filters\" : [ {\n        \"Values\" : [ \"{{ ResourceValue }}\" ],\n        \"Name\" : \"dbi-resource-id\"\n      } ],\n      \"Service\" : \"rds\",\n      \"Api\" : \"DescribeDBInstances\"\n    },\n    \"name\" : \"getRdsDBInstanceArnByDbInstanceResourceIdentifier\",\n    \"action\" : \"aws:executeAwsApi\"\n  }, {\n    \"inputs\" : {\n      \"ResourceName\" : \"{{ getRdsDBInstanceArnByDbInstanceResourceIdentifier.DBInstanceArn }}\",\n      \"Service\" : \"rds\",\n      \"Api\" : \"AddTagsToResource\",\n      \"Tags\" : [ {\n        \"Value\" : \"daily\",\n        \"Key\" : \"superwerker:backup\"\n      } ]\n    },\n    \"name\" : \"tagRdsInstance\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2022-02-13T07:59:45.821Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:694573972915:document/superwerker-Backup-P0Q41Y3PAD90-BackupTagRemediation-c7ceMIAblFaX",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "607d6c1e-c97b-48fe-92bf-4b62032f8417",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2914,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-09T07:14:03.5729663+00:00"
+}

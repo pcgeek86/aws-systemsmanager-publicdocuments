@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"This action will install Splunk Agents on an EC2 instance.\\n\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"playbookurl\" : {\n      \"type\" : \"String\",\n      \"description\" : \"URL where the playbook is stored\",\n      \"allowedPattern\" : \"^\\\\s*$|^(s3)://[^']*$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"InstallWindowsAgent\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"3600\",\n      \"runCommand\" : [ \"try {\", \"}\", \"catch {\", \"Write-Error \\\"General error during agent installation\\\"\", \"Write-Error $_\", \"Write-Error $_.ScriptStackTrace\", \"cd ..\", \"Remove-Item -Force -Recurse $tmpDir\", \"exit 1\", \"}\" ]\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"runShellScript\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : \"3600\",\n      \"runCommand\" : [ \"#!/bin/bash\", \"ansible --version\", \"if [ $? -ne 0 ]; then\", \" echo \\\"Ansible is not installed. Please install Ansible and rerun the command\\\" >&2\", \" exit 1\", \"fi\", \"execdir=$(dirname $0)\", \"cd $execdir\", \"aws s3 cp '{{ playbookurl }}' playbook.yml\", \"if [ $? -ne 0 ]; then\", \"  echo \\\"Error while downloading the document from S3\\\" >&2\", \"  exit 1\", \"fi\", \"ansible-playbook -i \\\"localhost,\\\" -c local playbook.yml\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-02-10T16:52:47.445Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:246018764427:document/SplunkAgentInstall",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e5115389-1a0f-4d1b-a9e4-d5a14789c368",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1795,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-10T07:13:34.2760632+00:00"
+}

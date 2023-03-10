@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Delete CloudFormation Stack with approval\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"StackNameOrId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) Name or Unique ID of the CloudFormation stack to be deleted\"\n    },\n    \"Approvers\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) IAM user or user arn of approvers for the automation action\"\n    },\n    \"SNSTopicArn\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The SNS topic ARN used to send pending approval notification for delete CloudFormation Stack. The SNS topic name must start with Automation.\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"approve\",\n      \"action\": \"aws:approve\",\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n        \"NotificationArn\": \"{{ SNSTopicArn }}\",\n        \"Message\": \"Approval required to delete CloudFormation stack: {{StackNameOrId}}\",\n        \"MinRequiredApprovals\": 1,\n        \"Approvers\": \"{{ Approvers }}\"\n      }\n    },\n    {\n      \"name\": \"deleteCloudFormationStack\",\n      \"action\":\"aws:deleteStack\",\n      \"maxAttempts\":1,\n      \"onFailure\":\"Abort\",\n      \"inputs\":{\n        \"StackName\":\"{{StackNameOrId}}\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-11-21T06:39:41.086Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-DeleteCloudFormationStackWithApproval",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f06313c1-6d4b-4461-8dec-f09d30d8c737",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1783,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-10T07:12:06.1456643+00:00"
+}

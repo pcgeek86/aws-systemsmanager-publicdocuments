@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"aws:downloadContent\",\n  \"schemaVersion\": \"2.2\",\n  \"parameters\": {\n    \"sourceInfo\": {\n      \"default\": {\n        \"allowInsecureDownload\": true,\n        \"url\": \"http://<url>\"\n      },\n      \"description\": \"(Required) The information required to retrieve the content from the required source.\",\n      \"type\": \"StringMap\"\n    },\n    \"sourceType\": {\n      \"allowedValues\": [\n        \"HTTP\",\n        \"S3\",\n        \"Git\",\n        \"GitHub\",\n        \"SSMDocument\"\n      ],\n      \"default\": \"HTTP\",\n      \"description\": \"(Required) The download source.\",\n      \"type\": \"String\"\n    },\n    \"destinationPath\": {\n      \"description\": \"(Optional) Local path on the instance where you want to download the file.\",\n      \"type\": \"String\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"inputs\": {\n        \"sourceInfo\": \"{{ sourceInfo }}\",\n        \"sourceType\": \"{{ sourceType }}\",\n        \"destinationPath\": \"{{ destinationPath }}\"\n      },\n      \"name\": \"downloadContent\",\n      \"action\": \"aws:downloadContent\"\n    }\n  ]\n}",
+  "CreatedDate": "2021-04-20T17:08:06.625Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:889275191765:document/DownloadFiles",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "48b0c015-fd96-49f3-90a7-3dc9516aed84",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1350,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-14T07:14:34.8855942+00:00"
+}

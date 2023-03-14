@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\":\"1.2\",\n    \"description\":\"Upgrade AWS PV driver to latest version. This upgrade automatically reboots the instance while updating critical system components. Therefore, we strongly recommend that you back up all critical data and stop all applications before performing the upgrade. Please refer to the following page for more detail about upgrading PV drivers. http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/Upgrading_PV_drivers.html#aws-pv-upgrade\",\n    \"parameters\":{\n    },\n    \"runtimeConfig\":{\n        \"aws:runPowerShellScript\":{\n            \"properties\":[\n                {\n                    \"id\":\"0.aws:runPowerShellScript\",\n                    \"runCommand\":[\n                        \"$minSupportOSVersion = '6.1'\",\n                        \"$maxSupportOSVersion = '6.3'\",\n                        \"$curOSVersion = '{0}.{1}' -f [environment]::OSVersion.Version.Major, [environment]::OSVersion.Version.Minor\",\n                        \"if ($curOSVersion -lt [version]$minSupportOSVersion -OR $curOSVersion -gt [version]$maxSupportOSVersion) {\",\n                        \"    Write-Error 'This command only supports Windows Server 2008R2, 2012, and 2012R2.'\",\n                        \"    exit -1\",\n                        \"}\",\n                        \"$upgraderUrl = 'http://ec2-downloads-windows.s3.amazonaws.com/Drivers/AWSPVDriverSetup.msi'\",\n                        \"$upgraderPath = Join-Path -Path $($env:TEMP) -ChildPath 'AWSPVDriverSetup.msi'\",\n                        \"try {\",\n                        \"    Write-Output 'Start downloading upgrader'\",\n                        \"    Write-Output \\\"Downloading $upgraderUrl to $upgraderPath\\\"\",\n                        \"    (New-Object System.Net.WebClient).DownloadFile($upgraderUrl, $upgraderPath)\",\n                        \"    Write-Output 'Download completed'\",\n                        \"    Write-Output 'Start executing PV Driver Upgrade MSI'\",\n                        \"    $process = Start-Process $upgraderPath /quiet -PassThru -Wait\",\n                        \"    Write-Output $(\\\"MSI execution completed with exit code {0}\\\" -f $process.ExitCode)\",\n                        \"    exit $process.ExitCode\",\n                        \"} catch [Exception] {\",\n                        \"    Write-Error $(\\\"An error occurred. Exception: {0}\\\" -f $_.Exception.Message)\",\n                        \"    exit -1\",\n                        \"}\",\n                        \"finally {\",\n                        \"    if (Test-Path $upgraderPath) {\",\n                        \"        rm $upgraderPath\",\n                        \"    }\",\n                        \"}\"\n                    ]\n                }\n            ]\n        }\n    }\n}",
+  "CreatedDate": "2016-07-12T21:03:51.89Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:995337936892:document/UpgradeAWSPVDriver",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a4a259c4-b2c3-4202-9431-d5d879c931ec",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3044,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-14T07:14:58.1000412+00:00"
+}

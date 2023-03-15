@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"cross-platform np-release\",\n  \"parameters\": {\n    \"commandLinux\": {\n      \"type\": \"String\",\n      \"description\": \"Optional. The command to be executed on Linux targets.\"\n    },\n    \"commandWindows\": {\n      \"type\": \"String\",\n      \"description\": \"Optional. The command to be executed on Windows targets.\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"NP_Release_Windows\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"{{ commandWindows }}\"\n        ]\n      }\n    },\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"NP_Release_Linux\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"{{ commandLinux }}\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2022-11-02T09:54:30.628Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:735680773724:document/np_release_cross_platform_shared",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "90d5e42a-ab5e-4400-936e-b96109504c45",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1315,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-15T07:12:54.3732202+00:00"
+}

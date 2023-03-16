@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Splunk Forwarder Agent Upgrade\",\n  \"parameters\": {\n    \"SplunkAgentFileName\": {\n      \"default\": \"splunkforwarder-9.0.2-17e00c557dc1-Linux-x86_64.tgz\",\n      \"description\": \"Insert latest Splunk agent version stored in ecs-infra-common S3 bucket\",\n      \"type\": \"String\"\n    },\n    \"SplunkVersion\": {\n      \"default\": \"9.0.2\",\n      \"description\": \"Latest version of Splunk forwarder version available to install\",\n      \"type\": \"String\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"inputs\": {\n        \"timeoutSeconds\": 7200,\n        \"runCommand\": [\n          \"#!/bin/bash\",\n          \"sudo su -\",\n          \"if [ -e /opt/splunkforwarder/bin/splunk ]; then\",\n          \"    version=$(cat /opt/splunkforwarder/etc/splunk.version | grep VERSION | cut -d \\\"=\\\" -f2)\",\n          \"    if [ $version != '{{SplunkVersion}}' ]; then\",\n          \"       echo \\\"Upgrading splunk\\\" \",\n          \"       echo \\\"Creating configuration backup\\\" \",\n          \"       if [ -e /opt/splunkforwarder/splunkforwarder_config_backup.tar ]; then \",\n          \"          mv splunkforwarder_config_backup.tar splunkforwarder_config_backup.tar.old || true \",\n          \"          tar -cvpf splunkforwarder_config_backup.tar /opt/splunkforwarder/etc || true \",\n          \"       else \",\n          \"           tar -cvpf splunkforwarder_config_backup.tar /opt/splunkforwarder/etc || true \",\n          \"       fi \",\n          \"       echo \\\"Stopping splunk agent service.\\\" \",\n          \"       /opt/splunkforwarder/bin/splunk stop\",\n          \"       echo \\\"Downloading new splunk forwarder version.\\\" \",\n          \"       aws s3 cp s3://ecs-infra-common/SplunkUF/'{{SplunkAgentFileName}}' /tmp && tar -xf /tmp/'{{SplunkAgentFileName}}' -C /opt && rm /tmp/'{{SplunkAgentFileName}}' || true\",\n          \"       chown -R ec2-user:ec2-user /opt/splunkforwarder || true\",\n          \"       echo \\\"Starting splunk agent service.\\\" \",\n          \"       /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes || true\",\n          \"   else \",\n          \"       echo \\\"Splunk is already up to date.\\\" \",\n          \"   fi \",\n          \"else \",\n          \"    echo \\\"Splunk is not installed.\\\" \",\n          \"fi\"\n        ]\n      },\n      \"name\": \"PatchLinux\",\n      \"action\": \"aws:runShellScript\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2022-12-02T05:04:16.99Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:050730830215:document/Splunk_Forwarder_Agent_Upgrade",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "39de2095-5613-4d44-92e3-4bd04c70cea9",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2855,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-16T07:14:04.6715725+00:00"
+}

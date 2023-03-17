@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"description\": \"Back up the specified HANA database.\",\n\t\"schemaVersion\": \"2.2\",\n\t\"parameters\": {\n\t\t\"HANASecretId\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"''\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9\\\"\\\\'\\\\[\\\\]\\\\{\\\\}\\\\/\\\\-_:+=\\\\.@]*$\",\n\t\t\t\"maxChars\": 128\n\t\t},\n\t\t\"HANASecretRegion\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-z0-9\\\\-]*$\",\n\t\t\t\"maxChars\": 30\n\t\t},\n\t\t\"HANASIDAdm\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"[A-Za-z0-9]{3}adm$\"\n\t\t},\n\t\t\"HANAInstanceNum\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"None\",\n\t\t\t\"allowedPattern\": \"^[0-9]{2}$\"\n\t\t},\n\t\t\"HANADatabaseName\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9_\\\\-\\\\/]*$\",\n\t\t\t\"maxChars\": 150\n\t\t},\n\t\t\"AWSBackupId\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9\\\\+\\\\$\\\\=\\\\/\\\\%]{1,800}$\",\n\t\t\t\"maxChars\": 800\n\t\t},\n\t\t\"HanaBackupType\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedValues\": [\n\t\t\t\t\"FULL\",\n\t\t\t\t\"DIFFERENTIAL\",\n\t\t\t\t\"INCREMENTAL\"\n\t\t\t]\n\t\t},\n\t\t\"BackupPrefix\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9\\\\-_]*$\",\n\t\t\t\"maxChars\": 300\n\t\t},\n\t\t\"Debug\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"False\",\n\t\t\t\"allowedValues\": [\n\t\t\t\t\"True\",\n\t\t\t\t\"False\"\n\t\t\t]\n\t\t}\n\t},\n\t\"mainSteps\": [\n\t\t{\n\t\t\t\"name\": \"InstallPackage\",\n\t\t\t\"action\": \"aws:runDocument\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"documentType\": \"SSMDocument\",\n\t\t\t\t\"documentPath\": \"AWS-ConfigureAWSPackage\",\n\t\t\t\t\"documentParameters\": {\n\t\t\t\t\t\"name\": \"arn:aws:ssm:us-west-2:318514306794:document/AWSSystemsManagerSAP-Support\",\n\t\t\t\t\t\"action\": \"Install\",\n\t\t\t\t\t\"installationType\": \"Uninstall and reinstall\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"InstallPackageAgain\",\n\t\t\t\"action\": \"aws:runDocument\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"documentType\": \"SSMDocument\",\n\t\t\t\t\"documentPath\": \"AWS-ConfigureAWSPackage\",\n\t\t\t\t\"documentParameters\": {\n\t\t\t\t\t\"name\": \"arn:aws:ssm:us-west-2:318514306794:document/AWSSystemsManagerSAP-Support\",\n\t\t\t\t\t\"action\": \"Install\",\n\t\t\t\t\t\"installationType\": \"Uninstall and reinstall\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"PerformAction\",\n\t\t\t\"action\": \"aws:runShellScript\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"RunCommand\": [\n\t\t\t\t\t\"# Timestamp: 1678567328815\",\n\t\t\t\t\t\"mkdir -p /usr/bin/ssm-sap/logs\",\n\t\t\t\t\t\"cd /usr/bin/ssm-sap/logs\",\n\t\t\t\t\t\"export PYTHONPATH=$PYTHONPATH:/usr/bin/ssm-sap/scripts\",\n\t\t\t\t\t\"if [ $(which python3 3>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python3)\",\n\t\t\t\t\t\"elif [ $(which python 3>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python)\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   exit 1\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"if [[ \\\"{{Debug}}\\\" == \\\"True\\\" ]]; then\",\n\t\t\t\t\t\"   DEBUGMODE='--debug'\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   DEBUGMODE=''\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"touch ~/.bashrc && source ~/.bashrc\",\n\t\t\t\t\t\"if [[ \\\":$PYTHONPATH:\\\" != *\\\":/usr/bin/ssm-sap/scripts/dependencies\\\"* ]]; then\",\n\t\t\t\t\t\"   sed -i 's#://usr/bin/ssm-sap/scripts/dependencies##' ~/.bashrc\",\n\t\t\t\t\t\"   echo export PYTHONPATH='${PYTHONPATH}:/usr/bin/ssm-sap/scripts/dependencies' >> ~/.bashrc\",\n\t\t\t\t\t\"   source ~/.bashrc\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"$PYTHON_BIN /usr/bin/ssm-sap/scripts/backup/backup_hana.py --credentials '{{HANASecretId}}' --region '{{HANASecretRegion}}' --sidadm '{{HANASIDAdm}}' --instanceNum '{{HANAInstanceNum}}' --databaseName '{{HANADatabaseName}}' --backupId '{{AWSBackupId}}' --backupType '{{HanaBackupType}}' --prefix '{{BackupPrefix}}' $DEBUGMODE\"\n\t\t\t\t],\n\t\t\t\t\"TimeoutSeconds\": \"600\"\n\t\t\t}\n\t\t}\n\t]\n}",
+  "CreatedDate": "2023-03-15T15:11:38.126Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "13",
+  "Name": "AWSSystemsManagerSAP-BackupHanaDatabase",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "5ebf52fc-8a29-41e3-ac66-69b391487d5f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4245,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-17T07:13:03.4036886+00:00"
+}

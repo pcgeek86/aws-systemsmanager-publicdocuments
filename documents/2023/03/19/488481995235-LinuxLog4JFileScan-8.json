@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r  \"schemaVersion\": \"2.2\",\r  \"description\": \"Scans Filesystem for Log4J Prints to stdout\",\r  \"mainSteps\": [\r    {\r      \"inputs\": {\r        \"runCommand\": [\r          \"touch log4j_jars\\n find / -iname \\\"*log4j-core*.jar\\\" 2>/dev/null > log4j_jars\\n if [ ! -s log4j_jars ]; then echo \\\"nolog4jcore\\\" > log4j_jars ; fi \\n TOKEN=`curl -s -X PUT \\\"http://169.254.169.254/latest/api/token\\\" -H \\\"X-aws-ec2-metadata-token-ttl-seconds: 21600\\\" 2>/dev/null`\\n AccId=`curl -s -H \\\"X-aws-ec2-metadata-token: $TOKEN\\\" -v http://169.254.169.254/latest/meta-data/identity-credentials/ec2/info/ 2>/dev/null | grep -i \\\"AccountId\\\" | awk '{print $3}' | tr -d \\\\\\\" | tr -d , | head -n 1`\\n InstId=`curl -s -H \\\"X-aws-ec2-metadata-token: $TOKEN\\\" -v http://169.254.169.254/latest/meta-data/instance-id 2>/dev/null`\\n Hostnme=`uname -n`\\n Region=`curl -s -H \\\"X-aws-ec2-metadata-token: $TOKEN\\\" -v http://169.254.169.254/latest/meta-data/placement/availability-zone 2>/dev/null`\\n RunDate=`date -u +%Y-%m-%dT%H:%M+00:00`\\n awk -v iHostnme=\\\"$Hostnme\\\" -v iRunDate=\\\"$RunDate\\\" -v iAccId=\\\"$AccId\\\" -v iInstId=\\\"$InstId\\\" -v iRegion=\\\"$Region\\\" '{print iRunDate \\\"\\t\\\" iAccId \\\"\\t\\\" iRegion \\\"\\t\\\" iInstId \\\"\\t\\\" iHostnme \\\"\\t\\\" $1} ' log4j_jars\\n rm log4j_jars\"\r        ]\r      },\r      \"name\": \"log4jFileSystemQuery\",\r      \"action\": \"aws:runShellScript\",\r      \"precondition\": {\r        \"StringEquals\": [\r          \"platformType\",\r          \"Linux\"\r        ]\r      }\r    }\r  ]\r}",
+  "CreatedDate": "2022-01-04T20:33:53.799Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "8",
+  "Name": "arn:aws:ssm:us-west-2:488481995235:document/LinuxLog4JFileScan",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "81754cb1-d4cd-494c-932f-288edf7f30a0",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1811,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-19T07:11:53.6993124+00:00"
+}

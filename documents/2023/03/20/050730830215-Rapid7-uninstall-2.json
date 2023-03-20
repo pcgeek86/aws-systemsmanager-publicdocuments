@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Rapid7 agent uninstall\",\n  \"schemaVersion\": \"2.2\",\n  \"parameters\": {\n    \"AccountId\": {\n      \"default\": \"12345678\",\n      \"description\": \"Aws AccountId\",\n      \"type\": \"String\"\n    },\n    \"Platform\": {\n      \"allowedValues\": [\n        \"NA\",\n        \"UK\",\n        \"CSID\"\n      ],\n      \"description\": \"Select region you are in\",\n      \"type\": \"String\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"inputs\": {\n        \"timeoutSeconds\": 7200,\n        \"runCommand\": [\n          \"#!/bin/bash\",\n          \"sudo su -\",\n          \"systemctl stop ir_agent\",\n          \"wget --directory-prefix=/tmp/rapid https://javaqualysagnetinstallation.s3-us-west-2.amazonaws.com/agents-linux.tar.gz\",\n          \"tar -xzf /tmp/rapid/agents-linux.tar.gz --directory /tmp/rapid  && cd /tmp/rapid/agents-linux/\",\n          \"chmod +x agent_installer.sh\",\n          \"./agent_installer.sh uninstall || true\",\n          \"cd ~ && rm -rf /tmp/rapid\"\n        ]\n      },\n      \"name\": \"PatchLinux\",\n      \"action\": \"aws:runShellScript\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      }\n    },\n    {\n      \"inputs\": {\n        \"timeoutSeconds\": 7200,\n        \"runCommand\": [\n          \"New-Item -Path 'C:\\\\' -Name \\\"rapid\\\" -ItemType \\\"directory\\\";\",\n          \"write-host $Platform\",\n          \"cd C:\\\\rapid;\",\n          \"(New-Object System.Net.WebClient).DownloadFile('https://javaqualysagnetinstallation.s3-us-west-2.amazonaws.com/agents-win.zip', 'C:\\\\rapid\\\\agents-win.zip');\",\n          \"expand-archive -path 'C:\\\\rapid\\\\agents-win.zip' -destinationpath 'C:\\\\rapid';\",\n          \"sc stop ir_agent\",\n          \"msiexec /i agentInstaller-x86_64.msi uinstall\",\n          \"cd ~;\",\n          \"Start-Sleep -s 60;\",\n          \"Remove-Item -LiteralPath 'C:\\\\rapid' -Force -Recurse\"\n        ]\n      },\n      \"name\": \"PatchWindows\",\n      \"action\": \"aws:runPowerShellScript\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2022-11-09T19:11:33.206Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:050730830215:document/Rapid7-uninstall",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ec1e5480-6c62-49e9-8e35-2b250b359e08",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2462,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-20T07:12:52.6547684+00:00"
+}

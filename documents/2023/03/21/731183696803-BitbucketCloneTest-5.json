@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Cloning a file/repo from bitbucket\",\n  \"parameters\" : {\n    \"SourcePath\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Source Path\"\n    },\n    \"BranchName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"branch name\"\n    },\n    \"DestinationPath\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Destination Path\"\n    },\n    \"BitbucketRepo\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Bitbucket repo path\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"CopyFiles\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"try{\", \"Add-Type -AssemblyName System.Web\", \"New-Item -ItemType \\\"directory\\\" -Path {{DestinationPath}}\", \"cd {{DestinationPath}}\", \"git init\", \"git config core.sparsecheckout true\", \"New-Item -Path .\\\\.git\\\\info\\\\ -Name \\\"sparse-checkout\\\" -ItemType \\\"file\\\" -Value {{SourcePath}}\", \"$userName=(Get-SSMParameter -Name /bitbucket/svc/username).Value\", \"$password=[System.Web.HttpUtility]::UrlEncode((Get-SSMParameter -Name /bitbucket/svc/password -WithDecryption $True).Value)\", \"$repo={{BitbucketRepo}}\", \"$repoDetails=$repo.replace(\\\"https://\\\",\\\"https://${userName}:${password}@\\\")\", \"git pull $repoDetails {{BranchName}}\", \"} catch {\", \"Write-Host \\\"An error occurred:\\\"\", \"Write-Host $_.ScriptStackTrace\", \"Write-Host $_.Exception\", \"Write-Host $_.ErrorDetails }\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2019-08-21T04:47:16.297Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "5",
+  "Name": "arn:aws:ssm:us-west-2:731183696803:document/BitbucketCloneTest",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f2cb6883-046d-49c0-a84a-7da5ed7638e8",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1774,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-21T07:13:09.9285371+00:00"
+}

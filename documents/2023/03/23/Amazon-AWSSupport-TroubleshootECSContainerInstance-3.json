@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "ea97a5dc1940e3d88b3fbc52908071c6d4723e094ff21ee16e59dd0daca6e73e",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "attachment.zip",
+      "Size": 22523,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/708/190294270367/Automation/AWSSupport-TroubleshootECSContainerInstance%213d97b95f-c993-4218-9d53-5a35311308a0/3/attachment.zip?x-attachment-size=22523&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEO7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIHiZveZ2OhTVOn3gkDB7xW6puBMO%2BSoNX3%2FixP%2B%2BuQqHAiAZpvBjhSRcbxRihUB6c06PZWK8ckkZjxi1kL0a%2B5H6vyrDBQi3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAMaDDI0OTkyNDUyNzQxMCIMRlrIBFWqJxwUFmaTKpcFQsC2Y6hIGxoceXM3OabsujTxcqf6n6C8lEQpLp%2BX7LNsdCChDTtMOUr69nN0wbOSIiPDNpaiSuWl%2FU4%2B0r66GNCoTcPebad9x8pAYFZ1x%2BI1IpGl%2Fe2iH2eRIbet4Th7OUMYHlb%2FU850VOIoZFPO2hdytVE9ZgtjitH%2FCiIRSExZlPZxH%2FLf%2BylvnbAU5qGX3rVNFQKBoukjxkNW1QitAqgXDkoCn5R2HGDjoP7AInCdQiOTQzYSzQST0XaK9WMtUSNIIZXKRCLIMsdaVzF%2Fls86VOgFzhFiMiOcb3knbvRpdRVr%2F27PUpEdur1xZr2uoun3AajDweYVfhoyhuT%2BxtMMHrYCYQMo5XvB7ynAvWDO%2BtXlBZworM0Zv%2Bk5leMELcN%2B7bZ0FYCW0QirqypUelU3ByNDAlP%2FwkLeI%2BH%2BV%2FizJJggPNxtnS%2Bo1cs81qGzRtiUgb3%2B05gkRzHwr7IAl95q9nQk%2BVhlfThedbqgnvNBY9mlR%2FCNp7NgY4Kf8NuCDdf4WuBQzoxh1u3KEI2m2ub1%2BBIv4SzDZeOYVocD4MOjwdE9VsTPjoEIE83ONk74B85P9pENeKZbbfylYWebIYryiyQCK1FwGFB18FkAJLdMbJeBfNGXvZvGW94bohua79J2hMbLiDRj9Zbtud75DBfNmWGKSI4kJxlRhOPxlsfmFrAw9NqIjqg0ZyEMDdKdmeurykbMqYMQQgIdvFSPLEZ0qBKpplBegAerYtceE7trl1W0F%2BqzZABuWSqbrLRaCLpYIe%2Fe8LWVKCMGvKpyvScVRfekxeTj2fwjiLi%2BqMETzayVtZJxbbSukHDAId%2BkujRCcVK7zLp%2FOKD1%2FZigZQE7b9Rgkni93ppNrhnBFmj8FhxI%2Fb13MMzV76AGOrIBwpELEOw8EYbu99DbCYbVj%2BAhKqnxa38v4q%2FVC5Jq5hzof9DmAsjiVyWq3QigKAvlx2NLvgIKBjITALclVKPV3Qo1IWbXZz8wKKOEsVVcjGRZQXEnbP2pVoVkFX47zUMBBlKleCzCIolINaqXID7YS9M6CJnuMm300EaKZtnpBjmLRF%2F6tTy%2BDAywgIi%2BeZnBiAT9g311G0nkPacSYzG7szOGxeVSYOeGOdmub%2FxNl3fj5A%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230323T071243Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=ASIATUMFJUUZKVCHVFNN%2F20230323%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=faf0e549c467bbc9b77d4b9cbe2c9264f4d807d3bc57f5aed76176d8cac22a6c"
+    }
+  ],
+  "Content": "{\n  \"schemaVersion\": \"0.3\",\n  \"description\": \"The **AWSSupport-TroubleshootECSContainerInstance** runbook helps you troubleshoot an Amazon Elastic Compute Cloud (Amazon EC2) instance that fails to register with an Amazon Elastic Container Service (Amazon ECS) cluster. This automation reviews whether the user data for the instance contains the correct cluster information, whether the instance profile contains the required permissions, and network configuration issues.\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"AutomationAssumeRole\": {\n      \"default\": \"\",\n      \"type\": \"String\",\n      \"description\": \"(Optional) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf. If no role is specified, Systems Manager Automation uses the permissions of the user that starts this runbook.\",\n      \"allowedPattern\": \"^$|^arn:(aws|aws-cn|aws-us-gov):iam::\\\\d{12}:role\\\\/[\\\\w+=/,.@-]+$\"\n    },\n    \"ClusterName\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The name of the Amazon ECS cluster that the instance failed to register with.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^[a-zA-Z0-9_-]{1,255}$\"\n    },\n    \"InstanceId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The ID of the Amazon EC2 instance you want to troubleshoot.\",\n      \"default\": \"\",\n      \"allowedPattern\": \"^i-[a-z0-9]{8,17}$\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"executeChecker\",\n      \"action\": \"aws:executeScript\",\n      \"description\": \"Reviews whether the Amazon EC2 instance meets the prerequisites needed to register with an Amazon ECS cluster.\",\n      \"isCritical\": true,\n      \"timeoutSeconds\": 540,\n      \"inputs\": {\n        \"Runtime\": \"python3.8\",\n        \"InputPayload\": {\n          \"InstanceId\": \"{{InstanceId}}\",\n          \"ClusterName\": \"{{ClusterName}}\"\n        },\n        \"Handler\": \"lambda_handler\",\n        \"Script\": \"import boto3\\n\\nfrom saw_ecs.ec2 import EC2Instance\\nfrom saw_ecs.cluster import ECSCluster\\nfrom saw_ecs import __main__\\n\\n\\ndef lambda_handler(events, context):\\n    ec2_client = boto3.client(\\\"ec2\\\")\\n    instance = EC2Instance(id=events[\\\"InstanceId\\\"], ec2_client=ec2_client)\\n    cluster = ECSCluster(name=events[\\\"ClusterName\\\"])\\n\\n    stdout, info_codes = __main__.generate_stdout(instance, cluster)\\n\\n    # return {\\\"statusCode\\\": 200, \\\"body\\\": stdout}\\n    return {\\\"stdout\\\": stdout, \\\"info_codes\\\": info_codes}\\n\",\n        \"Attachment\": \"attachment.zip\"\n      },\n      \"outputs\": [\n        {\n          \"Name\": \"stdout\",\n          \"Selector\": \"$.Payload.stdout\",\n          \"Type\": \"String\"\n        },\n        {\n          \"Name\": \"info_codes\",\n          \"Selector\": \"$.Payload.info_codes\",\n          \"Type\": \"StringList\"\n        }\n      ]\n    }\n  ],\n  \"files\": {\n    \"attachment.zip\": {\n      \"checksums\": {\n        \"sha256\": \"ea97a5dc1940e3d88b3fbc52908071c6d4723e094ff21ee16e59dd0daca6e73e\"\n      }\n    }\n  },\n  \"outputs\": [\n    \"executeChecker.stdout\"\n  ]\n}",
+  "CreatedDate": "2022-11-09T10:59:26.088Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "AWSSupport-TroubleshootECSContainerInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ba584a4f-0d59-44f9-aa8e-8c8fe47ed704",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5698,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-23T07:12:43.2197819+00:00"
+}

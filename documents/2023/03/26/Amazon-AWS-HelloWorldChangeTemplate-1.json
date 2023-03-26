@@ -1,0 +1,32 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"This change template demonstrates the feature set available for creating change templates for Change Manager. This template starts a Runbook workflow for the Automation document called AWS-HelloWorld.\",\n  \"templateInformation\" : \"### Document Name: HelloWorldChangeTemplate\\n\\n## What does this document do?\\nThis change template demonstrates the feature set available for creating change templates for Change Manager. This template starts a Runbook workflow for the Automation document called AWS-HelloWorld.\\n\\n## Input Parameters\\n* ApproverSnsTopicArn: (Required) Amazon Simple Notification Service ARN for approvers.\\n* Approver: (Required) The name of the approver to send this request to.\\n* ApproverType: (Required) The type of reviewer.\\n  * Allowed Values: IamUser, IamGroup, IamRole, SSOGroup, SSOUser\\n\\n## Output Parameters\\nThis document has no outputs \\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"parameters\" : {\n    \"ApproverSnsTopicArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Amazon Simple Notification Service ARN for approvers.\"\n    },\n    \"Approver\" : {\n      \"type\" : \"String\",\n      \"description\" : \"IAM approver\"\n    },\n    \"ApproverType\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Approver types for the request. Allows values include IamUser, IamGroup, IamRole, SSOGroup, and SSOUser.\"\n    }\n  },\n  \"executableRunBooks\" : [ {\n    \"name\" : \"AWS-HelloWorld\",\n    \"version\" : \"1\"\n  } ],\n  \"emergencyChange\" : false,\n  \"mainSteps\" : [ {\n    \"name\" : \"SimpleApproveAction\",\n    \"action\" : \"aws:approve\",\n    \"timeoutSeconds\" : 3600,\n    \"inputs\" : {\n      \"Message\" : \"A sample change request has been submitted for your review in Change Manager. You can approve or reject this request.\",\n      \"EnhancedApprovals\" : {\n        \"NotificationArn\" : \"{{ ApproverSnsTopicArn }}\",\n        \"Approvers\" : [ {\n          \"approver\" : \"{{ Approver }}\",\n          \"type\" : \"{{ ApproverType }}\",\n          \"minRequiredApprovals\" : 1\n        } ]\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-16T21:26:03.099Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation.ChangeTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-HelloWorldChangeTemplate",
+  "Requires": [],
+  "ReviewStatus": {
+    "Value": "APPROVED"
+  },
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "7bb8c92b-e926-4e9b-b07e-6199b3e1b1a8",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2367,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-26T07:10:05.4576235+00:00"
+}

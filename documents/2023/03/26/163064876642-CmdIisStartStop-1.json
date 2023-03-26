@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Instance\": {\n      \"type\": \"String\",\n      \"description\": \"The IIS App Pool\",\n      \"default\": \"COSA\"\n    },\n    \"DesiredState\": {\n      \"type\": \"String\",\n      \"description\": \"The desired state for the App Pool - Stopped or Started\",\n      \"default\": \"Started\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"$theComputer = get-content env:computername\",\n          \"Write-Output \\\"The EC2 Instance to process is: ${theComputer}\\\"\",\n          \"$instance = \\\"ACRA\\\"\",\n          \"$instance = \\\"{{Instance}}\\\"\",\n          \"Write-Output \\\"The App Pool to process is: ${instance}\\\"\",\n          \"$desiredState = \\\"Stopped\\\"\",\n          \"$desiredState = \\\"{{DesiredState}}\\\"\",\n          \"Write-Output \\\"The Desired App Pool State is: ${desiredState}\\\"\",\n          \"$sleepSeconds = 1\",\n          \"$sleepCount = 15\",\n          \"$remoteScriptVal = New-Object 'System.Collections.Generic.Dictionary[String,object]'\",\n          \"If ((Get-IISAppPool $instance)){ \",\n             \"$currentState = (Get-IISAppPool $instance) | Select -ExpandProperty State\",\n             \"Write-Output \\\"AppPool: ${instance} has a current state of ${currentState}\\\"\",\n             \"if((Get-WebAppPoolState -Name $instance).Value -ne $desiredState) {\",\n                \"if ($desiredState -eq \\\"stopped\\\") {\",\n                   \"Stop-WebAppPool -Name $instance\",\n                   \"Write-Output \\\"AppPool: ${instance} has been requested to Stop\\\"\",\n                \"} else {\",\n                   \"start-WebAppPool -Name $instance\",\n                   \"Write-Output \\\"AppPool: ${instance} has been requested to Start\\\"\",\n                \"}\",\n                \"$counter = 0\",\n                \"$currentState = (Get-IISAppPool $instance) | Select -ExpandProperty State\",\n                \":myLabel while($currentState -ne $desiredState)\",\n                \"{\",\n                   \"if ($counter -ge $sleepCount) {\",\n                       \"Write-Output \\\"AppPool: ${instance} did NOT complete successfully with a state of ${currentState} and a desired state of ${desiredState}\\\"\",\n                       \"$remoteScriptVal.Add(\\\"ReturnCode\\\",\\\"2-Warning\\\")\",\n                       \"$remoteScriptVal.Add(\\\"ReturnText\\\",\\\"Warning AppPool: ${instance} did NOT complete successfully with a state of ${currentState} and a desired state of ${desiredState}\\\")\",\n                       \"break myLabel\",\n                   \"}\",\n                   \"Start-Sleep -Seconds $sleepSeconds\",\n                   \"Write-Output \\\"AppPool: ${instance} ... still working with a state of ${currentState} and a desired state of ${desiredState}\\\"\",\n                   \"$currentState = (Get-IISAppPool $instance) | Select -ExpandProperty State\",\n                   \"$counter = $counter + 1\",\n                \"}\",\n                \"if ($currentState -eq $desiredState) {\",\n                   \"Write-Output \\\"AppPool: ${instance} completed successfully and has a state of ${currentState}\\\"\",\n                   \"$remoteScriptVal.Add(\\\"ReturnCode\\\",\\\"1-Good\\\")\",\n                   \"$remoteScriptVal.Add(\\\"ReturnText\\\",\\\"Good AppPool: ${instance} completed successfully and has a state of ${currentState}\\\")\",\n                \"}\",\n             \"} \",\n             \"else\",\n             \"{\",\n                \"Write-Output \\\"AppPool: ${instance} already has a state of ${desiredState} - no action required\\\"\",\n                \"$remoteScriptVal.Add(\\\"ReturnCode\\\",\\\"1-Good\\\")\",\n                \"$remoteScriptVal.Add(\\\"ReturnText\\\",\\\"Good App Pool: ${instance} already has a state of ${desiredState} - No action required\\\")\",\n             \"}\",\n          \"} \",\n          \"else\",\n          \"{\",\n             \"Write-Output \\\"AppPool: ${instance} does not exist\\\"\",\n             \"$remoteScriptVal.Add(\\\"ReturnCode\\\",\\\"3-Error\\\")\",\n             \"$remoteScriptVal.Add(\\\"ReturnText\\\",\\\"Error App Pool: ${instance} does not exist\\\")\",\n          \"}\",\n          \"return $remoteScriptVal\"\n        ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2020-11-11T13:59:55.576Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:163064876642:document/CmdIisStartStop",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "dd4073c4-2c98-4968-87d0-298ea74bac17",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4728,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-26T07:11:54.9375753+00:00"
+}

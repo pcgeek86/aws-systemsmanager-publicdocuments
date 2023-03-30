@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "acc5fdd093a7ec999b894abd6efb6a803ff2b47759b60484a6364cac6edb62f5",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "AwsEnaNetworkDriver-2.4.0.zip",
+      "Size": 297283,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/5dd/316874961013/AwsEnaNetworkDriver%210c9db6a3-ee9e-4591-bfde-7780a7770321/12/AwsEnaNetworkDriver-2.4.0.zip?x-attachment-size=297283&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQDjmVnBKMAHohxm0h5ReWHbjsJ5wK8iB9GpBa8ta3c6ggIgdcARvW0Ke3y3aM5%2BjxrgvUjIN9tYLfXbkH0wyudqVM0qugUIbxADGgwyNDk5MjQ1Mjc0MTAiDNzdyJ%2BjTp6qh2zp5SqXBf3v7DMO3DsrqOrkN%2BVn6WuW1MgHkktuuNDpAFpulw5yV4EI2u4giLbH7HU8ZVTtu6IRztIehSI%2B6%2BzRZCNeMDEcwECW%2B0fhoYKxhrzjN0y6MITNXiX1d9bHqUASuVMldfRLhNm6%2F9gVdt4r%2BkMSgFcLAtNEwcfBjy715TAlQkdApL9lGFuXFy0VGjU1CcaAgJIxya6Wos4JQqrzDi4Ib%2Bmbff6TgqJ%2Bj7rWxeikuGvPKIyVY4x4f%2F%2B7GJokMS8TPoOzt8hWMQL8vM7JloCe0teTKZQzwNM%2B%2B06a0Fb1SE3SrKRef28IwJpVhRY7FlXu%2FNKrvJSJwtFi6QogpG9xV2chKEbVqRyY6GuhaIT1V5vBI1HRPyn2Km0Umu5A%2BlOF8FiIe1ik4ZNp%2FwPsxjcPhaTcbBAZJ%2BdmH7QYerOJnRSGwBpoy1BZUnrbbwdCxpy%2Bl8WrlM98KuNWttf6DT1FxwPb6X2Rz0C0gwSz7MZkINYTv3vre1iXjouir54zLl0V1DLFMzyTCmvPWRSfz1DBns0QZidgshP2g3g1WfB9KP2WNN%2B8SqLJScGV%2FsHTPVqXgjXttUilHEIfUlthU0aoaFyWKS3gE%2FjBfJKG0lo4y7UW5ojq5n82oso%2FRZEZkEjdniNjsK%2B1j3bY70c3HsqpJAjf2xZFJwAi9qdUXskiGQsI8A0%2Bi8wtgFGhL2h0Ka6wQJwGtQd3BkisNvHrFyOrCZrXRlraIEEgxE13Kdlo92dO%2BCppfbdTHqM2RuH9RLUzt5EheD4Tuj97eHOFjRNh%2BFbM2Uy8eeAuAB9OX4STW8hn3GLN9gtRKjk7yl%2FefTxTv0IZfHYr6sS150FunHLTVuVa67b3%2BMZB3EVolJVshrmLRzfmb%2F%2B6vDCmzJShBjqxAUbVg0Uy%2FHr6%2BxKWSu0IXGvxsGzI8C1zS04En6yRNLYgbdZs9tfE5TP0wtz01lDo%2BO0vEfnEwCePDNsNX8eOOLpZ6yUy2%2FHXSrbuLkejhYUj1pDjshgH%2FE9KXL6m1va1W4oU9lxzuZhaxeqeH44hYGbUza%2FTP7NuyRMur3pylub%2FVqDhYoun5jtAg9YRiD32SimSR80cPaP%2Bbyo8p3%2BC6IxPGQF1x5mjFiWQWNelP2olVg%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230330T071241Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIATUMFJUUZLSW7EE3W%2F20230330%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=8f6952fac6b15e900942342664537dd94c09b768cd627edc1a1c24d7669e3f2d"
+    }
+  ],
+  "Content": "{\n    \"schemaVersion\": \"2.0\",\n    \"name\": \"AwsEnaNetworkDriver\",\n    \"version\": \"2.4.0\",\n    \"packageArn\": \"arn:aws:ssm:::package/AwsEnaNetworkDriver\",\n    \"publisher\": \"Amazon AWS\",\n    \"url\": \"https://amazonaws.com\",\n    \"packages\": {\n        \"windows\": {\n            \"_any\": {\n                \"x86_64\": {\n                    \"file\": \"AwsEnaNetworkDriver-2.4.0.zip\"\n                }\n            }\n        }\n    },\n    \"files\": {\n        \"AwsEnaNetworkDriver-2.4.0.zip\": {\n            \"checksums\": {\n                \"sha256\": \"ACC5FDD093A7EC999B894ABD6EFB6A803FF2B47759B60484A6364CAC6EDB62F5\"\n            },\n            \"downloadLocation\": \"https://us-west-2-birdwatcher-prod.s3.us-west-2.amazonaws.com/316874961013/AwsEnaNetworkDriver-2.4.0.zip\"\n        }\n    }\n}",
+  "CreatedDate": "2022-04-28T11:09:20.733Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Package"
+  },
+  "DocumentVersion": "12",
+  "Name": "AwsEnaNetworkDriver",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "2.4.0",
+  "ResponseMetadata": {
+    "RequestId": "54d18de4-c3e6-47a4-b708-9d36b6571c88",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3169,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-03-30T07:12:41.8654578+00:00"
+}

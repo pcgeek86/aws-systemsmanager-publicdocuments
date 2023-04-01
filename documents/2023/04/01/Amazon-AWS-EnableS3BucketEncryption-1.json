@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Enables Encryption on S3 Bucket\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the S3 Bucket whose content will be encrypted.\"\n    },\n    \"SSEAlgorithm\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Server-side encryption algorithm to use for the default encryption.\",\n      \"default\" : \"AES256\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"PutBucketEncryption\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutBucketEncryption\",\n      \"Bucket\" : \"{{BucketName}}\",\n      \"ServerSideEncryptionConfiguration\" : {\n        \"Rules\" : [ {\n          \"ApplyServerSideEncryptionByDefault\" : {\n            \"SSEAlgorithm\" : \"{{SSEAlgorithm}}\"\n          }\n        } ]\n      }\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2018-09-04T17:03:07.264Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-EnableS3BucketEncryption",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "babbd390-6002-45b2-a9c8-cfb92185e0c3",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1424,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-01T07:09:50.8735965+00:00"
+}

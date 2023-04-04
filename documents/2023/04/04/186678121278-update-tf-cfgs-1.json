@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"update tf configs in services\",\n  \"parameters\" : {\n    \"workDir\" : {\n      \"type\" : \"String\",\n      \"description\" : \"work dir\",\n      \"default\" : \"/home/ssm-user\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"updatetfcfg\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"./updt_tf_cfg.sh\" ],\n      \"workingDirectory\" : \"{{ workDir }}/utils\"\n    }\n  } ]\n}",
+  "CreatedDate": "2022-07-21T13:31:11.738Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:186678121278:document/update-tf-cfgs",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "38a29fe5-4d56-4e84-98fa-4845b817f04f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 695,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-04T07:12:45.9184878+00:00"
+}

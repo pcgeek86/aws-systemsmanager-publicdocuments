@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Get latest syllable code\",\n  \"parameters\" : {\n    \"accesskeyPath\" : {\n      \"type\" : \"String\",\n      \"description\" : \"param store location\"\n    },\n    \"workDir\" : {\n      \"type\" : \"String\",\n      \"description\" : \"work dir\",\n      \"default\" : \"/tmp\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:downloadContent\",\n    \"name\" : \"checkoutterraform\",\n    \"inputs\" : {\n      \"sourceType\" : \"GitHub\",\n      \"sourceInfo\" : {\n        \"owner\" : \"asksyllable\",\n        \"repository\" : \"terraform\",\n        \"getOptions\" : \"branch:prod_env_setup\",\n        \"path\" : \".\",\n        \"tokenInfo\" : \"{{ ssm-secure:{{accesskeyPath}} }}\"\n      },\n      \"destinationPath\" : \"{{ workDir }}/terraform\"\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"permupdates\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"chown -R ssm-user:ssm-user {{ workDir}}/terraform\", \"ls {{ workDir}}/terraform\" ],\n      \"workingDirectory\" : \"{{ workDir }}/terraform\"\n    }\n  } ]\n}",
+  "CreatedDate": "2022-07-21T13:32:41.66Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:186678121278:document/updatecode",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a101abb8-6598-4b62-a794-59cbe553c495",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1327,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-05T07:13:01.0205237+00:00"
+}

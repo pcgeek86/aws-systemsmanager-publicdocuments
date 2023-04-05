@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Automation document to update EKS cluster version\\n## Notes:\\n  * You must select correct EKS version before starting.\\n  * You can not skip a version and update to the next i.e ( you can't update EKS from v 1.21 to v 1.24), error will be thrown.\\n  * For more info, visit https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html\\n\\n## Input Parameters\\n* ClusterName: (Required) The name of your cluster.\\n* Version: (Required) The desired Kubernetes version.\\n* AutomationAssumeRole: (Optional) The ARN of the role that allows the document to perform the actions on your behalf.\\n    \\n## minimum permissions required\\n  * eks:UpdateClusterVersion\\n  * eksDescribeUpdate\\n    \\n## Output parameters\\n  * UpdateUUID\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"ClusterName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of your cluster.\",\n      \"allowedPattern\" : \"^[0-9A-Za-z][A-Za-z0-9\\\\-_]*\"\n    },\n    \"Version\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The desired Kubernetes version.\",\n      \"allowedPattern\" : \"^((?:[1-9]|1[0-9]|2[0-3])(?:\\\\.\\\\d{1,2})?|24(?:\\\\.00?)?)$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"AWS::IAM::Role::Arn\",\n      \"description\" : \"(Optional) The ARN of the role that allows the document to perform the actions on your behalf\",\n      \"default\" : \"\",\n      \"allowedPattern\" : \"^$|arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role\\\\/?[a-zA-Z_0-9+=,.@\\\\-_\\\\/]+\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"UpdateEKSClusterVersion\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"onFailure\" : \"Abort\",\n    \"timeoutSeconds\" : 900,\n    \"description\" : \"## UpdateEKSClusterVersion\\nUpdate the Version of the existing EKS cluster.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"eks\",\n      \"Api\" : \"UpdateClusterVersion\",\n      \"name\" : \"{{ ClusterName }}\",\n      \"version\" : \"{{ Version }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"UpdateUUID\",\n      \"Selector\" : \"$.update.id\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"verifyUpdate\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"onFailure\" : \"Abort\",\n    \"timeoutSeconds\" : 900,\n    \"description\" : \"## verifyUpdate\\nVerify if the EKS cluster version had been updated.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"eks\",\n      \"Api\" : \"DescribeUpdate\",\n      \"name\" : \"{{ ClusterName }}\",\n      \"updateId\" : \"{{ UpdateEKSClusterVersion.UpdateUUID }}\",\n      \"PropertySelector\" : \"$.update.status\",\n      \"DesiredValues\" : [ \"Successful\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-03-28T16:07:27.669Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-UpdateEKSCluster",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "222ee38a-5111-476b-8140-42f2701278ac",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2988,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-05T07:11:09.8641516+00:00"
+}

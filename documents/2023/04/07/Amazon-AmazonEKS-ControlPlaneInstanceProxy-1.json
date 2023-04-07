@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\": \"1.0\",\n    \"description\": \"Document to establish connections to k8s CPIs\",\n    \"sessionType\": \"InteractiveCommands\",\n    \"parameters\": {\n        \"TargetComponent\": {\n            \"type\": \"String\",\n            \"description\": \"The target k8s component in the CPI.\",\n            \"default\": \"api-server\",\n            \"allowedPattern\": \"^(|etcd|api-server)$\"\n        }\n    },\n    \"properties\": {\n        \"linux\": {\n            \"runAsElevated\": false,\n            \"commands\": \"/opt/amazon/eks/ssm/ssm-proxy {{TargetComponent}}\"\n        }\n    }\n}",
+  "CreatedDate": "2022-05-12T16:23:00.451Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "AmazonEKS-ControlPlaneInstanceProxy",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "3ba4da1b-7fcd-49da-bb83-ee3fd503786c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 800,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-07T07:11:05.1477025+00:00"
+}

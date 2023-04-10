@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Command Document Example JSON Template\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \" (Required) Target EC2 InstanceID\"\n    },\n    \"TargetRegion\" : {\n      \"type\" : \"String\",\n      \"default\" : \"us-west-2\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"restartIIS\",\n    \"inputs\" : {\n      \"InstanceId\" : \"{{InstanceId}}\",\n      \"runCommand\" : [ \"& {iisreset}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-10-14T16:28:37.833Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:178701944667:document/RestartIIsCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a4b733d7-f808-4d26-90da-ada7486776cb",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 782,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-10T07:12:40.821009+00:00"
+}

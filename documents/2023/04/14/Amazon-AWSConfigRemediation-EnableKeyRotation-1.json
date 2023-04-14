@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableKeyRotation\\n\\n## What does this document do?\\nThis document enables automatic key rotation for the given AWS Key Management Service (KMS) symmetric customer master key(CMK) using [EnableKeyRotation](https://docs.aws.amazon.com/kms/latest/APIReference/API_EnableKeyRotation.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* KeyId: (Required) The Key ID of the AWS KMS symmetric CMK.\\n\\n## Output Parameters\\n* EnableKeyRotation.EnableKeyRotationResponse: The standard HTTP response from the EnableKeyRotation API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"KeyId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Key ID of the AWS KMS symmetric CMK.\",\n      \"allowedPattern\" : \"[a-z0-9-]{1,2048}\"\n    }\n  },\n  \"outputs\" : [ \"EnableKeyRotation.EnableKeyRotationResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"EnableKeyRotation\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## EnableKeyRotation\\nEnables automatic key rotation for the given AWS KMS CMK.\\n## Outputs\\n* EnableKeyRotationResponse: The standard HTTP response from the EnableKeyRotation API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"kms\",\n      \"Api\" : \"EnableKeyRotation\",\n      \"KeyId\" : \"{{ KeyId }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"EnableKeyRotationResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyKeyRotation\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyKeyRotation\\nVerifies that the KeyRotationEnabled is set to true for the given AWS KMS CMK.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"kms\",\n      \"Api\" : \"GetKeyRotationStatus\",\n      \"KeyId\" : \"{{ KeyId }}\",\n      \"PropertySelector\" : \"$.KeyRotationEnabled\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-11-13T16:08:26.868Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableKeyRotation",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ec588972-8ea0-41c9-9c59-4238d314b0f1",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2724,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-14T07:10:45.2964108+00:00"
+}

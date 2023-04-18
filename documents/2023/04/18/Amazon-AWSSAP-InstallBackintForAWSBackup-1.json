@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"schemaVersion\": \"2.2\",\n\t\"description\": \"A composite document for installing and configuring AWS Backint Agent.\",\n\t\"parameters\": {\n\t\t\"SystemID\": {\n\t\t\t\"description\": \"Enter the SAP HANA System ID. For example, HDB.\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^([A-Z]{1}[0-9A-Z]{2})$\"\n\t\t},\n\t\t\"InstallationDirectoryConfirmation\": {\n\t\t\t\"description\": \"Select 'yes' to confirm that AWS Backint agent can be installed in /hana/shared/ directory.\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"no\",\n\t\t\t\"allowedValues\": [\"yes\", \"no\"]\n\t\t},\n\t\t\"AgentVersion\": {\n\t\t\t\"description\": \"(Optional) The version of the package to install. The latest published version is installed by default.\",\n\t\t\t\"default\": \"\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^$|^[0-9_.]*$\",\n\t\t\t\"maxChars\": \"20\"\n\t\t},\n\t\t\"ModifyGlobalIniFile\": {\n\t\t\t\"description\": \"To modify the global.ini file, select ‘Modify’ to modify the file with this installation or select ‘SQL’ to generate SQL commands to modify the file.\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedValues\": [\n\t\t\t\t\"modify\",\n\t\t\t\t\"sql\",\n\t\t\t\t\"none\"\n\t\t\t],\n\t\t\t\"default\": \"none\"\n\t\t},\n\t\t\"ConfirmLogBackupPostInstall\": {\n\t\t\t\"description\": \"Select 'yes' to confirm that log backups be enabled in AWS Backup after installation of AWS Backint Agent for SAP HANA.\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"no\",\n\t\t\t\"allowedValues\": [\"yes\", \"no\"]\n\t\t},\n\t\t\"DebugMode\": {\n\t\t\t\"description\": \"Specify if you want to activate the debug mode.\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"no\",\n\t\t\t\"allowedValues\": [\"yes\", \"no\"]\n\t\t},\n\t\t\"EnsureNoBackupInProcess\": {\n\t\t\t\"description\": \"Select 'yes' to confirm that there are no backups in-progress and log backups are disabled before installation of AWS Backint Agent for SAP HANA. See AWS Backint documentation for details.\",\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"no\",\n\t\t\t\"allowedValues\": [\"yes\", \"no\"]\n\t\t}\n\t},\n\t\"mainSteps\": [{\n\t\t\t\"action\": \"aws:configurePackage\",\n\t\t\t\"name\": \"installAgent\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"name\": \"AWSSAP-Backint\",\n\t\t\t\t\"action\": \"Install\",\n\t\t\t\t\"version\": \"{{AgentVersion}}\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"action\": \"aws:runShellScript\",\n\t\t\t\"name\": \"configureAgent\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"runCommand\": [\n\t\t\t\t\t\"INSTALLERDIRSYMLINK='/usr/bin/aws-backint-installer'\",\n\t\t\t\t\t\"INSTALLERDIR=$(readlink -f /usr/bin/aws-backint-installer)\",\n\t\t\t\t\t\"if [ $(which python3 2>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python3)\",\n\t\t\t\t\t\"elif [ $(which python 2>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python)\",\n\t\t\t\t\t\"elif [ $(which python2 2>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python2)\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   exit 1\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"if [[ \\\"{{DebugMode}}\\\" == no ]]; then\",\n\t\t\t\t\t\"   DEBUGMODE=''\", \n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   DEBUGMODE='--debug'\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"if [[ \\\"{{InstallationDirectoryConfirmation}}\\\" == yes ]]; then\",\n\t\t\t\t\t\"   INSTALLATIONDIR='/hana/shared'\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   INSTALLATIONDIR=''\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"cd $INSTALLERDIR\",\n\t\t\t\t\t\"$PYTHON_BIN install-aws-backint-agent -ssm -backup_service -g \\\"hana_sid={{SystemID}},installation_directory=$INSTALLATIONDIR,modify_global_ini={{ModifyGlobalIniFile}}\\\" \",\n\t\t\t\t\t\"$PYTHON_BIN install-aws-backint-agent -f default.rsp -m silent -ssm -backup_service -a {{EnsureNoBackupInProcess}} -abs {{ConfirmLogBackupPostInstall}} $DEBUGMODE\"\n\t\t\t\t]\n\t\t\t}\n\t\t}\n\t]\n}\n",
+  "CreatedDate": "2023-04-13T00:54:29.618Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSSAP-InstallBackintForAWSBackup",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "01099f33-d5a8-4688-b54e-c0119861032a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4080,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-18T07:11:29.3130372+00:00"
+}

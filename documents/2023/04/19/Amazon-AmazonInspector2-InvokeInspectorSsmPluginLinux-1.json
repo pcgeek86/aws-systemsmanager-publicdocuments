@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\t\t\t\"schemaVersion\": \"2.2\",\n\t\t\t\t\"description\": \"Invokes inspector ssm plugin for linux\",\n\t\t\t\t\"parameters\": {\n\t\t\t\t\t\"Timeout\": {\n\t\t\t\t\t\t\"type\": \"String\",\n\t\t\t\t\t\t\"description\": \"Timeout in seconds for inspector ssm plugin\",\n\t\t\t\t\t\t\"default\": \"900\",\n\t\t\t\t\t\t\"allowedPattern\": \"^([0-9]|[1-9][0-9]+)$\"\n\t\t\t\t\t},\n\t\t\t\t\t\"CpuLimit\": {\n\t\t\t\t\t\t\"type\": \"String\",\n\t\t\t\t\t\t\"description\": \"Cpu usage limit in percentage for inspector ssm plugin\",\n\t\t\t\t\t\t\"default\": \"65\",\n\t\t\t\t\t\t\"allowedPattern\": \"^([1-9]|[1-9][0-9])$|^(100)$\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"mainSteps\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"action\": \"aws:runShellScript\",\n\t\t\t\t\t\t\"name\": \"invokeInspectorSsmPluginLinux\",\n\t\t\t\t\t\t\"precondition\":{\n\t\t\t\t\t\t\t\"StringEquals\": [\"platformType\", \"Linux\"]\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"inputs\":{\n\t\t\t\t\t\t\t\"runCommand\": [\"#!/bin/bash\",\n\"#\",\n\"# Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.\",\n\"#\",\n\"\",\n\"set -x\",\n\"\",\n\"function fail {\",\n\"  echo $1\",\n\"  echo $1 >&2\",\n\"  exit 1\",\n\"}\",\n\"\",\n\"function retry {\",\n\"  local attempt=0\",\n\"  local max_attempts=5\",\n\"  local delay=60\",\n\"  while\",\n\"    \\\"$1\\\" && break || {\",\n\"        ((attempt++))\",\n\"        echo \\\"Waiting for $delay second(s) before retrying...\\\"\",\n\"        sleep $delay;\",\n\"    }\",\n\"    [[ $attempt -lt $max_attempts ]]\",\n\"  do :; done\",\n\"  if [[ $attempt -eq $max_attempts ]]; then\",\n\"    echo \\\"Retries completed after $attempt attempts.\\\"\",\n\"    fail \\\"$2\\\"\",\n\"  fi\",\n\"}\",\n\"\",\n\"INSPECTOR_ROOT_DIR=\\\"/opt/aws/inspector\\\"\",\n\"INSPECTOR_SSM_PLUGIN=\\\"$INSPECTOR_ROOT_DIR/bin/inspectorssmplugin\\\"\",\n\"INSPECTOR_OUTPUT_DIR=\\\"$INSPECTOR_ROOT_DIR/var/output\\\"\",\n\"\",\n\"TIMEOUT=\\\"{{Timeout}}\\\"\",\n\"CPU_LIMIT=\\\"{{CpuLimit}}\\\"\",\n\"\",\n\"function is_installed {\",\n\"  if [[ ! -f $INSPECTOR_SSM_PLUGIN ]]; then\",\n\"    echo \\\"$INSPECTOR_SSM_PLUGIN does not exist\\\"\",\n\"    (exit 1)\",\n\"  else\",\n\"    echo \\\"$INSPECTOR_SSM_PLUGIN exist\\\"\",\n\"  fi\",\n\"}\",\n\"\",\n\"echo \\\"Checking the installation of inspector ssm plugin...\\\"\",\n\"retry is_installed \\\"Inspector ssm plugin is not installed. Exiting...\\\"\",\n\"echo \\\"Inspector ssm plugin is installed.\\\"\",\n\"\",\n\"echo \\\"Starting evaluation using inspector ssm plugin\\\"\",\n\"cmd=\\\"$INSPECTOR_SSM_PLUGIN -mode bpm -read-params-store -report-ssm-inventory -report-metrics-via-ssm-inventory -save-findings-as $INSPECTOR_OUTPUT_DIR/packages.txt -format text -timeout $(($TIMEOUT)) -cpulimit $(($CPU_LIMIT))\\\"\",\n\"$cmd\",\n\"status=$?\",\n\"if [ $status -eq 0 ]\",\n\"then\",\n\"  echo \\\"Inspector ssm plugin linux ran successfully\\\"\",\n\"  exit 0\",\n\"else\",\n\"  fail \\\"Inspector ssm plugin did not run successfully\\\"\",\n\"fi\"]\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}",
+  "CreatedDate": "2023-04-13T20:00:25.863Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AmazonInspector2-InvokeInspectorSsmPluginLinux",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c643e4f7-3417-425c-b384-7616a559a6a5",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3246,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-19T07:13:03.9717317+00:00"
+}

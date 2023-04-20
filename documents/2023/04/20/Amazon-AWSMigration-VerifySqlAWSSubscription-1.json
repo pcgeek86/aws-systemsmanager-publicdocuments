@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"This document verifies that your instance has the right usage operation per your Microsoft SQL Server edition.\\nThis document is only supported for Windows machines.\",\n  \"schemaVersion\" : \"0.3\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"AWS::EC2::Instance::Id\",\n      \"description\" : \"(Required) The instance ID for which the verification will be performed.\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"AWS::IAM::Role::Arn\",\n      \"description\" : \"(Optional) The ARN of the IAM role to assume by the automation. If no role is provided, this document will run with the permissions of the user that initiated the automation.\",\n      \"default\" : \"\"\n    }\n  },\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"mainSteps\" : [ {\n    \"name\" : \"GetImageId\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"Obtains the AMI ID of an instance.\",\n    \"timeoutSeconds\" : \"3600\",\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"DescribeInstances\",\n      \"Filters\" : [ {\n        \"Name\" : \"instance-id\",\n        \"Values\" : [ \"{{InstanceId}}\" ]\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"ImageId\",\n      \"Selector\" : \"$.Reservations[0].Instances[0].ImageId\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"GetUsageOperation\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"Obtains the UsageOperation of an AMI.\",\n    \"timeoutSeconds\" : \"3600\",\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"DescribeImages\",\n      \"Filters\" : [ {\n        \"Name\" : \"image-id\",\n        \"Values\" : [ \"{{GetImageId.ImageId}}\" ]\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"UsageOperation\",\n      \"Selector\" : \"$.Images[0].UsageOperation\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"VerifySqlVersionAndUsageOperation\",\n    \"action\" : \"aws:runCommand\",\n    \"description\" : \"Obtains the Microsoft SQL Server edition installed on the instance and verifies that it matches the usage operation.\",\n    \"timeoutSeconds\" : \"3600\",\n    \"inputs\" : {\n      \"DocumentName\" : \"AWS-RunPowerShellScript\",\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"Parameters\" : {\n        \"commands\" : [ \"try\\n{\\n    Import-Module 'sqlps' -DisableNameChecking\\n    [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO')\\n    $managedComputer = New-Object ('Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer')\\n    foreach ($instance in ($managedComputer.ServerInstances |  SELECT Name))\\n    {\\n        $instanceName = $instance.Name\\n    }\\n    $sqlServerPath = Get-ItemPropertyValue -Path \\\"HKLM:/SYSTEM/CurrentControlSet/Services/$instanceName/\\\" -Name 'ImagePath'\\n    $valueSplits = $sqlServerPath -split 'MSSQL'\\n    $version = $valueSplits[1].Split('.', [System.StringSplitOptions]::RemoveEmptyEntries)\\n    if (\\\"$version\\\" -eq '') {\\n        Write-Error 'Microsoft SQL Server not detected.'\\n        exit 1\\n    }\\n\\n    $edition = Get-ItemPropertyValue -Path \\\"HKLM:/software/Microsoft/Microsoft SQL Server/MSSQL$version.$instanceName/Setup\\\" -Name 'Edition'\\n    $edition = $edition.ToLower()\\n    echo \\\"Microsoft SQL Server $edition edition found.\\\"\\n}\\ncatch\\n{\\n     Write-Error 'Microsoft SQL Server not detected.'\\n     exit 1\\n}\\n\\n$versionMismatch = $True\\nif ((\\\"$edition\\\" -like '*standard*') -and ('{{GetUsageOperation.UsageOperation}}' -eq 'RunInstances:0006')) {\\n    $versionMismatch = $False\\n} elseif ((\\\"$edition\\\" -like '*enterprise*') -and ('{{GetUsageOperation.UsageOperation}}' -eq 'RunInstances:0102')) {\\n    $versionMismatch = $False\\n}elseif ((\\\"$edition\\\" -like '*web*') -and ('{{GetUsageOperation.UsageOperation}}' -eq 'RunInstances:0202'))  {\\n    $versionMismatch = $False\\n}\\n\\nif ($versionMismatch -eq $True) {\\n    Write-Error 'The usage operation does not match the expected one.'\\n    exit 1\\n}\\nWrite-Output 'Usage operation verification succeeded.'\\n\" ]\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2023-03-11T12:11:31.069Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSMigration-VerifySqlAWSSubscription",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b1d07209-b794-4781-b144-adf07b659767",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4392,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-20T07:11:32.1169771+00:00"
+}

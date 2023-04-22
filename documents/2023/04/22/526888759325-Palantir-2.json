@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Palantir\",\n  \"parameters\" : {\n    \"customer\" : {\n      \"description\" : \"The customer shortname\",\n      \"type\" : \"String\"\n    },\n    \"environment\" : {\n      \"description\" : \"The palantir environment [sandbox | prod]\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"PalantirLinux\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo su - root 2>&1 > /dev/null\", \"mkdir -p /root/palantir/json 2>&1 > /dev/null\", \"aws s3 cp --only-show-errors s3://palantir-10006-inventory/palantir-artifacts/{{ environment }}/ec2_python.zip /root/palantir 2>&1 > /dev/null\", \"unzip /root/palantir/ec2_python.zip -d /root/palantir 2>&1 > /dev/null\", \"python /root/palantir/palantir.py {{ customer }}\", \"aws s3 sync /root/palantir/json/ s3://ellucian-{{ customer }}-artifacts/palantir\", \"rm -rf /root/palantir 2>&1 > /dev/null\" ]\n    }\n  }, {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"PalantirWindows\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    },\n    \"inputs\" : {\n      \"runCommand\" : [ \"mkdir c:/Ellucian/palantir/json\", \"aws s3 cp --only-show-errors s3://palantir-10006-inventory/palantir-artifacts/{{ environment }}/ec2_powershell.zip c:/Ellucian/palantir/ec2_powershell.zip\", \"Expand-Archive -Path c:\\\\Ellucian\\\\palantir\\\\ec2_powershell.zip -DestinationPath c:\\\\Ellucian\\\\palantir\", \". C:\\\\\\\\Ellucian\\\\\\\\palantir\\\\\\\\ec2_audit.ps1 {{ customer }}\", \"aws s3 sync c:/Ellucian/palantir/json/ s3://ellucian-{{ customer }}-artifacts/palantir\", \"Remove-Item 'C:\\\\Ellucian\\\\palantir' -Recurse -Confirm:$false -Force\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-11-08T22:14:12.823Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:526888759325:document/Palantir",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a623cead-2ab5-44ea-bbf2-c82655cf63e1",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2093,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-22T07:11:47.6753543+00:00"
+}

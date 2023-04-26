@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.2\",\n  \"description\": \"Configure the CloudWatch agent to collect Disk Usage and Memory Usage metrics\",\n  \"parameters\": {},\n  \"runtimeConfig\": {\n    \"aws:cloudWatch\": {\n      \"metrics_collected\": {\n        \"disk\": {\n          \"measurement\": [\n            \"used_percent\"\n          ],\n          \"resources\": [\n            \"/\"\n          ]\n        },\n        \"mem\": {\n          \"measurement\": [\n            \"mem_used_percent\"\n          ]\n        }\n      }\n    }\n  }\n}\n",
+  "CreatedDate": "2023-03-23T16:01:35.197Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:675368546978:document/CloudWatch-Memory",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "7434bad3-339b-4a1a-815a-a5775ba15768",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 747,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-26T07:11:37.4197852+00:00"
+}

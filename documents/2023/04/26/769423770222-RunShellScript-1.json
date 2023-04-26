@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n    \"schemaVersion\": \"2.2\",\n    \"description\": \"My composite document for do0wnloading s3 document.\",\n    \"parameters\": {\n    },\n    \"mainSteps\": [\n      {\n        \"action\": \"aws:downloadContent\",\n        \"name\": \"downloadContent\",\n        \"inputs\": {\n          \"sourceType\": \"S3\",\n          \"sourceInfo\": \"{\\\"path\\\":\\\"https://s3.amazonaws.com/xero-ps-paas-dev-us-west-2-network/checkpoint-gateway/test_ssm.py\\\"}\",\n          \"destinationPath\": \"C:\\\\Temp\"\n        }\n      }\n    ]\n}\n",
+  "CreatedDate": "2018-02-04T22:04:47.717Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:769423770222:document/RunShellScript",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "5127b2c5-616e-4a4c-9811-9e1eb4d9561d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 746,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-26T07:11:46.1017954+00:00"
+}

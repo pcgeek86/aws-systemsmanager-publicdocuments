@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "bbecfae734cce9f365f19b94beb0526af38acf8c02f86fee455b6d4648ce3b20",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "AWS-ExportPatchReportToS3.zip",
+      "Size": 12246704,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/961/123784938132/Automation/AWS-ExportPatchReportToS3%212d2e1b32-782f-4fdf-8b4f-f4853d4b54a4/6/AWS-ExportPatchReportToS3.zip?x-attachment-size=12246704&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH4aCXVzLXdlc3QtMiJHMEUCIGFtBTj9QrqIP9NPpyEh2dshuCn9d%2BkwCVU4p%2FEqDFVrAiEAuApQw786havi%2BptYJmwUPRotmRJjBJZyiEug9LCWh9AqwwUIh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgwyNDk5MjQ1Mjc0MTAiDLvwsj7EtI7r0PNq9CqXBZUk%2FO0Il%2Fled9nY%2FXXaTblJbSHmK%2B4yS3D7z06R%2Bk0gdbLkbeDifXBxtTdyBuErAratTh2aRxFazu9RfT64YNYAT%2FvhbTmRR6Q%2FzMzh4vX3xTU8FmYd86p%2BoIkbByAPkGIh3rxUT3DqdiSi9hfh9zeTqMyKu6Mf29W0ivpRPmalqbZGVaWvddKjfXP749c7elYHHIZxy8SrvP7CLlKQuIGoruxsPq9yBtfQaFQk1atJJ74R6B%2FXw1y%2BdLrAZYjbYMCoBNdO9SYQjcrLBWOLML04RF36ftYusgl8aG2XcKpbSHkFSqLEPvNl%2B9aygn2oodzSTZaU7pvGpbhHje5XIHn1ObecelIT5bo3C0f6xCR62FWLRZF%2BhU%2FA%2Fwv7VjEKq8RXvcGvp7ZxLwd7qWQ9VaBgM2y%2FshIe8ut3EPK6rw3y2P6NJUkwMUkCNFtG8En47Jo3mODHqAfUg4uLn9rjSV4yIcYOlnGRmZHPuvvkGvAzZn0nxr7lj2wuCw48cwxIedqvU12pVElkC7br5fAj%2B2RCFHsHVmrRRAQ85Xxe87SHqgqjt0Z4cXslZPwzCJSq6ztz3BZpk8Jd%2BW0KhMkZkyZ41V18mboA%2BSv%2BihKFOyAJYZUwGaVTVXOYlbFhRg75y8OL3vEk%2F4fcHr4LA2YNS8SKXWpncXqVuY3KRhOvk1Aa28WDp7Kk4FuSsInlWkKNSezjMT1aTZlyshS5Kd4g%2BQZv0l6RdV0sDbwmdwncAj7ec4NblJtZsnXvZBaNH8oCKeW2YQ0pyyb%2BVQ1WbRzwHpTfI09wBfEMdUGORFSz57Hp%2BZm5vLI%2B%2BEVvvV1InSv3qaZbpUiA3uzrIaU3xZwJYBLESjt%2B9DWUekxfXz%2FWJL%2FgqX6owDs8PjDRg7iiBjqxAQfvxTUeXp%2Fl2LAeprsPYaSzPhk4FkmvoLhZ6l6Q9Q8a%2BVFcQVaJxWQKfk%2BpKl%2FBF4z0YBA07fn0AfvNsJ08TXxer%2F4UDQYRZZss054CAzkjUApUhGOipRmbM7Y66DjhaHOKJpfqIH9RCZBnBShEVrl89A%2F16nnxUVWAScwyDsYbKTxBswVZ1TdcxSvcJOix6Pv%2BxOf0kcB2XX6qetK2M6LtSMz0HOi1fx123HEF4GjkQA%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230430T070937Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Credential=ASIATUMFJUUZMOCUDONG%2F20230430%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=9cb1628533588e590e3ba579ac597c1b5484bb5ca061c33dcda0ce727e8deb02"
+    }
+  ],
+  "Content": "{\n  \"description\" : \"### Document name - AWS-ExportPatchReportToS3\\n\\n  ## What does this document do?\\n  This document retrieves lists of patch summary data and patch details in AWS Systems Manager Patch Manager and exports them to a CSV file in a specified Amazon S3 bucket.\\n\\n  ## Input Parameters\\n  * assumeRole: The Amazon Resource Name (ARN) of the role that allows Automation to perform the actions on your behalf.\\n  * reportName: The name of the CSV report to generate and download to S3.\\n  * s3BucketName: The Amazon S3 bucket where you want to download the output file.\\n  * snsTopicArn: The Amazon Simple Notification Service (SNS) topic ARN to notify when the download completes.\\n  * snsSuccessMessage: The message to send when the export finishes. If you don't specify message text, the snsSuccessMessage is sent empty by default.\\n  * targets: The instance ID or a wildcard character (*) to indicate whether to report patch data for a specific instance or for all instances. Use the format: instanceids=i-12345678901234567 or instanceids=*. Currently, the format 'instanceids=instance1,instance2' is not supported.\\n\\n  ## Output parameters\\n  * PatchSummary/Patches object: If the document runs successfully, the exported patch summary object or patches object is uploaded to your target S3 bucket.\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{assumeRole}}\",\n  \"parameters\" : {\n    \"assumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The role ARN to assume during the automation.\",\n      \"allowedPattern\" : \"^arn:aws([a-zA-Z-]*)?:iam::\\\\d{12}:role\\\\/([a-zA-Z0-9_+=,.@/-]+)$\"\n    },\n    \"reportName\" : {\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"^[a-zA-Z0-9._-]{1,50}$\",\n      \"description\" : \"(Required) The name of the CSV report to generate and download to S3.\"\n    },\n    \"s3BucketName\" : {\n      \"type\" : \"String\",\n      \"allowedPattern\" : \"^[a-z0-9.-]{3,63}$\",\n      \"description\" : \"(Required) The Amazon S3 bucket where you want to download the output file.\"\n    },\n    \"targets\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) Instance ID or a wildcard character (*) to indicate whether to report patch data for a specific instance or for all instances. \\\\\\n    Use the format 'instanceids=i-12345678901234567' or 'instanceids=*'. Currently, the format 'instanceids=instance1,instance2' is not supported.\",\n      \"allowedPattern\" : \"^instanceids=((i-(\\\\w{8}|\\\\w{17}))|(mi-\\\\w{17})|(\\\\*))$\"\n    },\n    \"snsTopicArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The Amazon Simple Notification Service (SNS) topic ARN to notify when the download completes.\",\n      \"allowedPattern\" : \"^(arn:aws([a-zA-Z-]*)?:sns:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\\\d{1}:\\\\d{12}:[a-zA-Z0-9-_]{1,256})|(^$)$\",\n      \"default\" : \"\"\n    },\n    \"snsSuccessMessage\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The message to send when the process completes. The maximum size is 256kb.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"ExportReportStep\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"Succeeded\",\n      \"Selector\" : \"$.Payload\",\n      \"Type\" : \"Boolean\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"script.script_handler\",\n      \"Script\" : \"def hello(): return hello\",\n      \"InputPayload\" : {\n        \"ReportName\" : \"{{reportName}}\",\n        \"S3BucketName\" : \"{{s3BucketName}}\",\n        \"SnsTopicArn\" : \"{{snsTopicArn}}\",\n        \"SnsSuccessMessage\" : \"{{snsSuccessMessage}}\",\n        \"Targets\" : \"{{targets}}\"\n      },\n      \"Attachment\" : \"AWS-ExportPatchReportToS3.zip\"\n    },\n    \"description\" : \"### What does the step do?\\n      The action for this step depends on the value of the 'targets' parameter. If 'targets' is in the format of 'instanceids=*',\\n      the step retrieves up to 10,000 patch summaries for instances in your account and exports the data to a CSV file.\\n\\n      If 'targets' is in the format 'instanceids=<instance-id>',\\n      the step retrieves both the patch summary and all the patches for the specified instance in your account and exports them to a CSV file.\\n\\n      ### What is the output of the step?\\n      The list of patch summaries/patches for all instances or for the specified instance is stored as a CSV file in an Amazon S3 bucket.\\n      An Amazon SNS message is published to report success. The output file name and the S3 bucket name are included in the message when the script finishes successfully.\",\n    \"timeoutSeconds\" : 600\n  } ],\n  \"files\" : {\n    \"AWS-ExportPatchReportToS3.zip\" : {\n      \"checksums\" : {\n        \"sha256\" : \"bbecfae734cce9f365f19b94beb0526af38acf8c02f86fee455b6d4648ce3b20\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2023-04-13T12:03:31.809Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ExportPatchReportToS3",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a2255318-0a99-4296-bce5-ee0dc70909e0",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 7376,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-04-30T07:09:37.9876575+00:00"
+}

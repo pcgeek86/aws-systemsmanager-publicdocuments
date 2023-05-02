@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-DisablePublicAccessToRedshiftCluster\\n\\n## What does this document do?\\nThe runbook disables public accessibility for the Amazon Redshift cluster you specify using the [ModifyCluster]\\n(https://docs.aws.amazon.com/redshift/latest/APIReference/API_ModifyCluster.html) API. \\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf. \\n* ClusterIdentifier: (Required) The unique identifier of the cluster you want to disable the public accessibility.\\n\\n## Output Parameters\\n* DisableRedshiftPubliclyAccessible.Response: The standard HTTP response from the ModifyCluster API call.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:aws[a-z0-9-]*:iam::\\\\d{12}:role\\\\/[\\\\w-\\\\/.@+=,]{1,1017}$\"\n    },\n    \"ClusterIdentifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The unique identifier of the cluster you want to disable the public accessibility.\",\n      \"allowedPattern\" : \"^[a-z]([a-z\\\\d]-?){0,61}[a-z\\\\d]$\"\n    }\n  },\n  \"outputs\" : [ \"DisableRedshiftPubliclyAccessible.Response\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"WaitForRedshiftClusterAvailability\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"description\" : \"## WaitForRedshiftClusterAvailability\\nWaits for the state of the cluster to change to available.\\n\",\n    \"timeoutSeconds\" : 900,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].ClusterStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"DisableRedshiftPubliclyAccessible\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DisableRedshiftPubliclyAccessible\\nDisables public accessibility for the cluster specified in the ClusterIdentifer parameter.\\n## Outputs\\n* Response: The standard HTTP response from the ModifyCluster API call.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"ModifyCluster\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PubliclyAccessible\" : false\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"CheckForRedshiftClusterAvailability\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"description\" : \"## WaitForRedshiftClusterAvailability\\nWaits for the state of the cluster to change to available.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].ClusterStatus\",\n      \"DesiredValues\" : [ \"available\" ]\n    }\n  }, {\n    \"name\" : \"VerifyRedshiftPubliclyAccessible\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyRedshiftPubliclyAccessible\\nConfirms the public accessibility setting is disabled on the cluster.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].PubliclyAccessible\",\n      \"DesiredValues\" : [ \"False\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-02-22T16:05:09.745Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "AWSConfigRemediation-DisablePublicAccessToRedshiftCluster",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "ba6d9fb2-efb1-4bdd-8804-4d987da61769",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4326,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-02T07:10:54.7506093+00:00"
+}

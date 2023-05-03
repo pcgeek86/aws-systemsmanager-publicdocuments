@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-EnableCLBCrossZoneLoadBalancing\\n\\n## What does this document do?\\nThis document enables `Cross Zone Load Balancing` on an AWS Classic load balancer using the [ModifyLoadBalancerAttributes](https://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_ModifyLoadBalancerAttributes.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* LoadBalancerName: (Required) The name of the AWS Classic load balancer.\\n\\n## Output Parameters\\n* ModifyLoadBalancer.Response: The standard HTTP response from the ModifyLoadBalancerAttributes API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"LoadBalancerName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the AWS Classic load balancer, for which `Cross Zone Load Balancing` is to be enabled.\",\n      \"allowedPattern\" : \"^[a-zA-Z0-9]([a-zA-Z0-9\\\\-]{0,30}[a-zA-Z0-9])?$\"\n    }\n  },\n  \"outputs\" : [ \"ModifyLoadBalancer.Response\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"ModifyLoadBalancer\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## ModifyLoadBalancer\\nMakes ModifyLoadBalancerAttributes API call to enable 'CrossZoneLoadBalancing' AWS Classic load balancer.\\n## Outputs\\n* Response: The standard HTTP response from the ModifyLoadBalancerAttributes API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"elb\",\n      \"Api\" : \"ModifyLoadBalancerAttributes\",\n      \"LoadBalancerName\" : \"{{ LoadBalancerName }}\",\n      \"LoadBalancerAttributes\" : {\n        \"CrossZoneLoadBalancing\" : {\n          \"Enabled\" : true\n        }\n      }\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyLoadBalancerState\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyLoadBalancerState\\nVerifies that 'CrossZoneLoadBalancing' is enabled for the given AWS Classic load balancer.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"elb\",\n      \"Api\" : \"DescribeLoadBalancerAttributes\",\n      \"LoadBalancerName\" : \"{{ LoadBalancerName }}\",\n      \"PropertySelector\" : \"LoadBalancerAttributes.CrossZoneLoadBalancing.Enabled\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-01-28T16:06:29.48Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-EnableCLBCrossZoneLoadBalancing",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e7b96ca9-bce5-4126-8264-d20deee5b781",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3124,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-03T07:11:18.4646102+00:00"
+}

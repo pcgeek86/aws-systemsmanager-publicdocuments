@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\"description\": \"Renews Continuous job Ids on an EC2 instance.\",\n\t\"schemaVersion\": \"2.2\",\n\t\"parameters\": {\n\t\t\"HANASID\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"None\",\n\t\t\t\"allowedPattern\": \"[A-Za-z0-9]{3}\"\n\t\t},\n\t\t\"HANADatabaseName\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9_\\\\-\\\\/]*$\",\n\t\t\t\"maxChars\": 150\n\t\t},\n\t\t\"FilePath\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^/hana/shared/aws-backint-agent/awsbackup/StorageId.json$\",\n\t\t\t\"maxChars\": 100\n\t\t},\n\t\t\"CatalogIdWrite\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9!@#$%^&*=?+-/]*$\",\n\t\t\t\"maxChars\": 6148\n\t\t},\n\t\t\"TxIdWrite\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9!@#$%^&*=?+-/]*$\",\n\t\t\t\"maxChars\": 6148\n\t\t},\n\t\t\"CatalogIdRead\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9!@#$%^&*=?+-/]*$\",\n\t\t\t\"maxChars\": 6148\n\t\t},\n\t\t\"TxIdRead\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9!@#$%^&*=?+-/]*$\",\n\t\t\t\"maxChars\": 6148\n\t\t},\n\t\t\"RestoreIdRead\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"^[a-zA-Z0-9!@#$%^&*=?+-/]*$\",\n\t\t\t\"maxChars\": 6148\n\t\t},\n\t\t\"TxIdExpirationTime\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"(^(\\\\d{4})-(\\\\d{2})-(\\\\d{2})T(\\\\d{2}):(\\\\d{2}):(\\\\d{2}(?:\\\\.\\\\d*)?)((-(\\\\d{2}):(\\\\d{2})|Z)?)$)|None$\",\n\t\t\t\"maxChars\": 50\n\t\t},\n\t\t\"CatalogIdExpirationTime\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"allowedPattern\": \"(^(\\\\d{4})-(\\\\d{2})-(\\\\d{2})T(\\\\d{2}):(\\\\d{2}):(\\\\d{2}(?:\\\\.\\\\d*)?)((-(\\\\d{2}):(\\\\d{2})|Z)?)$)|None$\",\n\t\t\t\"maxChars\": 50\n\t\t},\n\t\t\"Debug\": {\n\t\t\t\"type\": \"String\",\n\t\t\t\"default\": \"False\",\n\t\t\t\"allowedValues\": [\n\t\t\t\t\"True\",\n\t\t\t\t\"False\"\n\t\t\t]\n\t\t}\n\t},\n\t\"mainSteps\": [\n\t\t{\n\t\t\t\"name\": \"InstallPackage\",\n\t\t\t\"action\": \"aws:runDocument\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"documentType\": \"SSMDocument\",\n\t\t\t\t\"documentPath\": \"AWS-ConfigureAWSPackage\",\n\t\t\t\t\"documentParameters\": {\n\t\t\t\t\t\"name\": \"arn:aws:ssm:us-west-2:318514306794:document/AWSSystemsManagerSAP-Support\",\n\t\t\t\t\t\"action\": \"Install\",\n\t\t\t\t\t\"installationType\": \"Uninstall and reinstall\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"InstallPackageAgain\",\n\t\t\t\"action\": \"aws:runDocument\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"documentType\": \"SSMDocument\",\n\t\t\t\t\"documentPath\": \"AWS-ConfigureAWSPackage\",\n\t\t\t\t\"documentParameters\": {\n\t\t\t\t\t\"name\": \"arn:aws:ssm:us-west-2:318514306794:document/AWSSystemsManagerSAP-Support\",\n\t\t\t\t\t\"action\": \"Install\",\n\t\t\t\t\t\"installationType\": \"Uninstall and reinstall\"\n\t\t\t\t}\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"name\": \"PerformAction\",\n\t\t\t\"action\": \"aws:runShellScript\",\n\t\t\t\"inputs\": {\n\t\t\t\t\"RunCommand\": [\n\t\t\t\t\t\"# Timestamp: 1681695578705\",\n\t\t\t\t\t\"mkdir -p /usr/bin/ssm-sap/logs\",\n\t\t\t\t\t\"cd /usr/bin/ssm-sap/logs\",\n\t\t\t\t\t\"export PYTHONPATH=$PYTHONPATH:/usr/bin/ssm-sap/scripts\",\n\t\t\t\t\t\"if [ $(which python3 3>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python3)\",\n\t\t\t\t\t\"elif [ $(which python 3>/dev/null) ]; then\",\n\t\t\t\t\t\"   PYTHON_BIN=$(which python)\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   exit 1\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"if [[ \\\"{{Debug}}\\\" == \\\"True\\\" ]]; then\",\n\t\t\t\t\t\"   DEBUGMODE='--debug'\",\n\t\t\t\t\t\"else\",\n\t\t\t\t\t\"   DEBUGMODE=''\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"touch ~/.bashrc && source ~/.bashrc\",\n\t\t\t\t\t\"if [[ \\\":$PYTHONPATH:\\\" != *\\\":/usr/bin/ssm-sap/scripts/dependencies\\\"* ]]; then\",\n\t\t\t\t\t\"   sed -i 's#://usr/bin/ssm-sap/scripts/dependencies##' ~/.bashrc\",\n\t\t\t\t\t\"   echo export PYTHONPATH='${PYTHONPATH}:/usr/bin/ssm-sap/scripts/dependencies' >> ~/.bashrc\",\n\t\t\t\t\t\"   source ~/.bashrc\",\n\t\t\t\t\t\"fi\",\n\t\t\t\t\t\"$PYTHON_BIN /usr/bin/ssm-sap/scripts/idRenewal/id_renewal.py --dbName '{{HANADatabaseName}}' --sid '{{HANASID}}' --catalogIdWrite '{{CatalogIdWrite}}' --catalogIdExpirationTime '{{CatalogIdExpirationTime}}' --txIdWrite '{{TxIdWrite}}' --txIdExpirationTime '{{TxIdExpirationTime}}' --filePath '{{FilePath}}' --catalogIdRead '{{CatalogIdRead}}' --txIdRead '{{TxIdRead}}' --restoreIdRead '{{RestoreIdRead}}' $DEBUGMODE\"\n\t\t\t\t],\n\t\t\t\t\"TimeoutSeconds\": \"600\"\n\t\t\t}\n\t\t}\n\t]\n}",
+  "CreatedDate": "2023-04-20T15:12:58.913Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "20",
+  "Name": "AWSSystemsManagerSAP-BackupJobIdRenewal",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "17e574c9-c609-4e79-9c8e-cca2e2c5276d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4809,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-05T07:11:40.0336161+00:00"
+}

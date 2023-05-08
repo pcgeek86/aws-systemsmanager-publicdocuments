@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Delete Amazon Machine Image (AMI) and all associated snapshots.\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"ImageId\": {\n      \"type\": \"String\",\n      \"description\": \"(Required) The ID of the Amazon Machine Image (AMI).\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf. \",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"deleteImage\",\n      \"action\": \"aws:deleteImage\",\n      \"onFailure\": \"Abort\",\n      \"inputs\": {\n          \"ImageId\": \"{{ ImageId }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2018-08-07T17:04:43.72Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-DeleteImage",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a33390da-7df3-4a26-88b5-a7904e91e68c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 936,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-08T07:11:01.9567241+00:00"
+}

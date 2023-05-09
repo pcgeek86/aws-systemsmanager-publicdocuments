@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\"schemaVersion\": \"0.3\", \"description\": \"A composite document for testing Docker image with Image Builder\", \"parameters\": {\"arn\": {\"type\": \"String\", \"description\": \"The Image ARN\"}, \"platform\": {\"type\": \"String\", \"description\": \"The Image platform\"}, \"s3LogsBucketName\": {\"type\": \"String\", \"default\": \"imagebuilder-placeholder\"}, \"s3LogsKeyPrefix\": {\"type\": \"String\", \"default\": \"ImageBuilder-{{automation:EXECUTION_ID}}\"}, \"cloudWatchLogGroup\": {\"type\": \"String\"}, \"cloudWatchLogStream\": {\"type\": \"String\"}, \"imageVersionNumber\": {\"type\": \"String\", \"description\": \"The image version number\"}, \"imageBuildNumber\": {\"type\": \"String\", \"description\": \"The image build number\"}, \"isBuildWorkflow\": {\"type\": \"Boolean\", \"default\": false}, \"isTestWorkflow\": {\"type\": \"Boolean\", \"default\": false}, \"imageName\": {\"type\": \"String\", \"description\": \"(Optional) An image name\", \"default\": \"{{imageName}}/{{imageVersionNumber}}/{{imageBuildNumber}}\"}, \"runCommandDocument\": {\"type\": \"String\"}, \"dockerTestCommands\": {\"type\": \"String\", \"description\": \"The commands used to bootstrap the instance.\"}, \"workingDirectory\": {\"type\": \"String\"}, \"instanceId\": {\"type\": \"String\", \"description\": \"(Required) Launched Instance Id\"}, \"terminateInstanceOnFailure\": {\"type\": \"Boolean\", \"description\": \"(Optional) Terminate the instance when build failed\", \"default\": true}}, \"mainSteps\": [{\"name\": \"RunDockerTestScriptsBranch\", \"action\": \"aws:branch\", \"inputs\": {\"Choices\": [{\"NextStep\": \"RunDockerTestScriptsWithoutLogging\", \"Variable\": \"{{s3LogsBucketName}}\", \"StringEquals\": \"imagebuilder-placeholder\"}], \"Default\": \"RunDockerTestScriptsWithLogging\"}}, {\"name\": \"RunDockerTestScriptsWithLogging\", \"action\": \"aws:runCommand\", \"maxAttempts\": 3, \"timeoutSeconds\": 21600, \"onFailure\": \"step:FailureHandling\", \"inputs\": {\"InstanceIds\": [\"{{instanceId}}\"], \"DocumentName\": \"{{runCommandDocument}}\", \"Parameters\": {\"workingDirectory\": \"{{workingDirectory}}\", \"commands\": \"{{dockerTestCommands}}\", \"executionTimeout\": \"21600\"}, \"OutputS3BucketName\": \"{{s3LogsBucketName}}\", \"OutputS3KeyPrefix\": \"{{s3LogsKeyPrefix}}/{{imageName}}/{{imageVersionNumber}}/{{imageBuildNumber}}/Automations/RunDockerTestScripts\"}, \"nextStep\": \"EndOfRunDockerTestScriptsBranch\"}, {\"name\": \"RunDockerTestScriptsWithoutLogging\", \"action\": \"aws:runCommand\", \"maxAttempts\": 3, \"timeoutSeconds\": 21600, \"onFailure\": \"step:FailureHandling\", \"inputs\": {\"InstanceIds\": [\"{{instanceId}}\"], \"DocumentName\": \"{{runCommandDocument}}\", \"Parameters\": {\"workingDirectory\": \"{{workingDirectory}}\", \"commands\": \"{{dockerTestCommands}}\", \"executionTimeout\": \"21600\"}}, \"nextStep\": \"EndOfRunDockerTestScriptsBranch\"}, {\"name\": \"EndOfRunDockerTestScriptsBranch\", \"action\": \"aws:sleep\", \"maxAttempts\": 3, \"onFailure\": \"step:FailureHandling\", \"isEnd\": true, \"inputs\": {\"Duration\": \"PT5S\"}}, {\"name\": \"FailureHandling\", \"action\": \"aws:branch\", \"inputs\": {\"Choices\": [{\"NextStep\": \"DeleteInventoryAssociationOnFailure\", \"Variable\": \"{{terminateInstanceOnFailure}}\", \"BooleanEquals\": true}], \"Default\": \"EndOfFailureHandling\"}}, {\"name\": \"DeleteInventoryAssociationOnFailure\", \"action\": \"aws:executeAwsApi\", \"maxAttempts\": 3, \"isCritical\": false, \"onFailure\": \"Continue\", \"nextStep\": \"TerminateInstanceOnFailure\", \"inputs\": {\"Service\": \"ssm\", \"Api\": \"DeleteAssociation\", \"AssociationId\": \"{{ CreateInventory.AssociationId }}\"}}, {\"name\": \"TerminateInstanceOnFailure\", \"action\": \"aws:changeInstanceState\", \"maxAttempts\": 3, \"isCritical\": false, \"onFailure\": \"Continue\", \"nextStep\": \"EndOfFailureHandling\", \"inputs\": {\"InstanceIds\": [\"{{ instanceId }}\"], \"DesiredState\": \"terminated\"}}, {\"name\": \"EndOfFailureHandling\", \"action\": \"aws:sleep\", \"maxAttempts\": 3, \"isCritical\": false, \"isEnd\": true, \"onFailure\": \"Continue\", \"inputs\": {\"Duration\": \"PT5S\"}}]}",
+  "CreatedDate": "2020-12-05T01:57:18.492Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:538031854465:document/ImageBuilderTestDockerImageDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "bf41a758-31c6-4df3-9106-12442596cb83",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4418,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-09T07:12:37.6419717+00:00"
+}

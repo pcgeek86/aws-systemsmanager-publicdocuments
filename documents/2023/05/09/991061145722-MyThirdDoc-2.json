@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"String\",\n      \"description\": \"Example\",\n      \"default\": \"Hello\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": [ \"Write-Output {{Message}}\" ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-05-28T00:29:29.76Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:991061145722:document/MyThirdDoc",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f6164d9e-8d4b-414e-a459-f01dacf783ec",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 651,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-09T07:12:32.9486088+00:00"
+}

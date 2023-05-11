@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Resize an EC2 instance\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Id of the instance\"\n    },\n    \"InstanceType\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The desired instance type\"\n    },\n    \"SleepWait\" : {\n      \"type\" : \"String\",\n      \"default\" : \"PT5S\",\n      \"description\" : \"(Optional) The desired wait time before starting instance\",\n      \"allowedPattern\" : \"^PT([0-9]{1,6}S|[0-9]{1,5}M|[0-9]{1,3}H)$|^PD[0-7]$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"assertInstanceType\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"inputs\" : {\n      \"Service\" : \"EC2\",\n      \"Api\" : \"DescribeInstances\",\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"PropertySelector\" : \"$.Reservations[0].Instances[0].InstanceType\",\n      \"DesiredValues\" : [ \"{{InstanceType}}\" ]\n    },\n    \"onFailure\" : \"step:stopInstance\",\n    \"isCritical\" : false,\n    \"isEnd\" : true\n  }, {\n    \"name\" : \"stopInstance\",\n    \"action\" : \"aws:changeInstanceState\",\n    \"inputs\" : {\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"DesiredState\" : \"stopped\"\n    }\n  }, {\n    \"name\" : \"resizeInstance\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"EC2\",\n      \"Api\" : \"ModifyInstanceAttribute\",\n      \"InstanceId\" : \"{{InstanceId}}\",\n      \"InstanceType\" : {\n        \"Value\" : \"{{InstanceType}}\"\n      }\n    }\n  }, {\n    \"name\" : \"wait\",\n    \"action\" : \"aws:sleep\",\n    \"inputs\" : {\n      \"Duration\" : \"{{SleepWait}}\"\n    }\n  }, {\n    \"name\" : \"startInstance\",\n    \"action\" : \"aws:changeInstanceState\",\n    \"inputs\" : {\n      \"InstanceIds\" : [ \"{{InstanceId}}\" ],\n      \"DesiredState\" : \"running\"\n    }\n  } ]\n}",
+  "CreatedDate": "2022-01-06T18:11:08.618Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ResizeInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0427526e-ec0f-405e-ae5f-a4bc5be0c053",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2417,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-11T07:10:46.6422024+00:00"
+}

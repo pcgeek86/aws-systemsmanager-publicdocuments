@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Configures the S3 Bucket's versioning\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"BucketName\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The name of the Amazon S3 bucket you want to configure versioning for.\"\n    },\n    \"VersioningState\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) Applied to the VersioningConfiguration.Status. When set to 'Enabled', this process enables versioning for the objects in the bucket, all objects added to the bucket receive a unique version ID. When set to 'Suspended', this process dsables versioning for the objects in the bucket, all objects added to the bucket receive the version ID null.\\n\",\n      \"default\" : \"Enabled\",\n      \"allowedValues\" : [ \"Enabled\", \"Suspended\" ]\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"ConfigureVersioning\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"maxAttempts\" : 1,\n    \"inputs\" : {\n      \"Service\" : \"s3\",\n      \"Api\" : \"PutBucketVersioning\",\n      \"Bucket\" : \"{{BucketName}}\",\n      \"VersioningConfiguration\" : {\n        \"MFADelete\" : \"Disabled\",\n        \"Status\" : \"{{VersioningState}}\"\n      }\n    },\n    \"isEnd\" : true\n  } ]\n}",
+  "CreatedDate": "2023-02-21T17:06:02.697Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureS3BucketVersioning",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "9475de53-a43f-4919-92d1-a15108d48607",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1729,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-14T07:11:10.1713255+00:00"
+}

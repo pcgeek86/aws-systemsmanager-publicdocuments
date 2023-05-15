@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Clean up old kernel\",\n  \"parameters\": {\n    \"Message\": {\n      \"type\": \"String\",\n      \"description\": \"Linux kernel clean up\",\n      \"default\": \"Cleaning up old kernels.\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"RemoveKernel\",\n      \"inputs\": {\n        \"runCommand\": [\n          \"sudo yum install yum-utils\",\n          \"yes | sudo package-cleanup --oldkernels --count=1\"\n        ]\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2021-07-15T23:53:03.389Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:074452064311:document/wabtec-kernel-cleanup-doc",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "411d3852-9e8a-43ea-a9a8-f4c7f2da209a",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 898,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-15T07:12:42.7501694+00:00"
+}

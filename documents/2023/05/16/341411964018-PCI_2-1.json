@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Command Document Example JSON Template\",\n\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"example\",\n      \"inputs\": {\n        \"runCommand\": [ \"hostname -f && cd ~ && export TERM=cygwin  && sudo hostname && sudo date && sudo grep -c nologin /etc/passwd && sudo grep -i ^permitroot /etc/ssh/sshd_config && sudo grep -v nologin /etc/passwd\" ]\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2022-12-01T19:47:58.933Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:341411964018:document/PCI_2",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "4afb3100-42df-4f14-a9ba-b13c7638925d",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 663,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-16T07:13:12.4982452+00:00"
+}

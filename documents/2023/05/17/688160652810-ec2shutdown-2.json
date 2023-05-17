@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Install packages from Ubuntu repositories\",\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"reboot\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo poweroff\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2022-09-27T04:31:46.458Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:688160652810:document/ec2shutdown",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "936f3fa1-bd39-4b82-b0f8-1bb81357fffa",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 476,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-17T07:12:14.9698286+00:00"
+}

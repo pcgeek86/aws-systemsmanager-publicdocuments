@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "58871ae8f53ec421c147a0a4cafbfc79ce63aeb1feea116d758af05856cd66a2",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "windows-_any.zip",
+      "Size": 92820,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/c1c/292230061137/FalconSensor-Windows%211468570a-6844-4501-9318-9d0d8b45e169/12/windows-_any.zip?x-attachment-size=92820&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEC8aCXVzLXdlc3QtMiJHMEUCID24p9lTq5BPDc6ssfTzwAfRyAVLfSM0irkL3g4WyDYlAiEA29uBQKeq4Tnq3V3lckF1Hr%2F%2Frc1f4ugN4ygx%2Fp5Z3nQqugUIWBADGgwyNDk5MjQ1Mjc0MTAiDHYFDkPgYLA3qD7FISqXBStSxyY%2FSQRFAYoFvfrs5YKphvNkOgCzg2DmAM3FN1nRc6W4r0SfbTiFPv4eQVhqevL2tILgj8nQgDOAPwtNwhzlRv5nu6CZgtlJynynffKmNVp4KUXbrllZL1XBfVTBF6HZuD%2BryzEYsShyhzh%2B8519k0Gwtjob6bCBOSn2AYRMrGnBBIvmJshYuuMgjHTmyguKod07aekxJ%2B2T8DboEsKF16VGBQ7s1NnX3XsXXZJBHG0tqxl592pwM4z7gPjMCQpZ9Clw7%2FVw1NspK5Ebkw1GevxbdAJr3J7bu%2B%2BsAmLfPoYwY4iqh8U29ZgMRlhp%2B2wQHkfpbVmyu3cqucTcfUKUJVxUjeKUOiYrYQFvMVLA1P9A5dqcVCKpiCFVZ0nSDcvfP8hZ5xFVP9XDroLoMMHF%2F7F%2BkgvH6cVjuPxkM4lX3KW68631HFF9eP3sSMOH1eyZD0ZaGBy2gJOnDYLN23GoWvgksahzoCDpF9vrg9P8BMxgPl%2FxMLisspdpzAgtcQzR0XLniJhmfEiMO5QJYGueoi9CVakOwVCGTIBvajvnhcchq26iq9mEzAr0HW59lshkQb0PY5CB7dhHkFUTW1J1xMznc%2BpW%2F1qVlq%2BFldsjksX86zoLXUJP86mI%2FRamYVHtwTDmrsNFTS5d5T3vv1ESH15FJnie4m5RZmzMqEP9gQ6ETGHWRegD%2Fmu8nP7ml1UbXK0SJoW894wCuxWinh2uGSIsXwi76fSMux4082jK3MpUwu8QIfLz8BxXsZXtbe2rMc2XphC8e7Oli1a1Ma4vHRYf8TWdZfERkQaZYWtNBYr37f7lZFbyDahcUauaxUpBFBBKctofLCd1DOBS9ka9X7ZwX9PpLtgscL8dO%2BBmDKrz1fqIUDD%2FiJejBjqxAdVCDGzdTQ8eJxCrk4pZFaU2DzY%2BH6kytXHeyUYZOTIh3hKyxTEH6TO9PdoFX4PAFQ4vMOB2riwqmIGtEGC4GsD7SyUyWFkcBGbRY1xtSn%2Bpz88H0%2FsG8eoC5MtcncH7WpokN7LsW1fe0JyVxg%2BxjUf9V72ExpJGua21qgWoM0uQN%2FukRcYD17QbivA1rCUsC57SF2NTmACOQPAecR5rV96p8HXwH%2BDV8kIbeJb24lGq3Q%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230518T071138Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIATUMFJUUZIF767UWD%2F20230518%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=5f46b76ac98ea905b5bce7b37f45d739873419588f5772538c667b8c2e8e1728"
+    }
+  ],
+  "Content": "{\n    \"schemaVersion\": \"2.0\",\n    \"publisher\": \"Crowdstrike Inc.\",\n    \"description\": \"The CrowdStrike Falcon cloud delivered platform helps successfully stop breaches, all via a single lightweight agent. Learn how to protect your AWS environment with CrowdStrike at https://github.com/CrowdStrike/aws-ssm-distributor\",\n    \"version\": \"6.53.16705\",\n    \"packages\": {\n        \"windows\": {\n            \"_any\": {\n                \"_any\": {\n                    \"file\": \"windows-_any.zip\"\n                }\n            }\n        }\n    },\n    \"files\": {\n        \"windows-_any.zip\": {\n            \"checksums\": {\n                \"sha256\": \"58871ae8f53ec421c147a0a4cafbfc79ce63aeb1feea116d758af05856cd66a2\"\n            }\n        }\n    }\n}",
+  "CreatedDate": "2023-04-28T21:14:09.82Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Package"
+  },
+  "DocumentVersion": "12",
+  "Name": "FalconSensor-Windows",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "6.53.16705",
+  "ResponseMetadata": {
+    "RequestId": "dcc272d6-22c7-4980-ab55-06b868aa5c1e",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3036,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-18T07:11:38.1403818+00:00"
+}

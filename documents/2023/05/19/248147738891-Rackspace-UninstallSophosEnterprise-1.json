@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Sophos Enterprise antivirus Uninstaller\",\n  \"parameters\": {\n    \"windowsUninstallerURL\": {\n      \"description\": \"(Required for uninstall of Windows SophosEnterprise) uninstaller url\",\n      \"type\": \"String\",\n      \"default\": \"http://mirror.rackspace.com/sophos/Sophos_Uninstaller_GOSS.ps1\"\n    },\n    \"workingDirectory\": {\n      \"type\": \"String\",\n      \"default\": \"\",\n      \"description\": \"(Optional) The path where the content will be downloaded and executed from on your instance.\",\n      \"maxChars\": 4096\n    },\n    \"executionTimeout\": {\n      \"description\": \"(Optional) Time in seconds for a command to complete before it is considered to have failed.\",\n      \"type\": \"String\",\n      \"default\": \"3600\",\n      \"allowedPattern\": \"([1-9][0-9]{0,3})|(1[0-9]{1,4})|(2[0-7][0-9]{1,3})|(28[0-7][0-9]{1,2})|(28800)\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"UninstallSophosEnterpriseWindows\",\n      \"inputs\": {\n        \"runCommand\":[\"$scriptPath = ((new-object net.webclient).DownloadString('{{windowsUninstallerURL}}')); invoke-command -scriptblock ([scriptblock]::Create($scriptPath))\"],\n        \"workingDirectory\": \"{{ workingDirectory }}\",\n        \"timeoutSeconds\": \"{{ executionTimeout }}\"\n      }\n    },\n    {\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Linux\"\n        ]\n      },\n      \"action\": \"aws:runShellScript\",\n      \"name\": \"UninstallSophosEnterpriseLinux\",\n      \"inputs\": {\n        \"runCommand\":[\"if [ -e /opt/sophos-av/uninstall.sh ]\",\"then\",\"    yes | /opt/sophos-av/uninstall.sh\",\"    echo \\\"sophos uninstalled\\\"\",\"else\",\"    echo \\\"uninstall script does not exist on the VM\\\"\",\"fi\"],\n        \"workingDirectory\": \"{{ workingDirectory }}\",\n        \"timeoutSeconds\": \"{{ executionTimeout }}\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2023-05-05T17:55:47.244Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:248147738891:document/Rackspace-UninstallSophosEnterprise",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "c45c4915-c0c2-47cd-ae01-65e0b7e097cb",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2397,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-19T07:11:47.0188361+00:00"
+}

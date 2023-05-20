@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Automation Document Example JSON Template\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": [\"value1\", \"value2\", \"value3\"]\n    },\n    \"StringParameter\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"abc\"\n    }, \n    \"MapParameter\": {\n      \"type\": \"StringMap\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": {\"key\":\"value\"}\n    },\n    \"StringListParameter\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": [\"value1\", \"value2\", \"value3\"]\n    },\n    \"BooleanParameter\": {\n      \"type\": \"Boolean\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": false\n    },\n    \"IntegerParameter\": {\n      \"type\": \"Integer\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": 123\n    },\n    \"MapListParameter\": {\n      \"type\": \"MapList\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": [{\"key1\":\"value1\", \"key2\":\"value2\"}, {\"key11\":11, \"key22\":22}]\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"startInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"running\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2018-11-07T11:19:22.051Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:416306766477:document/ExampleDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "5a0e2bae-474c-4d93-a1de-bc1d440fe7d2",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2278,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-20T07:11:49.4272703+00:00"
+}

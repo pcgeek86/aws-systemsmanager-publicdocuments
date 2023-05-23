@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\r\n  \"schemaVersion\": \"2.2\",\r\n  \"description\": \"Execute composite or nested Systems Manager documents (SSM documents) stored in a remote location.\",\r\n  \"parameters\": {\r\n    \"documentUrl\": {\r\n      \"description\": \"(Required) Specify the SSM document URL that will be downloaded.\",\r\n      \"type\": \"String\"\r\n    },\r\n    \"documentParameters\": {\r\n      \"description\": \"(Optional) Parameters to be passed to the SSM document that will be executed.\",\r\n      \"type\": \"StringMap\",\r\n      \"displayType\": \"textarea\",\r\n      \"default\": {}\r\n    }\r\n  },\r\n  \"mainSteps\": [\r\n    {\r\n      \"action\": \"aws:runPowerShellScript\",\r\n      \"name\": \"runPowerShellScript\",\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Windows\"\r\n        ]\r\n      },\r\n      \"inputs\": {\r\n        \"timeoutSeconds\": \"1800\",\r\n        \"runCommand\": [\r\n          \"$tempfolderpath = (Join-Path 'C:\\\\Windows\\\\Temp\\\\esri' 'ssm')\",\r\n          \"if (-not (Test-Path -Path $tempfolderpath))\",\r\n          \"{\",\r\n          \"   New-Item -ItemType Directory -Path $tempfolderpath\",\r\n          \"}\",\r\n          \"$ssmdocumentpath = (Join-Path $tempfolderpath 'ssmdocument.json')\",\r\n          \"if (Test-Path -Path $ssmdocumentpath -PathType Leaf) {\",\r\n          \"   Remove-Item $ssmdocumentpath\",\r\n          \"}\",\r\n          \"Invoke-WebRequest -Uri {{ documentUrl }} -OutFile $ssmdocumentpath\"\r\n        ]\r\n      }\r\n    },\r\n    {\r\n      \"action\": \"aws:runDocument\",\r\n      \"name\": \"runDocumentOnWindows\",\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Windows\"\r\n        ]\r\n      },\r\n      \"inputs\": {\r\n        \"documentType\": \"LocalPath\",\r\n        \"documentPath\": \"C:\\\\Windows\\\\temp\\\\esri\\\\ssm\\\\ssmdocument.json\",\r\n        \"documentParameters\": \"{{ documentParameters }}\"\r\n      }\r\n    },\r\n    {\r\n      \"action\": \"aws:runShellScript\",\r\n      \"name\": \"runShellScript\",\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Linux\"\r\n        ]\r\n      },\r\n      \"inputs\": {\r\n        \"timeoutSeconds\": \"1800\",\r\n        \"runCommand\": [\r\n          \"curl -s -f \\\"{{ documentUrl }}\\\" > /tmp/ssmdocument.json\"\r\n        ]\r\n      }\r\n    },\r\n    {\r\n      \"action\": \"aws:runDocument\",\r\n      \"name\": \"runDocumentOnLinux\",\r\n      \"precondition\": {\r\n        \"StringEquals\": [\r\n          \"platformType\",\r\n          \"Linux\"\r\n        ]\r\n      },\r\n      \"inputs\": {\r\n        \"documentType\": \"LocalPath\",\r\n        \"documentPath\": \"/tmp/ssmdocument.json\",\r\n        \"documentParameters\": \"{{ documentParameters }}\"\r\n      }\r\n    }\r\n  ]\r\n}",
+  "CreatedDate": "2021-10-20T08:34:26.567Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:254163459979:document/Esri-RunDocument3",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "f6ff6fde-f6d8-4ae1-a3b2-d3dce1eb8a1f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3141,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-23T07:12:26.1453644+00:00"
+}

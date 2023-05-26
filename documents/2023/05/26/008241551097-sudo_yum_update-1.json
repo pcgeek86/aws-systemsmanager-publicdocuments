@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"sudo yum update\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"package\" : {\n      \"type\" : \"String\",\n      \"description\" : \"package to be updated\",\n      \"default\" : \"kernel\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"ConfigureKernelLivePatching\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : 7200,\n      \"runCommand\" : [ \"#!/bin/bash\", \"#\", \"yes | sudo yum update {{package}}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-02-03T18:24:40.678Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:008241551097:document/sudo_yum_update",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "b2f376ff-e9a8-4d90-83c7-cfc265be383b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 815,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-26T07:12:24.3781717+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-EnforceSSLOnlyConnectionsToRedshiftCluster \\n\\n## What does this document do?\\nThis automation document enables the `require_ssl` parameter in the Amazon Redshift Parameter Group for a Amazon Redshift cluster using the [ModifyClusterParameterGroup](https://docs.aws.amazon.com/redshift/latest/APIReference/API_ModifyClusterParameterGroup.html) API.\\n\\n## Input Parameters\\n* ClusterIdentifier: (Required) The unique identifier of the cluster on which logging to be started.\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* ModifyClusterParameterGroup.ModifyClusterParameterGroupResponse: Standard HTTP response of the ModifyClusterParameterGroup API.\\n* ValidateRequireSSLParameter.Response: JSON object representing required_ssl parameter.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"ModifyClusterParameterGroup.ModifyClusterParameterGroupResponse\", \"ValidateRequireSSLParameter.Response\" ],\n  \"parameters\" : {\n    \"ClusterIdentifier\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The unique identifier of the cluster on which the require_ssl parameter to be enabled.\",\n      \"allowedPattern\" : \"^[a-z]([a-z\\\\d]-?){0,61}[a-z\\\\d]$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:aws[a-z0-9-]*:iam::\\\\d{12}:role\\\\/[\\\\w-\\\\/.@+=,]{1,1017}$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DescribeCluster\",\n    \"description\" : \"## DescribeCluster\\nObtain the details of the given Amazon Redshift cluster to identify the parameter group.\\n## Outputs\\n* ParameterGroupName: Parameter group name obtained from DescriClusters API. \\n\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"ParameterGroupName\",\n      \"Selector\" : \"$.Clusters[0].ClusterParameterGroups[0].ParameterGroupName\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"ModifyClusterParameterGroup\",\n    \"description\" : \"## ModifyClusterParameterGroup\\nModifies the parameter group obtained from the previous step to enable the `require_SSL` parameter.\\n## Outputs\\n* ModifyClusterParameterGroupResponse: The standard HTTP response from the ModifyClusterParameterGroup API call. \\n\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"ModifyClusterParameterGroup\",\n      \"Parameters\" : [ {\n        \"ParameterValue\" : \"true\",\n        \"ParameterName\" : \"require_ssl\"\n      } ],\n      \"ParameterGroupName\" : \"{{ DescribeCluster.ParameterGroupName }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"ModifyClusterParameterGroupResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"ValidateRequireSSLParameter\",\n    \"description\" : \"## ValidateRequireSSLParameter\\nChecks whether require_ssl parameter is set to \\\"true\\\" for the cluster parameter group obtained from the DescribeCluster step.\\n## Outputs\\n* Response: StringMap representing the require_ssl status.\\n\",\n    \"action\" : \"aws:executeScript\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Runtime\" : \"python3.6\",\n      \"Handler\" : \"handler\",\n      \"InputPayload\" : {\n        \"ParameterGroupName\" : \"{{ DescribeCluster.ParameterGroupName }}\"\n      },\n      \"Script\" : \"import boto3\\ndef handler(event,context):\\n      redshift_client = boto3.client(\\\"redshift\\\")\\n      cluster_parameter_group = event[\\\"ParameterGroupName\\\"]\\n      cluster_parameters=redshift_client.describe_cluster_parameters(ParameterGroupName=cluster_parameter_group)\\n      parameter_list=cluster_parameters.get(\\\"Parameters\\\")\\n      for parameter in parameter_list:\\n          if parameter.get(\\\"ParameterName\\\")==\\\"require_ssl\\\" and parameter.get(\\\"ParameterValue\\\")==\\\"true\\\":\\n             return {\\\"Output\\\":{\\\"require_ssl\\\":\\\"true\\\"}}\\n      raise Exception(\\\"REQUIRE_SSL PARAMETER IS FALSE\\\")\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$.Payload.Output\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyParameterGroupChange\",\n    \"description\" : \"## VerifyParameterGroupChange\\nVerifies whether the parameter group is transitioned to \\\"applying\\\" or \\\"pending-reboot\\\" state.\\n\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"inputs\" : {\n      \"Service\" : \"redshift\",\n      \"Api\" : \"DescribeClusters\",\n      \"ClusterIdentifier\" : \"{{ ClusterIdentifier }}\",\n      \"PropertySelector\" : \"$.Clusters[0].ClusterParameterGroups[0].ParameterApplyStatus\",\n      \"DesiredValues\" : [ \"applying\", \"pending-reboot\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-04-24T15:06:24.306Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSConfigRemediation-EnforceSSLOnlyConnectionsToRedshiftCluster",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a3ed2d10-e1b5-4800-8698-e6db5763a2ed",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5535,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-26T07:11:16.6995475+00:00"
+}

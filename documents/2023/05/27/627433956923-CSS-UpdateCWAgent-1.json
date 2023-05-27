@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"A composite document for updating CloudWatch agent.\",\n  \"mainSteps\" : [ {\n    \"inputs\" : {\n      \"runCommand\" : [ \"sleep 1800\" ]\n    },\n    \"name\" : \"first\",\n    \"action\" : \"aws:runShellScript\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    }\n  }, {\n    \"inputs\" : {\n      \"runCommand\" : [ \"Start-Sleep -Seconds 1800\" ]\n    },\n    \"name\" : \"second\",\n    \"action\" : \"aws:runPowerShellScript\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Windows\" ]\n    }\n  }, {\n    \"inputs\" : {\n      \"documentParameters\" : \"{\\\"action\\\":\\\"Install\\\",\\\"name\\\" : \\\"AmazonCloudWatchAgent\\\"}\",\n      \"documentType\" : \"SSMDocument\",\n      \"documentPath\" : \"AWS-ConfigureAWSPackage\"\n    },\n    \"name\" : \"installCWAgent\",\n    \"action\" : \"aws:runDocument\"\n  } ]\n}",
+  "CreatedDate": "2023-03-31T00:21:30.532Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:627433956923:document/CSS-UpdateCWAgent",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "36092140-2226-453a-9d39-287b001951f7",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1164,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-27T07:11:38.3267778+00:00"
+}

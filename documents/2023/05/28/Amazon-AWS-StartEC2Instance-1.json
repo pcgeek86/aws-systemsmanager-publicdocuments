@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\": \"Start EC2 instances(s)\",\n  \"schemaVersion\": \"0.3\",\n  \"assumeRole\": \"{{ AutomationAssumeRole }}\",\n  \"parameters\": {\n    \"InstanceId\": {\n      \"type\": \"StringList\",\n      \"description\": \"(Required) EC2 Instance(s) to start\"\n    },\n    \"AutomationAssumeRole\": {\n      \"type\": \"String\",\n      \"description\": \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\": \"\"\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"name\": \"startInstances\",\n      \"action\": \"aws:changeInstanceState\",\n      \"inputs\": {\n        \"InstanceIds\": \"{{ InstanceId }}\",\n        \"DesiredState\": \"running\"\n      }\n    }\n  ]\n}\n",
+  "CreatedDate": "2017-11-20T20:34:50.793Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-StartEC2Instance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6ca30d7f-1bc5-4fee-8a49-3852fcc6a867",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 915,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-28T07:10:17.812157+00:00"
+}

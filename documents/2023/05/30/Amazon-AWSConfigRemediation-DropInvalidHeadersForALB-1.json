@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document name - AWSConfigRemediation-DropInvalidHeadersForALB\\n\\n## What does this document do?\\nThis runbook enables the application load balancer you specify to remove HTTP headers with invalid headers using the [ModifyLoadBalancerAttributes](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_ModifyLoadBalancerAttributes.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\\n* LoadBalancerArn: (Required) The Amazon Resource Name (ARN) of the load balancer that you want to drop invalid headers.\\n\\n## Output Parameters\\n* DropInvalidHeaders.Output: The standard HTTP response from the ModifyLoadBalancerAttributes API.\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"outputs\" : [ \"DropInvalidHeaders.Output\" ],\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows Systems Manager Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"LoadBalancerArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The Amazon Resource Name (ARN) of the load balancer that you want to drop invalid headers.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:elasticloadbalancing:[a-z]{2}-[a-z]+-[0-9]{1}:[0-9]{12}:loadbalancer\\\\/app\\\\/((?!internal-)(?!-)[0-9a-zA-Z-]{1,32}(?<!-))\\\\/[0-9aA-zZ]{16}$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DropInvalidHeaders\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## DropInvalidHeaders\\nEnables the drop invalid headers setting for the load balancer you specify in the `LoadBalancerArn` parameter.\\n## Outputs\\n* Output: The standard HTTP response from the ModifyLoadBalancerAttributes API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"elbv2\",\n      \"Api\" : \"ModifyLoadBalancerAttributes\",\n      \"LoadBalancerArn\" : \"{{ LoadBalancerArn }}\",\n      \"Attributes\" : [ {\n        \"Key\" : \"routing.http.drop_invalid_header_fields.enabled\",\n        \"Value\" : \"true\"\n      } ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyDropInvalidHeaders\",\n    \"action\" : \"aws:executeScript\",\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"description\" : \"## VerifyDropInvalidHeaders\\nVerifies the drop invalid headers setting has been enabled on the load balancer you specify in the `LoadBalancerArn` parameter.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"verify_drop_invalid_headers\",\n      \"InputPayload\" : {\n        \"LoadBalancerArn\" : \"{{ LoadBalancerArn }}\"\n      },\n      \"Script\" : \"import boto3\\ndef verify_drop_invalid_headers(event, context):\\n  elbv2_client = boto3.client(\\\"elbv2\\\")\\n  load_balancer_arn = event[\\\"LoadBalancerArn\\\"]\\n  response = elbv2_client.describe_load_balancer_attributes(LoadBalancerArn=load_balancer_arn)\\n  for attribute in response[\\\"Attributes\\\"]:\\n    if (attribute[\\\"Key\\\"] == \\\"routing.http.drop_invalid_header_fields.enabled\\\" and attribute[\\\"Value\\\"] == \\\"true\\\"):\\n      return {\\n        \\\"Output\\\": {\\n          \\\"message\\\": \\\"AWS APPLICATION LOAD BALANCER TO DROP INVALID HEADERS SETTING IS SUCCESSFUL.\\\",\\n          \\\"HTTPResponse\\\": response\\n          }\\n        }\\n  raise Exception(\\\"VERIFICATION FAILED, AWS APPLICATION LOAD BALANCER {} TO DROP INVALID HEADERS SETTING IS NOT SUCCESSFUL.\\\".format(load_balancer_arn))\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$.Payload.output\",\n      \"Type\" : \"StringMap\"\n    } ]\n  } ]\n}",
+  "CreatedDate": "2021-03-12T16:07:30.77Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-DropInvalidHeadersForALB",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "df49d72d-9977-4a93-89a0-e28ffa10ab57",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4393,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-30T07:10:45.5652075+00:00"
+}

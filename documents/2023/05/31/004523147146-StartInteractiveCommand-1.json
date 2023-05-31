@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.0\",\n  \"description\": \"Document to run single interactive command on an instance\",\n  \"sessionType\": \"InteractiveCommands\",\n  \"parameters\": {\n    \"command\": {\n      \"type\": \"String\",\n      \"description\": \"The command to run on the instance\"\n    }\n  },\n  \"properties\": {\n    \"windows\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"linux\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    },\n    \"macos\": {\n      \"commands\": \"{{command}}\",\n      \"runAsElevated\": false\n    }\n  }\n}",
+  "CreatedDate": "2023-03-07T21:46:50.617Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:004523147146:document/StartInteractiveCommand",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "eff27937-f4e0-4304-9da0-7c2cf36ac232",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 835,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-05-31T07:11:42.3486515+00:00"
+}

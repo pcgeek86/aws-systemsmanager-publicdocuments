@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document Name - AWSConfigRemediation-EnableEbsEncryptionByDefault\\n\\n## What does this document do?\\nThis document enables EBS encryption by default for an AWS account in the current region using the [EnableEbsEncryptionByDefault](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_EnableEbsEncryptionByDefault.html) API.\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\n* ModifyAccount.EnableEbsEncryptionByDefaultResponse: JSON formatted response from the EnableEbsEncryptionByDefault API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    }\n  },\n  \"outputs\" : [ \"ModifyAccount.EnableEbsEncryptionByDefaultResponse\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"ModifyAccount\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## ModifyAccount\\nEnables EBS encryption by default for the account in the current region.\\n## Outputs\\n* EnableEbsEncryptionByDefaultResponse: Response from the EnableEbsEncryptionByDefault API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"EnableEbsEncryptionByDefault\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"EnableEbsEncryptionByDefaultResponse\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyEbsEncryptionByDefault\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyEbsEncryptionByDefault\\nChecks if EbsEncryptionByDefault is enabled correctly from the previous step.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"ec2\",\n      \"Api\" : \"GetEbsEncryptionByDefault\",\n      \"PropertySelector\" : \"$.EbsEncryptionByDefault\",\n      \"DesiredValues\" : [ \"True\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2021-10-06T15:10:45.317Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "AWSConfigRemediation-EnableEbsEncryptionByDefault",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "95ddc6ac-9204-4e99-a223-12861d9dfd8f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2498,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-02T07:10:57.0349124+00:00"
+}

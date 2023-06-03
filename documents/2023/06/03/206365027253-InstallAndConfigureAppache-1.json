@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Sample YAML template to install Apache\",\n  \"parameters\" : {\n    \"Message\" : {\n      \"type\" : \"String\",\n      \"description\" : \"Welcome Message\",\n      \"default\" : \"Hello World\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"configureApache\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"sudo yum update -y\", \"sudo yum install -y httpd\", \"sudo systemctl start httpd.service\", \"sudo systemctl enable httpd.service\", \"echo \\\"{{Message}} from $(hostname -f)\\\" > /var/www/html/index.html\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-13T19:20:17.436Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:206365027253:document/InstallAndConfigureAppache",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "25556eac-68c5-4dc2-be16-b416aa3481ff",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 860,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-03T07:11:08.302248+00:00"
+}

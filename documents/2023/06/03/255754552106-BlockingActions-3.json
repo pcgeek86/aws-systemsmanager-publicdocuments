@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"*Replace this default text with instructions or other information about your document.*  \\n\\n---\\n# What is Markdown?\\nMarkdown is a lightweight markup language that converts your content with plain text formatting to structurally valid rich text.\\n## You can add headings\\nYou can add *italics* or make the font **bold**.  \\n1. Create numbered lists \\n* Add bullet points \\n>Indent `code samples` \\n\\nYou can create a [link to another webpage](${ AWS_ENDPOINT }).\",\n  \"schemaVersion\" : \"0.3\",\n  \"mainSteps\" : [ {\n    \"name\" : \"sleep\",\n    \"action\" : \"aws:sleep\",\n    \"inputs\" : {\n      \"Duration\" : \"PT50M\"\n    }\n  }, {\n    \"name\" : \"pause\",\n    \"action\" : \"aws:approve\",\n    \"inputs\" : {\n      \"Approvers\" : [ \"Administrator\" ]\n    }\n  }, {\n    \"name\" : \"Pause\",\n    \"action\" : \"aws:pause\",\n    \"inputs\" : { }\n  } ]\n}",
+  "CreatedDate": "2023-05-18T21:22:37.361Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "3",
+  "Name": "arn:aws:ssm:us-west-2:255754552106:document/BlockingActions",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "0bd7c726-48a0-4cc9-aca4-ea8eb58e8833",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1125,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-03T07:11:04.4854899+00:00"
+}

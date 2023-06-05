@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"sudo yum update\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"package\" : {\n      \"type\" : \"String\",\n      \"description\" : \"package to be updated\",\n      \"default\" : \"kernel\"\n    },\n    \"restartKernel\" : {\n      \"type\" : \"Boolean\",\n      \"description\" : \"should we restart the kernels?\",\n      \"default\" : false\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"ConfigureKernelLivePatching\",\n    \"precondition\" : {\n      \"StringEquals\" : [ \"platformType\", \"Linux\" ]\n    },\n    \"inputs\" : {\n      \"timeoutSeconds\" : 7200,\n      \"runCommand\" : [ \"#!/bin/bash\", \"#\", \"yes | sudo yum update {{package}}\", \"if [ restart_kernel ] \", \"then\", \"  sudo yum update kernel\", \"  sudo yum install yum-util\", \"  sudo package-cleanup --oldkernels --count=1\", \"fi\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-03-02T00:05:35.678Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:107269422842:document/sudo_yum_update",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "70498ab9-3a52-44c4-9ce5-3f79e521b087",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1129,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-05T07:13:24.8639325+00:00"
+}

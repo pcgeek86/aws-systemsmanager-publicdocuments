@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"## Documento de automação inserir instância do ELB\\n\\n---\\n### Parâmetros\\n* InstanceId\\n* ELBGroup\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"arn:aws:iam::351328429544:role/Cloud-Insert-Remove-EC2-From-ELB\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"type\" : \"String\"\n    },\n    \"ELBGroup\" : {\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"insert\",\n    \"action\" : \"aws:executeScript\",\n    \"outputs\" : [ {\n      \"Name\" : \"message\",\n      \"Selector\" : \"$.Payload.out\",\n      \"Type\" : \"String\"\n    } ],\n    \"inputs\" : {\n      \"Runtime\" : \"python3.8\",\n      \"Handler\" : \"script_handler\",\n      \"Script\" : \"import boto3\\r\\nimport json\\r\\n\\r\\ndef script_handler(event, context):\\r\\n  elb_client = boto3.client('elb')\\r\\n  var_familia = event.get('elbgroup')\\r\\n  var_ec2 = event.get('instanceid')\\r\\n  out= {}\\r\\n  \\r\\n  response_elb = elb_client.describe_load_balancers()\\r\\n  for elb in response_elb['LoadBalancerDescriptions']:\\r\\n    elb_name = elb['LoadBalancerName']\\r\\n    response_elb_name= elb_client.describe_tags(LoadBalancerNames=[elb_name])\\r\\n    for tag in response_elb_name['TagDescriptions']:\\r\\n      elb_name = tag['LoadBalancerName']\\r\\n      for tagname in tag['Tags']:\\r\\n        if tagname['Key'] == 'ELBGROUP' and tagname['Value'] == var_familia:\\r\\n          response_insert_elb = elb_client.register_instances_with_load_balancer(LoadBalancerName=elb_name,Instances=[{'InstanceId': var_ec2}])\\r\\n          out = {\\\"Response\\\": response_insert_elb}\\r\\n  \\r\\n  \\r\\n  \\r\\n  return out\",\n      \"InputPayload\" : {\n        \"elbgroup\" : \"{{ELBGroup}}\",\n        \"instanceid\" : \"{{InstanceId}}\"\n      }\n    }\n  } ]\n}",
+  "CreatedDate": "2023-05-15T15:53:19.86Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:351328429544:document/ASF-insertELB",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "7116a2fb-f912-4099-9918-30429b8b315f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2043,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-05T07:12:36.8581525+00:00"
+}

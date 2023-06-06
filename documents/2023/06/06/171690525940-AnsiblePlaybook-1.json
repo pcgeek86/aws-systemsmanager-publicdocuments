@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"2.2\",\n  \"description\" : \"Install IIS on an EC2 Windows instance using Ansible playbooks\",\n  \"parameters\" : {\n    \"Message\" : {\n      \"type\" : \"String\",\n      \"description\" : \"The ID of the EC2 instance to install IIS on\",\n      \"default\" : \"Hello World\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runPowerShellScript\",\n    \"name\" : \"example\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"Write-Host \\\"Installing IIS...\\\"\", \"sudo apt-get install ansible\", \"ansible-playbook -i inventory playbook.yaml\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-05-05T03:30:22.739Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:171690525940:document/AnsiblePlaybook",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "feefd08c-273a-475d-89ee-9c579e5b699b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 811,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-06T07:12:10.8138904+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"1.2\",\n  \"description\": \"Restart ntpd service on a Linux instance.\",\n  \"parameters\": {\n \n  },\n  \"runtimeConfig\": {\n    \"aws:runShellScript\": {\n      \"properties\": [\n        {\n          \"id\": \"0.aws:runShellScript\",\n          \"runCommand\": [\"service ntpd restart\"]\n        }\n      ]\n    }\n  }\n}",
+  "CreatedDate": "2016-07-25T13:32:59.911Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:530644011101:document/RestartNTPDService",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "520d2189-f935-4d61-85fa-23ad2c44c52c",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 560,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-08T07:11:35.5747307+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n\t\t\t\t\"schemaVersion\": \"2.2\",\n\t\t\t\t\"description\": \"Install or uninstall a Distributor package.\",\n\t\t\t\t\"parameters\": {\n\t\t\t\t\t\"action\": {\n      \t\t\t\t\t\"description\": \"(Required) Specify whether or not to install or uninstall the package.\",\n      \t\t\t\t\t\"type\": \"String\",\n      \t\t\t\t\t\"allowedValues\": [\n        \t\t\t\t\t\"Install\",\n        \t\t\t\t\t\"Uninstall\"\n      \t\t\t\t\t]\n    \t\t\t\t},\n\t\t\t\t\t\"installationType\": {\n      \t\t\t\t\t\"description\": \"(Optional) Specify the type of installation. Uninstall and reinstall: The application is taken offline until the reinstallation process completes. In-place update: The application is available while new or updated files are added to the installation.\",\n\t\t\t\t\t\t\"type\": \"String\",\n\t\t\t\t\t  \t\"allowedValues\": [\n\t\t\t\t\t\t\t\"Uninstall and reinstall\",\n\t\t\t\t\t\t\t\"In-place update\"\n\t\t\t\t\t  \t],\n      \t\t\t\t\t\"default\": \"Uninstall and reinstall\"\n    \t\t\t\t},\n\t\t\t\t\t\"name\": {\n\t\t\t\t\t  \t\"description\": \"(Required) The package to install/uninstall.\",\n\t\t\t\t\t  \t\"type\": \"String\",\n\t\t\t\t\t  \t\"allowedPattern\": \"^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:(package|document)\\\\/[a-zA-Z0-9/:.\\\\-_]{1,128}$|^[a-zA-Z0-9/:.\\\\-_]{1,128}$\"\n\t\t\t\t\t},\n\t\t\t\t\t\"version\": {\n\t\t\t\t\t  \t\"description\": \"(Optional) The version of the package to install or uninstall. If you don't specify a version, the system installs the latest published version by default. The system will only attempt to uninstall the version that is currently installed. If no version of the package is installed, the system returns an error.\",\n\t\t\t\t\t  \t\"type\": \"String\",\n\t\t\t\t\t  \t\"default\": \"\"\n\t\t\t\t\t},\n\t\t\t\t\t\"additionalArguments\": {\n\t\t\t\t\t  \t\"description\": \"(Optional) The additional parameters to provide to your install, uninstall, or update scripts.\",\n\t\t\t\t\t  \t\"type\": \"StringMap\",\n\t\t\t\t\t  \t\"displayType\": \"textarea\",\n\t\t\t\t\t  \t\"default\": {},\n\t\t\t\t\t  \t\"maxChars\": 4096\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"mainSteps\": [\n\t\t\t\t\t{\n\t\t\t\t\t  \t\"action\": \"aws:configurePackage\",\n\t\t\t\t\t  \t\"precondition\": {\n\t\t\t\t\t\t\t\"StringEquals\": [\"platformType\", \"Linux\"]\n\t\t\t\t\t  \t},\n\t\t\t\t\t  \t\"name\": \"configurePackage\",\n\t\t\t\t\t  \t\"inputs\": {\n\t\t\t\t\t\t\t\"name\": \"{{ name }}\",\n\t\t\t\t\t\t\t\"action\": \"{{ action }}\",\n\t\t\t\t\t\t\t\"installationType\": \"{{installationType}}\",\n\t\t\t\t\t\t\t\"version\": \"{{ version }}\",\n\t\t\t\t\t\t\t\"additionalArguments\": \"{{ additionalArguments }}\"\n\t\t\t\t\t  \t}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}",
+  "CreatedDate": "2023-04-13T20:00:26.289Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AmazonInspector2-ConfigureInspectorSsmPluginLinux",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "93980028-c9b2-4e0a-b326-88880acac8c4",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3005,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-10T07:10:54.6153993+00:00"
+}

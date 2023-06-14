@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\": \"2.2\",\n  \"description\": \"Install or uninstall a Distributor package. You can install the latest version, default version, or a version of the package you specify. Packages provided by AWS such as AmazonCloudWatchAgent, AwsEnaNetworkDriver, and AWSPVDriver are also supported.\",\n  \"parameters\": {\n    \"action\": {\n      \"description\": \"(Required) Specify whether or not to install or uninstall the package.\",\n      \"type\": \"String\",\n      \"allowedValues\": [\n        \"Install\",\n        \"Uninstall\"\n      ]\n    },\n    \"installationType\": {\n      \"description\": \"(Optional) Specify the type of installation. Uninstall and reinstall: The application is taken offline until the reinstallation process completes. In-place update: The application is available while new or updated files are added to the installation.\",\n      \"type\": \"String\",\n      \"allowedValues\": [\n        \"Uninstall and reinstall\",\n        \"In-place update\"\n      ],\n      \"default\": \"Uninstall and reinstall\"\n    },\n    \"name\": {\n      \"description\": \"(Required) The package to install/uninstall.\",\n      \"type\": \"String\",\n      \"allowedPattern\": \"^arn:[a-z0-9][-.a-z0-9]{0,62}:[a-z0-9][-.a-z0-9]{0,62}:([a-z0-9][-.a-z0-9]{0,62})?:([a-z0-9][-.a-z0-9]{0,62})?:(package|document)\\\\/[a-zA-Z0-9/:.\\\\-_]{1,128}$|^[a-zA-Z0-9/:.\\\\-_]{1,128}$\"\n    },\n    \"version\": {\n      \"description\": \"(Optional) The version of the package to install or uninstall. If you don't specify a version, the system installs the latest published version by default. The system will only attempt to uninstall the version that is currently installed. If no version of the package is installed, the system returns an error.\",\n      \"type\": \"String\",\n      \"default\": \"\"\n    },\n    \"additionalArguments\": {\n      \"description\": \"(Optional) The additional parameters to provide to your install, uninstall, or update scripts.\",\n      \"type\": \"StringMap\",\n      \"displayType\": \"textarea\",\n      \"default\": {},\n      \"maxChars\": 4096\n    }\n  },\n  \"mainSteps\": [\n    {\n      \"action\": \"aws:runPowerShellScript\",\n      \"name\": \"createDownloadFolder\",\n      \"precondition\": {\n        \"StringEquals\": [\n          \"platformType\",\n          \"Windows\"\n        ]\n      },\n      \"inputs\": {\n        \"runCommand\": [\n          \"try {\",\n          \"  $sku = (Get-CimInstance -ClassName Win32_OperatingSystem).OperatingSystemSKU\",\n          \"  if ($sku -eq 143 -or $sku -eq 144) {\",\n          \"    Write-Host \\\"This document is not supported on Windows 2016 Nano Server.\\\"\",\n          \"    exit 40\",\n          \"  }\",\n\n          \"  $ssmAgentService = Get-ItemProperty 'HKLM:SYSTEM\\\\\\\\CurrentControlSet\\\\\\\\Services\\\\\\\\AmazonSSMAgent\\\\\\\\'\",\n          \"  if ($ssmAgentService -and [System.Version]$ssmAgentService.Version -ge [System.Version]'3.0.1031.0') {\",\n          \"     exit 0\",\n          \"  }\",\n\n          \"  $DataFolder = \\\"Application Data\\\"\",\n          \"  if ( ![string]::IsNullOrEmpty($env:ProgramData) ) {\",\n          \"    $DataFolder = $env:ProgramData\",\n          \"  } elseif ( ![string]::IsNullOrEmpty($env:AllUsersProfile) ) {\",\n          \"    $DataFolder = \\\"$env:AllUsersProfile\\\\Application Data\\\"\",\n          \"  }\",\n\n          \"  $TempFolder = \\\"/\\\"\",\n          \"  if ( $env:Temp -ne $null ) {\",\n          \"    $TempFolder = $env:Temp\",\n          \"  }\",\n\n          \"  $DataFolder = Join-Path $DataFolder 'Amazon\\\\SSM'\",\n          \"  $DownloadFolder = Join-Path $TempFolder 'Amazon\\\\SSM'\",\n\n          \"  if ( !( Test-Path -LiteralPath $DataFolder )) {\",\n          \"    $none = New-Item -ItemType directory -Path $DataFolder\",\n          \"  }\",\n\n          \"  $DataACL = Get-Acl $DataFolder\",\n          \"  if ( Test-Path -LiteralPath $DownloadFolder ) {\",\n          \"    $DownloadACL = Get-Acl $DownloadFolder\",\n          \"    $ACLDiff = Compare-Object ($DownloadACL.AccessToString) ($DataACL.AccessToString)\",\n          \"    if ( $ACLDiff.count -eq 0 ) {\",\n          \"      exit 0\",\n          \"    }\",\n\n          \"    Remove-Item $DownloadFolder -Recurse -Force\",\n          \"  }\",\n          \"  $none = New-Item -ItemType directory -Path $DownloadFolder\",\n          \"  Set-Acl $DownloadFolder -aclobject $DataACL\",\n\n          \"  $DownloadACL = Get-Acl $DownloadFolder\",\n          \"  $ACLDiff = Compare-Object ($DownloadACL.AccessToString) ($DataACL.AccessToString)\",\n          \"  if ( $ACLDiff.count -ne 0 ) {\",\n          \"    Write-Error \\\"Failed to create download folder\\\" -ErrorAction Continue\",\n          \"    exit 41\",\n          \"  }\",\n\n          \"} catch {\",\n          \"  Write-Host  \\\"Failed to create download folder\\\"\",\n          \"  Write-Error  $Error[0]  -ErrorAction Continue\",\n          \"  exit 42\",\n          \"}\"\n        ]\n      }\n    },\n    {\n      \"action\": \"aws:configurePackage\",\n      \"name\": \"configurePackage\",\n      \"inputs\": {\n        \"name\": \"{{ name }}\",\n        \"action\": \"{{ action }}\",\n        \"installationType\": \"{{installationType}}\",\n        \"version\": \"{{ version }}\",\n        \"additionalArguments\": \"{{ additionalArguments }}\"\n      }\n    }\n  ]\n}",
+  "CreatedDate": "2021-07-06T14:36:00.371Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-ConfigureAWSPackage",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "70c4a220-5ed7-4495-81c8-ec0ac14377a5",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 5607,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-14T07:10:37.3416733+00:00"
+}

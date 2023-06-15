@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "    {\n    \"schemaVersion\": \"1.0\",\n    \"description\": \"Document to hold regional settings for Session Manager\",\n    \"sessionType\": \"Standard_Stream\",\n    \"inputs\": {\n        \"s3BucketName\": \"\",\n        \"s3KeyPrefix\": \"\",\n        \"s3EncryptionEnabled\": true,\n        \"cloudWatchLogGroupName\": \"ssm_manager_dev_logs\",\n        \"cloudWatchEncryptionEnabled\": false,\n        \"idleSessionTimeout\": \"5\",\n        \"maxSessionDuration\": \"\",\n        \"cloudWatchStreamingEnabled\": true,\n        \"kmsKeyId\": \"71ba0ddc-e781-4a8b-bbeb-da408f3099d4\",\n        \"runAsEnabled\": true,\n        \"runAsDefaultUser\": \"svc-aws-bastion-dev\",\n        \"shellProfile\": {\n        \"windows\": \"\",\n        \"linux\": \"exec /bin/bash\\nuser=$(whoami)\\ncd /home/$user\\necho \\\"Welcome $user\\\"\"\n        }\n    }\n    }\n",
+  "CreatedDate": "2023-03-11T00:45:28.468Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Session"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:004523147146:document/SSM-DevelopersSession-dev",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "6d34e41e-7516-4bdd-b924-aae1ab0d0e3b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1078,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-15T07:13:05.7352065+00:00"
+}

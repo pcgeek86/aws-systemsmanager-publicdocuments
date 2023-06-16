@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"RouteTableId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The route table ID.\",\n      \"allowedPattern\" : \"^(rtb-)([0-9a-f]){1,}$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"default\" : \"\",\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"DeleteRoute\",\n    \"action\" : \"aws:invokeLambdaFunction\",\n    \"maxAttempts\" : 1,\n    \"onFailure\" : \"Abort\",\n    \"inputs\" : {\n      \"FunctionName\" : \"DeleteRouteTableEntry\",\n      \"Payload\" : \"{\\\"RouteTableId\\\": \\\"{{RouteTableId}}\\\"}\\n\"\n    }\n  } ]\n}",
+  "CreatedDate": "2021-07-05T07:52:29.256Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "28",
+  "Name": "arn:aws:ssm:us-west-2:557760777793:document/DeleteRoute",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "189880ef-787a-4d02-b1cf-12d6b4337503",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1043,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-16T07:12:28.9719123+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Security Best Practices for AutoScaling\",\n  \"schemaVersion\" : \"1.0\",\n  \"templateBody\" : {\n    \"Resources\" : {\n      \"AutoscalingCapacityRebalancing\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-capacity-rebalancing\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::AutoScalingGroup\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_CAPACITY_REBALANCING\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"AutoscalingGroupElbHealthcheckRequired\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-group-elb-healthcheck-required\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::AutoScalingGroup\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_GROUP_ELB_HEALTHCHECK_REQUIRED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"AutoscalingLaunchConfigHopLimit\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-launch-config-hop-limit\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::LaunchConfiguration\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_LAUNCH_CONFIG_HOP_LIMIT\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"AutoscalingLaunchConfigPublicIpDisabled\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-launch-config-public-ip-disabled\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::LaunchConfiguration\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_LAUNCH_CONFIG_PUBLIC_IP_DISABLED\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"AutoscalingLaunchconfigRequiresImdsv2\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-launchconfig-requires-imdsv2\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::LaunchConfiguration\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_LAUNCHCONFIG_REQUIRES_IMDSV2\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"AutoscalingMultipleAz\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-multiple-az\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::AutoScalingGroup\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_MULTIPLE_AZ\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      },\n      \"AutoscalingMultipleInstanceTypes\" : {\n        \"Properties\" : {\n          \"ConfigRuleName\" : \"autoscaling-multiple-instance-types\",\n          \"Scope\" : {\n            \"ComplianceResourceTypes\" : [ \"AWS::AutoScaling::AutoScalingGroup\" ]\n          },\n          \"Source\" : {\n            \"Owner\" : \"AWS\",\n            \"SourceIdentifier\" : \"AUTOSCALING_MULTIPLE_INSTANCE_TYPES\"\n          }\n        },\n        \"Type\" : \"AWS::Config::ConfigRule\"\n      }\n    }\n  }\n}",
+  "CreatedDate": "2022-08-25T22:53:39.434Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "ConformancePackTemplate"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConformancePacks-SecurityBestPracticesforAutoScaling",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "2f00e112-56ce-450f-ba24-d3132370dc6f",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3851,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-19T07:12:02.2143254+00:00"
+}

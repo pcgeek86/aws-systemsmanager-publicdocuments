@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\"schemaVersion\": \"2.2\", \"description\": \"This document is used to download script from the S3 bucket via presigned URL and execute it.\", \"parameters\": {\"scriptUrl\": {\"type\": \"String\", \"description\": \"(Required) URL to download the script from.\"}, \"arguments\": {\"type\": \"String\", \"default\": \"\", \"description\": \"(Optional) Arguments to be passed to the script on the instance.\"}, \"workingDirectory\": {\"type\": \"String\", \"default\": \"\", \"description\": \"(Optional) The path where the content will be downloaded and executed from on your instance.\", \"maxChars\": 4096}, \"executionTimeout\": {\"description\": \"(Optional) The time in seconds for a command to complete before it is considered to have failed. Default is 3600 (1 hour). Maximum is 28800 (8 hours).\", \"type\": \"String\", \"default\": \"3600\", \"allowedPattern\": \"([1-9][0-9]{0,3})|(1[0-9]{1,4})|(2[0-7][0-9]{1,3})|(28[0-7][0-9]{1,2})|(28800)\"}}, \"mainSteps\": [{\"precondition\": {\"StringEquals\": [\"platformType\", \"Windows\"]}, \"action\": \"aws:runPowerShellScript\", \"name\": \"runPowerShellScript\", \"inputs\": {\"runCommand\": [\"\", \"$directory = Convert-Path .\", \"$env:PATH += \\\";$directory\\\"\", \"Invoke-WebRequest -URI '{{ scriptUrl }}' -OutFile script.ps1\", \"powershell.exe -noprofile -executionpolicy bypass -file script.ps1 {{ arguments }}\", \"if ($?) {\", \"    exit $LASTEXITCODE\", \"} else {\", \"    exit 255\", \"}\", \"\"], \"workingDirectory\": \"{{ workingDirectory }}\", \"timeoutSeconds\": \"{{ executionTimeout }}\"}}, {\"precondition\": {\"StringEquals\": [\"platformType\", \"Linux\"]}, \"action\": \"aws:runShellScript\", \"name\": \"runShellScript\", \"inputs\": {\"runCommand\": [\"\", \"directory=$(pwd)\", \"if which wget &>/dev/null ; then\", \"wget \\\"{{ scriptUrl }}\\\" -O script.sh\", \"elif which curl &>/dev/null ; then\", \"curl \\\"{{ scriptUrl }}\\\" -O script.sh\", \"else\", \"echo \\\"Cannot download, neither wget nor curl is available.\\\"\", \"fi\", \"chmod +x script.sh\", \"./script.sh {{ arguments }}\", \"\"], \"workingDirectory\": \"{{ workingDirectory }}\", \"timeoutSeconds\": \"{{ executionTimeout }}\"}}]}",
+  "CreatedDate": "2023-06-22T12:11:13.819Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "2",
+  "Name": "arn:aws:ssm:us-west-2:004819812935:document/Nordcloud-RunRemoteScript",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "1.2",
+  "ResponseMetadata": {
+    "RequestId": "a85fa779-a837-4993-9dc8-c608984a5997",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2425,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-23T07:14:15.9111921+00:00"
+}

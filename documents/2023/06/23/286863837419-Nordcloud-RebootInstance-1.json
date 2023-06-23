@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\"schemaVersion\": \"2.2\", \"description\": \"This document is used to force instance reboot.\", \"parameters\": {}, \"mainSteps\": [{\"precondition\": {\"StringEquals\": [\"platformType\", \"Linux\"]}, \"action\": \"aws:runShellScript\", \"name\": \"ForceInstanceRebootLinux\", \"inputs\": {\"runCommand\": [\"instanceRebootFile=/var/log/amazon/ssm/instance-reboot\", \"if [[ ! -f \\\"$instanceRebootFile\\\" ]]; then\", \"  touch ${instanceRebootFile}\", \"  exit 194\", \"fi\", \"rm -f ${instanceRebootFile}\", \"echo \\\"Reboot is done, proceed to next step.\\\"\"]}}, {\"precondition\": {\"StringEquals\": [\"platformType\", \"Windows\"]}, \"action\": \"aws:runPowerShellScript\", \"name\": \"ForceInstanceRebootWindows\", \"inputs\": {\"runCommand\": [\"$appName = 'KlarityFleetControlOperations'\", \"$localFileLocation = [IO.Path]::Combine($env:ProgramData, 'Amazon', $appName, 'State')\", \"$instanceRebootFile = [IO.Path]::Combine($localFileLocation, 'InstanceReboot')\", \"if (-Not (Test-Path $instanceRebootFile -PathType Leaf)) {\", \"  New-Item $instanceRebootFile -ItemType File | Out-Null\", \"  exit 3010\", \"}\", \"Remove-Item $instanceRebootFile -Force\", \"echo \\\"Reboot is done, proceed to next step.\\\"\"]}}]}",
+  "CreatedDate": "2023-05-31T08:44:41.783Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:286863837419:document/Nordcloud-RebootInstance",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "1.0",
+  "ResponseMetadata": {
+    "RequestId": "857fcfd6-0cad-4f70-a213-1d12db3c600b",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1469,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-23T07:14:23.6649978+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "  {\n    \"description\": \"This command runs the Command document AWS-RunPatchBaseline on the specified instances.\",\n    \"schemaVersion\": \"0.3\",\n    \"parameters\": {\n        \"Operation\": {\n            \"type\": \"String\",\n            \"description\": \"\",\n            \"default\": \"Scan\"\n        },\n        \"RebootOption\": {\n            \"type\": \"String\",\n            \"description\": \"\",\n            \"default\": \"RebootIfNeeded\"\n        },\n        \"SnapshotId\": {\n            \"type\": \"String\",\n            \"description\": \"\",\n            \"default\": \"random_uuid.snapshot_id.result\"\n        },\n        \"InstallOverrideList\": {\n            \"type\": \"String\",\n            \"description\": \"\",\n            \"default\": \"(^$)|^https://.+$|^s3://([^/]+)/(.*?([^/]+))$\"\n        }\n    },\n    \"mainSteps\": [\n        {\n            \"name\": \"runPatchBaseline\",\n            \"action\": \"aws:runCommand\",\n            \"timeoutSeconds\": 7200,\n            \"maxAttempts\": 1,\n            \"inputs\": {\n                \"DocumentName\": \"AWS-RunPatchBaseline\",\n                \"Targets\": [\n                  {\n                    \"Key\": \"resource-groups:Name\",\n                    \"Values\": [\n                      \"WebServers\"\n                    ]\n                  }\n                ],\n                \"Parameters\": {\n                  \"Operation\": \"\",\n                  \"RebootOption\": \"\",\n                  \"SnapshotId\": \"\",\n                  \"InstallOverrideList\": \"\"\n                },\n                \"OutputS3BucketName\": \"patch-manager-execution-logs-use1\",\n                \"OutputS3KeyPrefix\": \"patching/accountid={{global:ACCOUNT_ID}}/region={{global:REGION}}/executionid={{automation:EXECUTION_ID}}\"\n                \n            }\n        }\n    ]\n}\n",
+  "CreatedDate": "2023-06-19T16:45:46.172Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:830055101690:document/automation_doc_xaccount_xregion_patch_baseline",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "e09978a2-219d-46c0-9e96-f3ab14886bd1",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 2128,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-25T07:12:48.8296311+00:00"
+}

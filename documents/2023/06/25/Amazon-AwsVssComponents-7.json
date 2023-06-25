@@ -1,0 +1,40 @@
+{
+  "AttachmentsContent": [
+    {
+      "Hash": "836f22afc3ca4688ed1096181168313925a71b7f3ab56196ac6ab9b75f6c46eb",
+      "HashType": {
+        "Value": "Sha256"
+      },
+      "Name": "AwsVssComponents-2.0.0.zip",
+      "Size": 2010436,
+      "Url": "https://aws-ssm-document-attachments-us-west-2.s3.us-west-2.amazonaws.com/4fa/014368086970/AwsVssComponents%21a264f8fc-2e81-42e1-9afa-32a3b4992389/7/AwsVssComponents-2.0.0.zip?x-attachment-size=2010436&x-requester-accountId=987868780346&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQDWSd79pKeJxKOcbr6vZR3EzyOSZbSajimt8V7txc4%2B2wIgCeLp0b%2FJUOoeeAQYFyc1ISszE2A%2F8GZSX3g9gqQ4HWwqugUIKBADGgwyNDk5MjQ1Mjc0MTAiDIwCvE1lxyrgPZLXPiqXBbFBkd3ZzgS7qW%2FD2KPDjd2ZvtPDZ1TcOK%2Fewzm2hDyY7WzSBMonuSM6VDj3jMbkRxEl1744ogDLXVcoUAe14ThO3nIEt%2FCVuHFKImLWr0DwzMEjNzjvIPj1X4dUgvU0K%2BJGY0AhsTKV%2F4e1q5rJA%2Fvm%2FxKOgQSl4CPK%2FtyLQPsigHRgbWCH4FGSfgjjZpu6zbPbT0uQ8tEnRvjeeuRpCc5gNxNy6kp9WYgJ0X%2Bp%2FVQfSOdF%2FXqBj9t1fA4%2BxwGPcx42l3xTST3%2BoqprOHs3Y0yE%2B2L%2Frz%2B474GhfNGNP0mysn%2FFwARR9gTgw3FtQm7gRCd2T8nXg7hCerQ7UtPC6Lc3vulZRyvQsFuoR40k%2Fv43qOQYTd3k4DsOx84IszQNmxfl1tt0S6URpH94v2m%2FwmxmIOUT%2Bz0ku2LR7Qb3fnV2zOWu0uq56KEwextPwctyawcwxfQ9d749W2v54Tt8RmLUwilvVkTj7XKW0y%2BKxZGiRWElM30zivkXV4BkhBpGQ%2F0gF%2B4bi0pdJEOo6XWP3OhZB7eVcSUGudg6THfvTYJelQRpGaX5MBoSBn%2FVcRzibv3ovullDUoF1tI%2B4j%2FC%2B0TssDAbPdAPy8lv86nWL31GqZSrgmLHtw7ciCaYB%2FJAzlCs%2BOZoqTVQZNX9KkdGOUXtO2mje5W%2BPlhPsm6LZT3nWO02ITVe42jaCmNhDZ4MPHVaLNrVzPaW312%2BEo%2Fsi5cOjmVO0xu9gsfiAKNVFBDhuA7dyMewMepMcyKdeL%2Bet4UeTJ9xstcjO3bXcZMOnbM1CjS2Nnh%2B%2B4ag4s8HhDzLP2HbVLgfHTEeObzKhQmGkMDWVMYJz5Ak4EuMRmBtP1P%2FI3G8u0awKHuWw5yk603kSdYUCEwSOzCZv9%2BkBjqxAQdmyPSf9zwXAUMyFbO2Lg3hPwN3zZ6Pd1eSctO%2FAZwZyfvOBW57eHC1AjPvy0s3o%2FxtjxSf5%2Bd8mwqA6arTL9BTtG9d83cT395ljTJF8MJulYSiok3ETXMqir5utbiyckpQMtoHq%2F%2F%2Ft1WwKAmjlHmqkmwu2bSA6ajpQpwUQEV%2Bszi4aLIPEdvEMsmkKRXOa4sfe7Vpvm%2F1H9b32eaV%2By8bOPlEWMXpy7iVnrtvHacFBA%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230625T071230Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIATUMFJUUZDYQQG5P3%2F20230625%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=fda7c587d6a4b740bda6d356bfdbb525fc8d543eb0993b7cd17e253471d97ab3"
+    }
+  ],
+  "Content": "{\n    \"schemaVersion\": \"2.0\",\n    \"name\": \"AwsVssComponents\",\n    \"version\": \"2.0.0\",\n    \"packageArn\": \"arn:aws:ssm:::package/AwsVssComponents\",\n    \"publisher\": \"Amazon AWS\",\n    \"url\": \"https://amazonaws.com\",\n    \"packages\": {\n        \"windows\": {\n            \"_any\": {\n                \"x86_64\": {\n                    \"file\": \"AwsVssComponents-2.0.0.zip\"\n                }\n            }\n        }\n    },\n    \"files\": {\n        \"AwsVssComponents-2.0.0.zip\": {\n            \"checksums\": {\n                \"sha256\": \"836f22afc3ca4688ed1096181168313925a71b7f3ab56196ac6ab9b75f6c46eb\"\n            },\n            \"downloadLocation\": \"https://us-west-2-birdwatcher-prod.s3.us-west-2.amazonaws.com/014368086970/AwsVssComponents-2.0.0.zip\"\n        }\n    }\n}",
+  "CreatedDate": "2023-05-01T18:29:39.706Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Package"
+  },
+  "DocumentVersion": "7",
+  "Name": "AwsVssComponents",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": "2.0.0",
+  "ResponseMetadata": {
+    "RequestId": "fee69c00-05bc-474a-918f-aba21f0848af",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3162,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-25T07:12:30.1004399+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"### Document Name - AWS-CloseSecurityGroup\\n\\n## What does this document do?\\nThis document closes traffic to and from a security group by removing any ingress and egress rules from it.\\n\\n## Input Parameters\\n* SecurityGroupId: (Required) Security group id, This security group will be closed by removing any ingress or egress rules.\\n* AutomationAssumeRole: (Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\\n\\n## Output Parameters\\nThis document has no outputs.\\n\\n## Minimum Permissions Required\\n* `ec2:RevokeSecurityGroupIngress`\\n* `ec2:RevokeSecurityGroupEgress`\\n* `ec2:DescribeSecurityGroups`\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"SecurityGroupId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The security group ID.\",\n      \"allowedPattern\" : \"^(sg-)([0-9a-f]){1,}$\"\n    },\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\",\n      \"allowedPattern\" : \"^arn:aws(-cn|-us-gov)?:iam::\\\\d{12}:role\\\\/[\\\\w+=,.@_\\\\/-]+|^$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"CloseSecurityGroup\",\n    \"action\" : \"aws:executeScript\",\n    \"onFailure\" : \"Abort\",\n    \"isCritical\" : true,\n    \"isEnd\" : true,\n    \"timeoutSeconds\" : 600,\n    \"description\" : \"## CloseSecurityGroup\\nRemoves any ingress and egress rules from the security group.\\n## Inputs\\n* SecurityGroupId: The security group ID.\\n## Outputs\\nThis step has no outputs.\\n\",\n    \"inputs\" : {\n      \"Runtime\" : \"python3.7\",\n      \"Handler\" : \"close_security_group_handler\",\n      \"InputPayload\" : {\n        \"SecurityGroupId\" : \"{{SecurityGroupId}}\"\n      },\n      \"Script\" : \"import boto3\\n\\nec2_resource = boto3.resource(\\\"ec2\\\")\\nec2_client = boto3.client(\\\"ec2\\\")\\n\\ndef close_security_group_handler(event, context):\\n    sg_id = event[\\\"SecurityGroupId\\\"]\\n    sg_resource = ec2_resource.SecurityGroup(sg_id)\\n    successful = True\\n    errorMsg = \\\"\\\"\\n    try:\\n        sg_description = ec2_client.describe_security_groups(GroupIds = [sg_id])\\n        ip_permissions = sg_description[\\\"SecurityGroups\\\"][0][\\\"IpPermissions\\\"]\\n        ip_permissions_egress = sg_description[\\\"SecurityGroups\\\"][0][\\\"IpPermissionsEgress\\\"]\\n\\n        if ip_permissions:\\n            revoke_response = sg_resource.revoke_ingress(\\n                    GroupId = sg_id,\\n                    IpPermissions = ip_permissions,\\n                    DryRun = False\\n            )\\n            if not revoke_response.get(\\\"Return\\\"):\\n                successful = False\\n\\n        if ip_permissions_egress:\\n            revoke_egress_response = sg_resource.revoke_egress(\\n                    GroupId = sg_id,\\n                    IpPermissions = ip_permissions_egress,\\n                    DryRun = False\\n            )\\n            if not revoke_egress_response.get(\\\"Return\\\"):\\n                successful = False\\n\\n    except Exception as e:\\n        errorMsg = str(e)\\n        successful = False\\n        if \\\"InvalidGroup.NotFound\\\" in errorMsg or \\\"InvalidGroupId.Malformed\\\" in errorMsg:\\n            errorMsg = \\\"The security group '{}' does not exist\\\".format(sg_id)\\n\\n    if not successful:\\n        raise Exception(\\\"Unable to close the security group '{}'. error: '{}'.\\\".format(sg_id, errorMsg))\\n\"\n    }\n  } ]\n}",
+  "CreatedDate": "2021-05-05T17:42:42.17Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWS-CloseSecurityGroup",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "3a050d41-c45f-46eb-83c7-53b1fd8e82b2",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 3868,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-25T07:11:39.6777271+00:00"
+}

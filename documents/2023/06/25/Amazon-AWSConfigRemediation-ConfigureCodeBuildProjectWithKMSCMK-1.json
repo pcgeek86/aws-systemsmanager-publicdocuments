@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"schemaVersion\" : \"0.3\",\n  \"description\" : \"### Document name - AWSConfigRemediation-ConfigureCodeBuildProjectWithKMSCMK\\n\\n## What does this document do?\\nThis document configures a AWS Key Management Service (KMS) Customer Master Key (CMK) to encrypt a given AWS CodeBuild project's build artifacts using the [UpdateProject](https://docs.aws.amazon.com/codebuild/latest/APIReference/API_UpdateProject.html) API.\\n\\nThis document must only be used as a baseline to ensure that your AWS CodeBuild project's build artifacts are encrypted with the minimum security best practice of using an AWS KMS customer managed CMK.\\nBased on your data policy, AWS CodeBuild project's build artifacts should be encrypted with different customer managed CMKs as documented [here](https://docs.aws.amazon.com/kms/latest/developerguide/best-practices.html).\\n\\n## Input Parameters\\n* AutomationAssumeRole: (Required) The ARN of the role that allows Automation to perform the actions on your behalf.\\n* ProjectId: (Required) The resource ID of the AWS CodeBuild project stored by AWS Config.\\n* KMSCMKArn: (Required) The AWS KMS CMK ARN used for encryption.\\n\\n## Output Parameters\\n* ModifyProject.Output: The standard HTTP response from the UpdateProject API.\\n\",\n  \"assumeRole\" : \"{{ AutomationAssumeRole }}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"allowedPattern\" : \"^arn:(aws[a-zA-Z-]*)?:iam::\\\\d{12}:role/[\\\\w+=,.@/-]+$\"\n    },\n    \"ProjectId\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The resource ID of the AWS CodeBuild project stored by AWS Config.\",\n      \"allowedPattern\" : \"^[a-z0-9-]{1,768}\"\n    },\n    \"KMSCMKArn\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) The AWS KMS CMK ARN used for encryption.\",\n      \"allowedPattern\" : \"(^arn:(aws[a-z-]*)?:kms:)([a-z0-9-]*):\\\\d{12}:(key|alias)/([0-9a-z-_/]{1,256})\"\n    }\n  },\n  \"outputs\" : [ \"ModifyProject.Output\" ],\n  \"mainSteps\" : [ {\n    \"name\" : \"GetBuildName\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## GetBuildName\\nMakes the GetResourceConfigHistory API call to obtain the AWS CodeBuild project name.\\n## Outputs\\n* BuildName: The name of the AWS CodeBuild project.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"config\",\n      \"Api\" : \"GetResourceConfigHistory\",\n      \"resourceId\" : \"{{ ProjectId }}\",\n      \"resourceType\" : \"AWS::CodeBuild::Project\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"BuildName\",\n      \"Selector\" : \"$.configurationItems[0].resourceName\",\n      \"Type\" : \"String\"\n    } ]\n  }, {\n    \"name\" : \"ModifyProject\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"description\" : \"## ModifyProject\\nUpdates the AWS CodeBuild project configuration to encrypt build output artifacts using the specified AWS KMS customer managed key.\\n## Outputs\\n* Output: The standard HTTP response from the UpdateProject API.\\n\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : false,\n    \"inputs\" : {\n      \"Service\" : \"codebuild\",\n      \"Api\" : \"UpdateProject\",\n      \"name\" : \"{{ GetBuildName.BuildName }}\",\n      \"encryptionKey\" : \"{{ KMSCMKArn }}\"\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Output\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"VerifyProject\",\n    \"action\" : \"aws:assertAwsResourceProperty\",\n    \"timeoutSeconds\" : 600,\n    \"isEnd\" : true,\n    \"description\" : \"## VerifyProject\\nVerifies that the AWS CodeBuild project has been configured to encrypt build artifacts using the given AWS KMS CMK.\\n\",\n    \"inputs\" : {\n      \"Service\" : \"codebuild\",\n      \"Api\" : \"BatchGetProjects\",\n      \"names\" : [ \"{{ GetBuildName.BuildName }}\" ],\n      \"PropertySelector\" : \"$.projects[0].encryptionKey\",\n      \"DesiredValues\" : [ \"{{ KMSCMKArn }}\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2020-12-22T16:03:46.466Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSConfigRemediation-ConfigureCodeBuildProjectWithKMSCMK",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "2c85675b-76f9-4b87-967c-9d2e34cbd6e8",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 4408,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-25T07:11:49.0404127+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Agent-Install\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"InstanceId\" : {\n      \"default\" : \"i-123abc456def\",\n      \"description\" : \"Where your Agents will be deployed\",\n      \"type\" : \"String\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"CheckIfLinux\",\n    \"action\" : \"aws:runShellScript\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"echo hi\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-06-22T17:17:36.052Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "arn:aws:ssm:us-west-2:968920300428:document/wrapperSSMDocument",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "21cf3d69-62ec-4504-92e7-c394841d3ce6",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 649,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-26T07:14:23.6265887+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"This document enables the Amazon Inspector v2 service for the account. Only the EC2 resource type is enabled.\\n\\n\",\n  \"schemaVersion\" : \"0.3\",\n  \"assumeRole\" : \"{{AutomationAssumeRole}}\",\n  \"parameters\" : {\n    \"AutomationAssumeRole\" : {\n      \"type\" : \"AWS::IAM::Role::Arn\",\n      \"description\" : \"(Optional) The ARN of the role that allows Automation to perform the actions on your behalf.\",\n      \"default\" : \"\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"name\" : \"GetAccountId\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"outputs\" : [ {\n      \"Selector\" : \"$.Account\",\n      \"Type\" : \"String\",\n      \"Name\" : \"AccountId\"\n    } ],\n    \"inputs\" : {\n      \"Service\" : \"sts\",\n      \"Api\" : \"GetCallerIdentity\"\n    }\n  }, {\n    \"name\" : \"EnableInspector\",\n    \"action\" : \"aws:executeAwsApi\",\n    \"inputs\" : {\n      \"Service\" : \"inspector2\",\n      \"Api\" : \"Enable\",\n      \"resourceTypes\" : [ \"EC2\" ],\n      \"accountIds\" : [ \"{{GetAccountId.AccountId}}\" ]\n    },\n    \"outputs\" : [ {\n      \"Name\" : \"Response\",\n      \"Selector\" : \"$\",\n      \"Type\" : \"StringMap\"\n    } ]\n  }, {\n    \"name\" : \"WaitInspectorEnabled\",\n    \"action\" : \"aws:waitForAwsResourceProperty\",\n    \"inputs\" : {\n      \"Service\" : \"inspector2\",\n      \"PropertySelector\" : \"$.accounts[0].resourceState.ec2.status\",\n      \"DesiredValues\" : [ \"ENABLED\" ],\n      \"Api\" : \"BatchGetAccountStatus\",\n      \"accountIds\" : [ \"{{GetAccountId.AccountId}}\" ]\n    },\n    \"timeoutSeconds\" : 300\n  } ]\n}",
+  "CreatedDate": "2023-06-02T07:50:16.558Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Automation"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSMigration-EnableInspector",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "a5dbde5a-3038-4f7f-a3c6-080a7971b0d2",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 1821,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-28T07:12:28.388948+00:00"
+}

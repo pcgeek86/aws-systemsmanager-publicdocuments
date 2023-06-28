@@ -1,0 +1,30 @@
+{
+  "AttachmentsContent": [],
+  "Content": "{\n  \"description\" : \"Simulate Network Unavailable on EC2 instance\",\n  \"schemaVersion\" : \"2.2\",\n  \"parameters\" : {\n    \"DurationInMinutes\" : {\n      \"type\" : \"String\",\n      \"description\" : \"(Required) 'The duration - in minutes - of the attack'\",\n      \"allowedPattern\" : \"^\\\\d+$\"\n    }\n  },\n  \"mainSteps\" : [ {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"RevertCommandScheduling\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"echo 'iptables -D INPUT -j DROP' | at now + {{ DurationInMinutes }} minutes\" ]\n    }\n  }, {\n    \"action\" : \"aws:runShellScript\",\n    \"name\" : \"AlterIPtables\",\n    \"inputs\" : {\n      \"runCommand\" : [ \"iptables -A INPUT -j DROP\" ]\n    }\n  } ]\n}",
+  "CreatedDate": "2023-06-27T13:56:50.574Z",
+  "DisplayName": null,
+  "DocumentFormat": {
+    "Value": "JSON"
+  },
+  "DocumentType": {
+    "Value": "Command"
+  },
+  "DocumentVersion": "1",
+  "Name": "AWSResilienceHub-NetworkUnavailableCommand_2020-07-23",
+  "Requires": [],
+  "ReviewStatus": null,
+  "Status": {
+    "Value": "Active"
+  },
+  "StatusInformation": null,
+  "VersionName": null,
+  "ResponseMetadata": {
+    "RequestId": "26534fce-7820-40dc-ade3-913f032c0535",
+    "Metadata": {},
+    "ChecksumAlgorithm": 0,
+    "ChecksumValidationStatus": 0
+  },
+  "ContentLength": 948,
+  "HttpStatusCode": 200,
+  "LoggedAt": "2023-06-28T07:12:39.4771887+00:00"
+}

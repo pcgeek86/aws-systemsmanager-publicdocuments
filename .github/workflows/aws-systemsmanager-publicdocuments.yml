@@ -11,15 +11,15 @@ jobs:
   update_file:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: pwsh -Command 'Install-Module -Name AWS.Tools.SimpleSystemsManagement, SimplySql -Force'
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::272881578724:role/github-actions-systemsmanager
           aws-region: us-west-2
       - run: pwsh -File get-aws-systemsmanager-publicdocs.ps1
-      - uses: EndBug/add-and-commit@v7 
+      - uses: EndBug/add-and-commit@v9 
         with:
           message: Updating Systems Manager documents
           author_name: Trevor Sullivan

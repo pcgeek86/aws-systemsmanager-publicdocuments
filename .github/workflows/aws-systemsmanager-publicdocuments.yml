@@ -16,7 +16,7 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::987868780346:role/github-actions-systemsmanager
+          role-to-assume: arn:aws:iam::272881578724:role/github-actions-systemsmanager
           aws-region: us-west-2
       - run: pwsh -File get-aws-systemsmanager-publicdocs.ps1
       - uses: EndBug/add-and-commit@v7 
